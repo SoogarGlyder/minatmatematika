@@ -7,7 +7,8 @@ const PostSchema = new mongoose.Schema({
   publishDate: Date,
   categories: [String],
   featuredImage: String,
-  wpId: String
+  wpId: String,
+  status: { type: String, default: 'publish' }
 }, { timestamps: true });
 
 export default mongoose.models.Post || mongoose.model('Post', PostSchema);
