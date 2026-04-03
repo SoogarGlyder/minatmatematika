@@ -5,7 +5,8 @@ import Link from "next/link";
 export default async function Home() {
   await dbConnect();
 
-  const posts = await Post.find({ status: 'publish' }).sort({ publishDate: -1 }).lean();
+  // PERBAIKAN: Menghapus filter status agar semua artikel terbaca dulu
+  const posts = await Post.find({}).sort({ publishDate: -1 }).lean();
 
   return (
     <main className="min-h-screen p-8 bg-gray-50 font-sans">

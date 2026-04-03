@@ -9,6 +9,10 @@ const PostSchema = new mongoose.Schema({
   featuredImage: String,
   wpId: String,
   status: { type: String, default: 'publish' }
-}, { timestamps: true });
+}, { 
+  timestamps: true,
+  // PERBAIKAN: Menegaskan nama collection di database agar tidak salah cari
+  collection: 'posts' 
+});
 
 export default mongoose.models.Post || mongoose.model('Post', PostSchema);
