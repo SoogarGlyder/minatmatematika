@@ -1,0 +1,47 @@
+.breadcrumbNav {
+  margin-left: 3px;
+  margin-bottom: 10px;
+  font-size: 0.9em;
+  color: var(--foreground);
+  opacity: 0.8;
+}
+
+.breadcrumbList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.link {
+  text-decoration: none;
+  color: var(--accent);
+  font-weight: 500;
+  transition: opacity 0.2s;
+}
+
+.link:hover {
+  text-decoration: underline;
+  opacity: 0.8;
+}
+
+.separator {
+  margin: 0 8px;
+  color: var(--foreground);
+  opacity: 0.4;
+  font-size: 1.2em;
+  line-height: 1;
+}
+
+.activeItem {
+  color: var(--foreground);
+  font-weight: 600;
+  opacity: 0.9;
+}
+
+.listItem {
+  display: flex;
+  align-items: center;
+}

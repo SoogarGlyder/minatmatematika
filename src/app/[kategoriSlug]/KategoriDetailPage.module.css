@@ -1,0 +1,208 @@
+.holyGrailLayout {
+  display: flex;
+  width: 100%;
+  max-width: 1440px; 
+  justify-self: center;
+  align-items: flex-start; 
+  position: relative;
+  justify-content: center;
+}
+.mobileToggle {
+  display: none;
+}
+.leftSidebar {
+  width: min(14.3vw, 205.771px);
+  flex-shrink: 0; 
+  position: sticky;
+  position: -webkit-sticky;
+  top: var(--total-header-height);
+  height: calc(100vh - var(--total-header-height)); 
+  overflow-y: auto;
+  background: var(--background);
+  border-right: 1px solid var(--input-border);
+  scrollbar-width: thin;
+}
+.leftSidebarTitle {
+  padding: 10px;
+  color: var(--foreground);
+  font-weight: bold;
+}
+.mainContent {
+  flex-grow: 1; 
+  min-width: 0; 
+  background: var(--card-bg);
+  color: var(--foreground);
+  padding: 10px 20px;
+  border-right: 1px solid var(--input-border);
+  padding-bottom: 100px;
+}
+.chapterList {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+.chapterLink {
+  display: block;
+  padding: 5px 10px;
+  text-decoration: none;
+  color: var(--foreground);
+  transition: all 0.2s;
+}
+.chapterLink:hover {
+  background-color: var(--input-bg);
+  color: var(--primary);
+  font-weight: bold;
+  font-size: 110%;
+  padding-left: 20px;
+}
+.activeChapter {
+  background-color: var(--primary);
+  color: var(--background); /* Putih/Terang untuk monokrom */
+  font-weight: bold;
+  font-size: 110%;
+}
+.activeChapter:hover {
+  background-color: var(--primary);
+  color: var(--background);
+  font-weight: bold;
+  font-size: 110%;
+}
+.chapterHeader h1 {
+  font-size: 2em;
+  margin: 0;
+  line-height: 1.2;
+  color: var(--foreground);
+}
+.chapterHeader h2 {
+  font-size: 1.2em;
+  font-weight: 500;
+  color: var(--foreground);
+  opacity: 0.9;
+}
+.divider {
+  border: 0;
+  border-top: 2px solid var(--input-border);
+  margin-bottom: 15px;
+}
+.content {
+  font-size: var(--math-font-size, 18px); /* Mengikuti pengaturan font */
+  line-height: 1.6; 
+  color: var(--foreground);
+  text-align: justify;
+  margin-bottom: 1em;
+}
+
+.navigation {
+  padding: 20px 0px;
+  border-top: 2px solid var(--input-border);
+  border-bottom: 2px solid var(--input-border);
+  display: flex;
+  justify-content: space-between;
+}
+.lastRead {
+  padding: 15px;
+  background-color: var(--input-bg); 
+  border-left: 5px solid var(--accent); /* Abu-abu Monokrom */
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: var(--foreground);
+  width: 100%;
+  margin-bottom: 15px;
+}
+.lastRead a {
+  background-color: var(--primary);
+  color: var(--background); 
+  padding: 8px 16px;
+  border-radius: 4px;
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 0.9rem;
+  transition: transform 0.2s ease, background-color 0.2s;
+  text-align: center;
+  white-space: nowrap;
+}
+.lastRead a:hover {
+  opacity: 0.9;
+  transform: scale(1.05);
+}
+.disclaimer {
+  font-size: 0.85rem;
+  background: var(--input-bg);
+  color: var(--foreground);
+  margin-top: 15px;
+  padding: 15px;
+  border-radius: 5px;
+  border-left: 3px solid #555555; /* Diubah ke Abu-Abu agar Monokrom */
+}
+
+@media (max-width: 767px) {
+  .holyGrailLayout {
+    flex-direction: column;
+    padding-top: 0 !important;
+    padding: 10px;
+    gap: 10px;
+    align-items: center;
+  }
+  .leftSidebar {
+    z-index: 3;
+    width: 100vw;
+    left: 0;
+    height: auto;
+    overflow-y: visible;
+    padding-top: 4px;
+    background: var(--card-bg);
+    border-bottom: 1px solid var(--input-border);
+    border-right: 0px;
+  }
+  .mobileToggle {
+    display: block;
+    padding: 4.5px;
+    width: 100vw;
+    font-size: 1.1em;
+    font-weight: bold;
+    background-color: var(--input-bg);
+    color: var(--foreground);
+    border-bottom: 1px solid var(--input-border);
+    border-radius: 0px;
+    cursor: pointer;
+    border: none;
+  }
+  .chapterList {
+    background: var(--card-bg);
+    font-size: 0.95em;
+    text-align: center;
+  }
+  .leftSidebarTitle {
+    display: none;
+  }
+  .mainContent {
+    order: 2;
+    width: 100%;
+    padding: 0 10px;
+    margin-left: unset;
+    border-right: none;
+    background: var(--card-bg);
+  }
+  .novelInfoContainer {
+    display: flex;
+    flex-direction: column;
+    }
+  .coverWrapper {
+    max-width: 100%;
+  }
+  .contentSection {
+    margin: 20px 0 0 0;
+  } 
+  .chapterHeader h1 {
+    font-size: 2em;
+  }
+  .lastRead {
+    border-radius: 4px 0 0 4px;
+  }
+  .navigation {
+    flex-direction: column;
+    gap: 15px;
+  }
+}

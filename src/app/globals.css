@@ -1,26 +1,241 @@
-@import "tailwindcss";
+:root {
+  --logo-height: 60px;
+  --logo-margin-top: 0px;
+  --logo-margin-bottom: 0px;
+  --total-logo: calc(var(--logo-height) + var(--logo-margin-top) + var(--logo-margin-bottom));
+  --nav-height: 35px;
+  --total-header-height: calc(var(--total-logo) + var(--nav-height));
+  
+  /* Tema Terang (Monokrom) */
+  --background: #ffffff;
+  --foreground: #213547;
+  --primary: #222222;        /* Hitam Gelap pengganti Biru */
+  --link: #555555;           /* Abu-abu untuk Link */
+  --link-hover: #000000;     /* Hitam Pekat saat di-hover */
+  --button-bg: whitesmoke;
+  --button-text: #213547;
+  --input-bg: whitesmoke;
+  --input-border: #ddd;
+  --card-bg: #ffffff;
+  
+  /* Variabel tambahan untuk ukuran teks Matematika */
+  --math-font-size: 18px;
+}
+
+.dark {
+  /* Tema Gelap (Monokrom) */
+  --background: #171717;
+  --foreground: #ededed;
+  --primary: #e5e5e5;        /* Putih/Abu terang pengganti Biru */    
+  --link: #aaaaaa;               
+  --link-hover: #ffffff;
+  --button-bg: #262626;
+  --button-text: whitesmoke;
+  --input-bg: #262626;
+  --input-border: #404040;
+  --card-bg: #171717;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box; 
+  scroll-behavior: smooth;
+}
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+  
+  color-scheme: light dark; 
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 body {
-  background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: var(--background);
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+h1 {
+  font-size: 3.2em;
+  line-height: 1.1;
+  color: var(--foreground);
+}
+
+a {
+  font-weight: 500;
+  color: var(--link);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+a:hover {
+  color: var(--link-hover);
+}
+
+button {
+  border-radius: 8px;
+  border: 1px solid transparent;
+  padding: 0.6em 1.2em;
+  font-size: 1em;
+  font-weight: 500;
+  font-family: inherit;
+  cursor: pointer;
+  transition: border-color 0.25s, background-color 0.25s, color 0.25s;
+  
+  background-color: var(--button-bg);
+  color: var(--button-text);
+}
+
+button:disabled {
+  color: gray;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+button:not(:disabled):hover {
+  background-color: var(--primary);
+  color: var(--background);
+  font-weight: bold;
+}
+
+/* button:focus, button:focus-visible {
+  outline: 4px auto -webkit-focus-ring-color;
+} */
+
+.container {
+  display: grid;
+  min-height: calc(100vh - 130px); 
+  width: 100vw;
+  align-content: center;
+  justify-items: center;
+  background-color: var(--card-bg); 
+}
+
+label {
+  font-weight: bold;
+  margin-top: 10px;
+  display: block;
+  color: var(--foreground);
+}
+
+input[type='text'],
+textarea,
+select { 
+  width: 100%;
+  padding: 10px;
+  margin-top: 5px;
+  border: 1px solid var(--input-border);
+  border-radius: 4px;
+  box-sizing: border-box;
+  font-family: inherit;
+  font-size: 1em;
+  
+  color: var(--foreground);
+  background-color: var(--input-bg);
+}
+
+.loadingContainer {
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: calc(100vh - (var(--total-header-height)));
+  width: 100%;
+  background-color: var(--background); 
+  z-index: 50;
+}
+
+.spinner {
+  border: 4px solid rgba(128, 128, 128, 0.2); 
+  border-top: 4px solid var(--primary);      
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@media (max-width: 767px) {
+  :root {
+    --logo-height: 60px;
+  }
+}
+
+/* =========================================
+   TAMBAHAN KHUSUS MINAT MATEMATIKA (SOAL & PEMBAHASAN)
+   ========================================= */
+
+/* --- Question Card (Kotak Pembahasan) --- */
+details {
+  background: var(--card-bg);
+  border: 1px solid var(--input-border);
+  border-radius: 8px;
+  margin: 2rem 0;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+details[open] {
+  border-color: var(--primary);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+}
+
+summary {
+  list-style: none;
+  padding: 1rem 1.5rem;
+  cursor: pointer;
+  font-weight: 700;
+  color: var(--foreground);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--input-bg);
+  user-select: none;
+}
+
+summary::-webkit-details-marker { display: none; }
+
+summary::after {
+  content: "Pembahasan ↓";
+  font-size: 0.85em;
+  background: var(--card-bg);
+  border: 1px solid var(--input-border);
+  padding: 0.4rem 0.8rem;
+  border-radius: 99px;
+  transition: 0.3s;
+}
+
+details[open] summary::after {
+  content: "Tutup ↑";
+  background: var(--primary);
+  color: var(--background);
+  border-color: var(--primary);
+}
+
+.pembahasan-inner {
+  padding: 1.5rem;
+  border-top: 1px dashed var(--input-border);
+}
+
+/* --- Pengaturan Responsif Rumus Matematika (KaTeX) --- */
+.katex-display {
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 1rem 0;
+}
+
+.katex {
+  font-size: 1.05em !important; 
 }

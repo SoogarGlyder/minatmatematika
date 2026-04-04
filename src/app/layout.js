@@ -1,101 +1,88 @@
-import { Rubik } from "next/font/google";
-import "./globals.css";
-import { GoogleTagManager } from '@next/third-parties/google';
-import Script from "next/script";
+import './globals.css';
+import Script from 'next/script'; 
+// import { GoogleAnalytics } from '@next/third-parties/google'; // Aktifkan nanti kalau butuh Google Analytics
+import { Providers } from './providers'; 
+import Header from '@/components/Header';
+// import Footer from '@/components/Footer'; // TODO: Nanti kita buat Footer
+import FloatingSettings from '@/components/FloatingSettings';
 
-const rubik = Rubik({ 
-  subsets: ["latin"],
-  variable: '--font-rubik',
-  display: 'swap',
-});
+export const viewport = {
+  themeColor: '#1a365d', // Warna biru khas edukasi
+  width: 'device-width',
+  initialScale: 1,
+};
 
 export const metadata = {
-  title: {
-    default: "Minat Matematika | Latihan Soal UTBK & SNBT",
-    template: "%s | Minat Matematika"
-  },
-  description: "Berisi latihan soal UTBK - SNBT dan pembahasannya mulai dari Penalaran Umum, Pengetahuan Kuantitatif, hingga Penalaran Matematika.",
-  
   metadataBase: new URL('https://minatmatematika.com'),
   alternates: {
     canonical: '/',
   },
-  robots: {
-    index: true,
-    follow: true,
-    "max-image-preview": "large",
-    "max-snippet": -1,
-    "max-video-preview": -1,
-  },
-
-  verification: {
-    google: "HPNrPSuwx1xFIx9U5VDoQY_0thMbF9XoBP-9eeIVy00",
-    other: {
-      "msvalidate.01": "aaec6b0e1efd47b09d5613d284794984",
-      "purpleads-verification": "ff5fcbda691cda3c777ba8c7",
-    },
-  },
-
+  title: 'Minat Matematika | Pusat Latihan Soal UTBK & SNBT', 
+  description: 'Latihan soal UTBK - SNBT lengkap beserta pembahasannya. Tersedia Penalaran Umum, Pengetahuan Kuantitatif, dan Penalaran Matematika.',
+  applicationName: 'Minat Matematika',
+  keywords: ["utbk", "snbt", "penalaran umum", "pengetahuan kuantitatif", "penalaran matematika", "soal utbk", "pembahasan soal"],
+  
   openGraph: {
-    title: "Minat Matematika",
-    description: "Tempat bagi yang ber-Minat Matematika",
-    url: "https://minatmatematika.com",
-    siteName: "Minat Matematika",
-    locale: "id_ID",
-    type: "website",
-    images: [
-      {
-        url: 'https://minatmatematika.com/wp-content/uploads/2022/12/minat-matematika-logo-saja.png', // Pastikan gambar ini sudah ada di folder public/wp-content/uploads kamu!
-        width: 1500,
-        height: 1500,
-        alt: 'Logo Minat Matematika',
-      },
-    ],
+    title: 'Minat Matematika | Latihan Soal UTBK',
+    description: 'Kuasai konsep, taklukkan ujian UTBK - SNBT bersama Minat Matematika.',
+    url: 'https://minatmatematika.com',
+    siteName: 'Minat Matematika',
+    locale: 'id_ID',
+    type: 'website',
   },
-
-  // --- Tampilan di Twitter/X ---
   twitter: {
     card: 'summary_large_image',
-    site: '@MinatMatematika',
-    title: "Minat Matematika",
-    description: "Berisi latihan soal UTBK - SNBT dan pembahasannya.",
   },
-};
+  other: {
+    "google-adsense-account": "ca-pub-4365395677457990"
+  }
+}; 
 
 export default function RootLayout({ children }) {
-  return (
-    <html lang="id">
-      <head>
-        <Script
-          id="google-funding-choices"
-          strategy="beforeInteractive"
-          src="https://fundingchoicesmessages.google.com/i/pub-4365395677457990?ers=1"
-        />
-        <Script id="google-fc-logic" strategy="afterInteractive">
-          {`
-            (function() {
-              function signalGooglefcPresent() {
-                if (!window.frames['googlefcPresent']) {
-                  if (document.body) {
-                    const iframe = document.createElement('iframe'); 
-                    iframe.style = 'width: 0; height: 0; border: none; z-index: -1000; left: -1000px; top: -1000px;'; 
-                    iframe.style.display = 'none'; 
-                    iframe.name = 'googlefcPresent'; 
-                    document.body.appendChild(iframe);
-                  } else {
-                    setTimeout(signalGooglefcPresent, 0);
-                  }
-                }
-              }
-              signalGooglefcPresent();
-            })();
-          `}
-        </Script>
-      </head>
-      
-      <body className={rubik.className}>
-        {children}
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    name: 'Minat Matematika',
+    alternateName: ['MinatMatematika', 'Soal UTBK', 'Latihan SNBT'], 
+    url: 'https://minatmatematika.com',
+    potentialAction: {
+      "@type": "SearchAction",
+      "target": "https://minatmatematika.com/?search={search_term_string}",
+      "query-input": "required name=search_term_string"
+    }
+  };
 
+  return (
+    <html lang="id" suppressHydrationWarning>
+      <head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
+        <Script
+          async
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4365395677457990"
+          crossOrigin="anonymous"
+          strategy="afterInteractive"
+        />
+      </head>
+      <body suppressHydrationWarning>
+        <Providers>
+          <Header /> 
+          <main style={{ 
+            marginTop: '0', 
+            minHeight: 'calc(100vh - var(--total-header-height, 100px))',
+            backgroundColor: 'var(--background)',
+            color: 'var(--foreground)',
+            transition: 'background-color 0.3s ease, color 0.3s ease'
+          }}>
+            {children}
+          </main>
+          {/* <Footer /> */}
+          <FloatingSettings />
+        </Providers>
+        
+        {/* Script Saweria */}
         <Script id="saweria-widget" strategy="lazyOnload">
           {`
             (function() {
@@ -112,16 +99,7 @@ export default function RootLayout({ children }) {
             })();
           `}
         </Script>
-
-        <Script
-          id="adsbygoogle-init"
-          strategy="afterInteractive"
-          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4365395677457990"
-          crossOrigin="anonymous"
-        />
-
       </body>
-      <GoogleTagManager gtmId="GTM-W6V8HJR" />
     </html>
   );
 }
