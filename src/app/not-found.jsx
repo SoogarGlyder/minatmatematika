@@ -25,11 +25,8 @@ export default function NotFound() {
           color: 'var(--background)', 
           textDecoration: 'none',
           borderRadius: '6px',
-          fontWeight: 'bold',
-          transition: 'transform 0.2s'
+          fontWeight: 'bold'
         }}
-        onMouseOver={(e) => e.target.style.transform = 'scale(1.05)'}
-        onMouseOut={(e) => e.target.style.transform = 'scale(1)'}
       >
         Kembali ke Beranda
       </Link>
