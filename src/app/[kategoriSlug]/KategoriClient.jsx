@@ -9,6 +9,7 @@ import Breadcrumbs from '@/components/Breadcrumbs';
 import { useGlobalContext } from '@/app/providers';
 import { getReadingHistory } from '@/utils/readingHistory';
 import RightSidebar from '@/components/RightSidebar';
+import MathContent from '@/components/MathContent'; // <-- IMPORT MATHCONTENT
 
 export default function KategoriClient({ category, allPosts }) {
   const router = useRouter();
@@ -110,8 +111,8 @@ export default function KategoriClient({ category, allPosts }) {
         </div>
         <hr className={styles.divider} />
         
-        <div className={styles.content} style={{ fontSize: `${fontSize}px` }}>
-          <div dangerouslySetInnerHTML={{ __html: category.description }} />
+        <div className={`${styles.content} global-content`} style={{ fontSize: `${fontSize}px` }}>
+          <MathContent content={category.description} />
         </div>
 
         <div className={styles.navigation}>

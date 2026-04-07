@@ -57,7 +57,7 @@
 }
 .activeChapter {
   background-color: var(--primary);
-  color: var(--background); /* Putih/Terang untuk monokrom */
+  color: var(--background);
   font-weight: bold;
   font-size: 110%;
 }
@@ -85,8 +85,8 @@
   margin-bottom: 15px;
 }
 .content {
-  font-size: var(--math-font-size, 18px); /* Mengikuti pengaturan font */
-  line-height: 1.6; 
+  font-size: var(--math-font-size);
+  line-height: 1.8; 
   color: var(--foreground);
   text-align: justify;
   margin-bottom: 1em;
@@ -102,7 +102,7 @@
 .lastRead {
   padding: 15px;
   background-color: var(--input-bg); 
-  border-left: 5px solid var(--accent); /* Abu-abu Monokrom */
+  border-left: 5px solid var(--accent);
   border-radius: 4px;
   display: flex;
   align-items: center;
@@ -134,7 +134,7 @@
   margin-top: 15px;
   padding: 15px;
   border-radius: 5px;
-  border-left: 3px solid #555555; /* Diubah ke Abu-Abu agar Monokrom */
+  border-left: 3px solid #555555; 
 }
 
 @media (max-width: 767px) {
@@ -185,16 +185,6 @@
     border-right: none;
     background: var(--card-bg);
   }
-  .novelInfoContainer {
-    display: flex;
-    flex-direction: column;
-    }
-  .coverWrapper {
-    max-width: 100%;
-  }
-  .contentSection {
-    margin: 20px 0 0 0;
-  } 
   .chapterHeader h1 {
     font-size: 2em;
   }

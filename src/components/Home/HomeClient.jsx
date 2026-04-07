@@ -4,14 +4,9 @@ import React, { useState } from 'react';
 import CategoryFilter from './CategoryFilter';
 import HomeGrid from './HomeGrid';
 
-export default function HomeClient({ initialPosts }) {
-  // Default tab adalah 'semua'
-  const [activeTab, setActiveTab] = useState('semua');
-
-  // Logika filter instan (tanpa loading spinner)
-  const filteredPosts = activeTab === 'semua' 
-    ? initialPosts 
-    : initialPosts.filter(post => post.categories && post.categories.includes(activeTab));
+export default function HomeClient() {
+  // PENTING: Default tab diubah menjadi 'terbaru' agar sinkron dengan API
+  const [activeTab, setActiveTab] = useState('terbaru');
 
   return (
     <div style={{ 
@@ -24,7 +19,9 @@ export default function HomeClient({ initialPosts }) {
         activeTab={activeTab} 
         setActiveTab={setActiveTab} 
       />
-      <HomeGrid posts={filteredPosts} />
+      
+      {/* Mengirim status tab yang aktif ke komponen Grid bergaya Magazine */}
+      <HomeGrid activeTab={activeTab} />
     </div>
   );
 }

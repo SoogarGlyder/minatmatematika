@@ -1,75 +1,119 @@
-.gallery {
-  display: flex;
-  flex-wrap: wrap; 
-  justify-content: center; 
-  gap: 25px; 
-  margin: 0 auto;
+.masonryWrapper {
   width: 100%;
   max-width: 1440px;
+  margin: 0 auto;
   padding: 20px;
 }
 
-.card {
-  aspect-ratio: 1000 / 1430;
+.masonryGrid {
+  /* Sihir Pinterest Layout ada di 2 baris ini */
+  column-count: 4;
+  column-gap: 20px;
+}
+
+.masonryCard {
+  /* Mencegah kartu terpotong di antara kolom */
+  break-inside: avoid;
+  page-break-inside: avoid;
+  -webkit-column-break-inside: avoid;
+  
+  margin-bottom: 20px;
   display: flex;
   flex-direction: column;
-  text-align: center;
-  width: 330px; 
-  text-decoration: none; 
   background-color: var(--card-bg);
   color: var(--foreground);
   position: relative;
-  border-radius: 8px; 
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); 
+  border-radius: 12px; 
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08); 
   overflow: hidden; 
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
   border: 1px solid var(--input-border);
+  text-decoration: none;
 }
 
-.card:hover {
-  transform: translateY(-5px) scale(1.02); 
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+.masonryCard:hover {
+  transform: translateY(-6px); 
+  box-shadow: 0 12px 20px rgba(0, 0, 0, 0.15);
   border-color: var(--primary);
 }
 
-.caption {
+.cardBadge {
   position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  padding: 10px;
-  font-size: 0.9em; 
-  font-weight: 600; 
-  text-align: center;
-  background: rgba(0, 0, 0, 0.6); /* Sedikit lebih gelap agar teks kontras */
-  backdrop-filter: blur(4px);
-  color: white; /* Tetap putih agar terbaca di atas gambar */
-  min-height: 50px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  top: 10px;
+  left: 10px;
+  z-index: 2;
+  background: var(--background);
+  color: var(--primary);
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 800;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.imageContainer {
+  width: 100%;
+  /* Tidak di-set height agar mengikuti proporsi asli gambar */
+  display: block;
 }
 
 .cardImage {
-  object-fit: cover;
   width: 100%;
-  height: 100%;
+  height: auto; /* Membiarkan gambar bervariasi tingginya */
+  display: block;
+  object-fit: cover;
 }
 
-@media (max-width: 767px) {
-  .gallery {
-    gap: 15px;
-    padding: 15px 10px;
-  }
+.caption {
+  padding: 15px;
+  font-size: 1rem; 
+  font-weight: 700; 
+  line-height: 1.4;
+  color: var(--foreground);
+  background-color: var(--card-bg);
+  border-top: 1px solid var(--input-border);
+}
 
-  .card {
-    width: calc(50% - 15px); 
-    font-size: 0.85em;
+/* --- RESPONSIVITAS KOLOM --- */
+
+/* Tablet & Laptop Kecil */
+@media (max-width: 1024px) {
+  .masonryGrid {
+    column-count: 3;
+    column-gap: 15px;
   }
-  
+}
+
+/* Tablet Portrait */
+@media (max-width: 768px) {
+  .masonryGrid {
+    column-count: 2;
+    column-gap: 15px;
+  }
   .caption {
-    min-height: 40px;
-    padding: 5px;
-    font-size: 0.8em;
+    font-size: 0.9rem;
+    padding: 12px;
+  }
+}
+
+/* HP Layar Sangat Kecil */
+@media (max-width: 480px) {
+  .masonryGrid {
+    /* Bisa diset 1 kolom atau tetap 2 kolom tergantung selera. 
+       Untuk kesan majalah, 2 kolom di HP masih sangat bagus. */
+    column-count: 2;
+    column-gap: 10px;
+  }
+  .masonryCard {
+    margin-bottom: 10px;
+    border-radius: 8px;
+  }
+  .cardBadge {
+    font-size: 0.65rem;
+    padding: 3px 8px;
+  }
+  .caption {
+    font-size: 0.8rem;
+    padding: 8px;
   }
 }

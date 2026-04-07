@@ -65,7 +65,7 @@
 
 .navActive {
   background-color: var(--primary);
-  color: white !important;
+  color: var(--background) !important;
 }
 
 .themeToggleBtn {
@@ -96,7 +96,7 @@
     width: 100%;
     display: flex;
     justify-content: center;
-    height: 45px; /* Atau gunakan var(--nav-height) jika sudah di-define */
+    height: 45px;
     background-color: var(--input-bg);
     border-bottom: 1px solid var(--input-border);
     overflow-x: auto;
@@ -130,7 +130,7 @@
 
 .navContent.active {
     background-color: var(--primary);
-    color: white;
+    color: var(--background);
     font-size: 115%;
 }
 
@@ -152,7 +152,7 @@
     justify-content: center;
   }
   .leftSection {
-  justify-content: center;
+    justify-content: center;
   }
   .navContent {
     font-size: 0.9em;
@@ -163,4 +163,24 @@
   .navContent.active {
     font-size: 1.1em;
   }
+}
+
+/* --- OVERLAY UNTUK GRID MAGAZINE DI DROPDOWN --- */
+.dropdownOverlay {
+  position: fixed;
+  top: var(--total-header-height);
+  left: 0;
+  width: 100vw;
+  height: calc(100vh - var(--total-header-height));
+  background-color: rgba(0, 0, 0, 0.6); 
+  backdrop-filter: blur(5px);
+  z-index: 1000;
+  overflow-y: auto;
+}
+
+.dropdownGridContainer {
+  width: 100%;
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 30px 10px;
 }

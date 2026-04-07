@@ -61,7 +61,7 @@
 
 .fontBtn:hover {
   background-color: var(--primary);
-  color: white;
+  color: var(--background);
   border-color: var(--primary);
 }
 
@@ -111,7 +111,7 @@
 
 .affiliateBtn {
   background-color: #ee4d2d;
-  color: white;
+  color: white; /* Shopee brand color tetap putih agar mencolok */
   border: none;
   padding: 10px 0;
   border-radius: 8px;

@@ -3,14 +3,15 @@
 import React, { useState, useEffect, useRef } from 'react';
 import styles from './CategoryFilter.module.css';
 
-// Kategori disesuaikan untuk Minat Matematika
+// Kategori disesuaikan dengan logika API Grid yang baru
 const seriesTabs = [
-  { id: 'semua', name: 'Semua Materi' },
-  { id: 'Penalaran Umum', name: 'Penalaran Umum' },
-  { id: 'Pengetahuan Kuantitatif', name: 'Pengetahuan Kuantitatif' },
-  { id: 'Penalaran Matematika', name: 'Penalaran Matematika' },
-  { id: 'Aljabar', name: 'Aljabar' },
-  { id: 'Geometri', name: 'Geometri' },
+  { id: 'terbaru', name: 'Terbaru' },
+  { id: 'PU', name: 'Penalaran Umum (PU)' },
+  { id: 'PK', name: 'Pengetahuan Kuantitatif (PK)' },
+  { id: 'PM', name: 'Penalaran Matematika (PM)' },
+  { id: 'PKS 10', name: 'PKS 10' },
+  { id: 'PKS 11', name: 'PKS 11' },
+  { id: 'PKS 12', name: 'PKS 12' },
 ];
 
 export default function CategoryFilter({ activeTab, setActiveTab }) {

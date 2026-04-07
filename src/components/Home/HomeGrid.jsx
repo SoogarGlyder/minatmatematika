@@ -1,52 +1,93 @@
 'use client';
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import styles from './HomeGrid.module.css';
+import LoadingSpinner from '../LoadingSpinner';
 
-export default function HomeGrid({ posts }) {
+export default function HomeGrid({ activeTab }) {
+  const [items, setItems] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchGridData = async () => {
+      setLoading(true);
+      setError(null);
+      try {
+        // Memanggil API cerdas kita
+        const response = await fetch(`/api/grid?tab=${activeTab}`);
+        const result = await response.json();
+        
+        if (!response.ok || !result.success) {
+          throw new Error(result.error || 'Gagal mengambil data.');
+        }
+
+        setItems(result.data);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    // Pastikan activeTab tidak kosong
+    if (activeTab) {
+      fetchGridData();
+    }
+  }, [activeTab]);
   
-  if (!posts || posts.length === 0) {
+  if (loading) return <LoadingSpinner message="Menyusun majalah materi..." />;
+
+  if (error) {
+    return (
+      <div style={{ textAlign: 'center', padding: '40px', color: 'var(--foreground)' }}>
+        <p>Waduh, terjadi kesalahan: {error}</p>
+      </div>
+    );
+  }
+  
+  if (!items || items.length === 0) {
     return (
       <div style={{ textAlign: 'center', padding: '60px', opacity: 0.7, color: 'var(--foreground)' }}>
-        <p>Belum ada paket soal di kategori ini.</p>
+        <p>Belum ada data di kategori ini. Tunggu *update* selanjutnya, ya!</p>
       </div>
     );
   }
 
   return (
-    <div className={styles.gallery}>
-      {posts.map((post) => {
-        // Ambil nama kategori untuk membuat routing yang benar
-        const catName = post.categories && post.categories.length > 0 ? post.categories[0] : 'umum';
-        const categorySlug = catName.toLowerCase().replace(/[^a-z0-9]+/g, '-');
-        
-        const href = `/${categorySlug}/${post.slug}`; 
-        const coverImage = post.featuredImage || 'https://images.unsplash.com/photo-1632516643720-e7f0d7e6a739?q=80&w=250&auto=format&fit=crop';
-
-        return (
+    <div className={styles.masonryWrapper}>
+      <div className={styles.masonryGrid}>
+        {items.map((item) => (
           <Link 
-            key={post._id} 
-            href={href}
-            className={styles.card}
+            key={item._id} 
+            href={item.href} // href ini sudah ajaib, menyesuaikan dia soal atau materi
+            className={styles.masonryCard}
           >
-            <div style={{ position: 'relative', width: '100%', height: '100%' }}>
+            {/* Tag/Label kecil di atas gambar untuk membedakan Soal vs Materi */}
+            <div className={styles.cardBadge}>
+              {item.type === 'paket-soal' ? '📝 Latihan' : '📚 Materi'}
+            </div>
+
+            <div className={styles.imageContainer}>
               <Image 
-                src={coverImage}
-                alt={post.title}
-                fill
-                sizes="(max-width: 768px) 50vw, (max-width: 1200px) 33vw, 20vw"
+                src={item.image}
+                alt={item.title}
+                width={500}
+                height={500} 
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                 className={styles.cardImage}
                 priority={false}
               />
             </div>
+            
             <figcaption className={styles.caption}>
-              {post.title}
+              {item.title}
             </figcaption>
           </Link>
-        );
-      })}
+        ))}
+      </div>
     </div>
   );
 }

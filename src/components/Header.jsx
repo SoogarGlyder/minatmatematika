@@ -7,14 +7,18 @@ import { useTheme } from 'next-themes';
 import { FaSun, FaMoon } from 'react-icons/fa'; 
 import styles from './Header.module.css';
 import { useGlobalContext } from '../app/providers'; 
+import HomeGrid from './Home/HomeGrid'; // <-- Import HomeGrid yang berdesain Magazine
+import ReadingProgressBar from './ReadingProgressBar'; 
 
-// Mengganti tab SAO menjadi tab Kategori Matematika
+// Tab Kategori Matematika disamakan dengan Home
 const categoryTabs = [
-  { id: 'penalaran-umum', name: 'Penalaran Umum' },
-  { id: 'pengetahuan-kuantitatif', name: 'Pengetahuan Kuantitatif' },
-  { id: 'penalaran-matematika', name: 'Penalaran Matematika' },
-  { id: 'aljabar', name: 'Aljabar' },
-  { id: 'geometri', name: 'Geometri' },
+  { id: 'terbaru', name: 'Terbaru' },
+  { id: 'PU', name: 'Penalaran Umum (PU)' },
+  { id: 'PK', name: 'Pengetahuan Kuantitatif (PK)' },
+  { id: 'PM', name: 'Penalaran Matematika (PM)' },
+  { id: 'PKS 10', name: 'PKS 10' },
+  { id: 'PKS 11', name: 'PKS 11' },
+  { id: 'PKS 12', name: 'PKS 12' },
 ];
 
 function Header() {
@@ -38,15 +42,11 @@ function Header() {
   const isHomePage = pathname === '/';
   const isAdminPage = pathname?.startsWith('/admin');
 
-  // Asumsi format URL baru: /[kategoriSlug]/[paketSlug]
-  const isKategoriPage = pathname && !isHomePage && !isAdminPage
-    ? pathname.split('/').filter(Boolean).length === 1 
-    : false;
-
   const isPaketSoalPage = pathname && !isHomePage && !isAdminPage
     ? pathname.split('/').filter(Boolean).length === 2 
     : false;
 
+  // Otomatis menutup dropdown saat pindah halaman
   useEffect(() => {
     setIsListOpen(false);
   }, [pathname, setIsListOpen]);
@@ -91,7 +91,8 @@ function Header() {
     if (catId === dropdownCategory && isListOpen) {
       setIsListOpen(false);
     } else {
-      setDropdownCategory(catId);
+      // Langsung simpan ID-nya (contoh: 'PU', 'PKS 10') agar bisa dibaca API
+      setDropdownCategory(catId); 
       setIsListOpen(true);
     }
   };
@@ -123,9 +124,6 @@ function Header() {
               <Link href="/" className={`${styles.navItem} ${isHomePage ? styles.navActive : ''}`}>
                 Beranda
               </Link>
-              <Link href="/materi" className={`${styles.navItem} ${isActive('/materi') ? styles.navActive : ''}`}>
-                Daftar Materi
-              </Link>
 
               <button 
                 className={styles.themeToggleBtn}
@@ -146,7 +144,7 @@ function Header() {
             style={maskStyle}
             >
             {categoryTabs.map((tab) => {
-              const isActiveByReading = activeCategory === tab.id;
+              const isActiveByReading = activeCategory === tab.name; // Mencocokkan nama kategori penuh
               const isActiveByDropdown = isListOpen && dropdownCategory === tab.id;
               const showAsActive = isActiveByReading || isActiveByDropdown;
 
@@ -163,18 +161,17 @@ function Header() {
           </nav>
         )}
         
-        {/* {isPaketSoalPage && <ReadingProgressBar />} */}
+        {isPaketSoalPage && <ReadingProgressBar />}
       </div>
 
-      {/* TODO: Nanti kita buat komponen CategoryList pengganti NovelList */}
-      {/* {!isHomePage && isListOpen && (
-        <CategoryList 
-          activeCategory={dropdownCategory}
-          onCategoryClick={() => setIsListOpen(false)}
-          navigate={router.push} 
-          isOverlay={true}
-       />
-      )} */}
+      {/* Menampilkan Grid Magazine saat Tab di Header diklik */}
+      {!isHomePage && isListOpen && (
+        <div className={styles.dropdownOverlay}>
+          <div className={styles.dropdownGridContainer}>
+            <HomeGrid activeTab={dropdownCategory} />
+          </div>
+        </div>
+      )}
     </>
   );
 }

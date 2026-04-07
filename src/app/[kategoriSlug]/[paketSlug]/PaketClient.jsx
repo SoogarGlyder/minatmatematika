@@ -10,6 +10,7 @@ import { useGlobalContext } from '@/app/providers';
 import { saveReadingHistory } from '@/utils/readingHistory';
 import RightSidebar from '@/components/RightSidebar';
 import MathContent from '@/components/MathContent';
+import CommentSection from '@/components/CommentSection'; 
 
 export default function PaketClient({
   kategoriSlug,
@@ -25,6 +26,9 @@ export default function PaketClient({
   const [isListVisible, setIsListVisible] = useState(false);
   
   const postSlug = post.slug;
+  
+  // --- PENGECEKAN KATEGORI PM ---
+  const isPM = kategoriSlug === 'penalaran-matematika';
 
   useEffect(() => {
     if (!window.location.hash) {
@@ -64,7 +68,7 @@ export default function PaketClient({
   if (!post) return null;
 
   const wordCount = post.content ? post.content.replace(/<[^>]*>/g, '').split(/\s+/).length : 0;
-  const readingTime = Math.ceil(wordCount / 150); // Penyesuaian waktu baca matematika
+  const readingTime = Math.ceil(wordCount / 150); 
 
   return (
     <div className={styles.holyGrailLayout}>
@@ -81,11 +85,14 @@ export default function PaketClient({
         
         {isListVisible && (
             <ul className={styles.chapterList}>
-              <li>
-                <Link href={`/${kategoriSlug}`} className={styles.chapterLink}>
-                  Deskripsi Materi
-                </Link>
-              </li>
+              {/* Sembunyikan tombol Deskripsi Materi jika ini adalah PM */}
+              {!isPM && (
+                <li>
+                  <Link href={`/${kategoriSlug}`} className={styles.chapterLink}>
+                    Deskripsi Materi
+                  </Link>
+                </li>
+              )}
               {allPosts.map((item) => (
                 <li key={item._id}>
                   <Link 
@@ -118,21 +125,25 @@ export default function PaketClient({
             </div>
             
             <hr className={styles.divider} />
-            <div className={styles.content} style={{ fontSize: `${fontSize}px` }}>
-               {/* Konten Matematika di-render di sini */}
-               <MathContent content={post.content} />
+            <div className={`${styles.content} global-content`} style={{ fontSize: `${fontSize}px` }}>
+              <MathContent content={post.content} />
             </div>
 
             <div className={styles.navigation}>
-              <button 
-                onClick={() => {
-                  if (prevPost) router.push(`/${kategoriSlug}/${prevPost.slug}`);
-                  else router.push(`/${kategoriSlug}`);
-                }}
-              >
-                {prevPost ? '« Paket Sebelumnya' : '« Deskripsi Materi'}
-              </button>
+              {/* Logika Tombol Kiri (Kembali) */}
+              {prevPost ? (
+                <button onClick={() => router.push(`/${kategoriSlug}/${prevPost.slug}`)}>
+                  « Paket Sebelumnya
+                </button>
+              ) : !isPM ? (
+                <button onClick={() => router.push(`/${kategoriSlug}`)}>
+                  « Deskripsi Materi
+                </button>
+              ) : (
+                <div /> /* Elemen kosong agar tombol Next tetap di kanan jika pakai flex space-between */
+              )}
 
+              {/* Logika Tombol Kanan (Lanjut) */}
               <button 
                 onClick={() => {
                   if (nextPost) {
@@ -152,6 +163,8 @@ export default function PaketClient({
                 Gunakan tombol + dan - di sidebar kanan untuk menyesuaikan ukuran teks rumus.
               </p>
             </div>
+
+            <CommentSection kategoriSlug={kategoriSlug} paketSlug={post.slug} />
 
       </main>
       <RightSidebar 
