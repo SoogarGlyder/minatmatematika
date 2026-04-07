@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { FaMinus, FaPlus, FaRedoAlt, FaShoppingBag } from 'react-icons/fa';
 import { useFontSize } from '@/contexts/FontSizeContext';
 import styles from './RightSidebar.module.css'; 
@@ -9,10 +9,19 @@ export default function RightSidebar({ affiliateData }) {
   const { changeFontSize, resetFontSize } = useFontSize();
   const hasAffiliate = affiliateData && affiliateData.link && affiliateData.image && affiliateData.title;
 
+  // Trik wajib di React/Next.js untuk memicu iklan AdSense
+  useEffect(() => {
+    try {
+      (window.adsbygoogle = window.adsbygoogle || []).push({});
+    } catch (err) {
+      console.error('AdSense Error:', err);
+    }
+  }, []);
+
   return (
     <aside className={styles.rightSidebar}>
       
-      {/* Pengatur Font */}
+      {/* Pengatur Font & Kotak Iklan */}
       <div className={styles.rightContainer}>
         <h3 className={styles.sidebarTitle}>Ukuran Teks</h3>
         <div className={styles.fontControlButtons}>
@@ -41,7 +50,22 @@ export default function RightSidebar({ affiliateData }) {
       </div>
 
       <div className={styles.stickyWrapper}>
-        
+
+        {/* ========================================== */}
+        {/* IKLAN ADSENSE RESPONSIVE                   */}
+        {/* ========================================== */}
+        <div style={{ marginTop: '20px', width: '100%', overflow: 'hidden', minHeight: '250px' }}>
+          <ins className="adsbygoogle"
+                style={{ display: 'block' }}
+                data-ad-client="ca-pub-4365395677457990"
+                data-ad-slot="4896743654"
+                data-ad-format="auto"
+                data-full-width-responsive="true">
+          </ins>
+        </div>
+        {/* ========================================== */}
+
+
         {/* Banner Buku/Alat Tulis Afiliasi */}
         {hasAffiliate && (
           <div className={styles.rightContainer}>
