@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useEffect } from 'react';
+import Image from 'next/image'; // <-- IMPORT JURUS NEXT/IMAGE
 import { FaMinus, FaPlus, FaRedoAlt, FaShoppingBag } from 'react-icons/fa';
 import { useFontSize } from '@/contexts/FontSizeContext';
 import styles from './RightSidebar.module.css'; 
@@ -71,10 +72,14 @@ export default function RightSidebar({ affiliateData }) {
           <div className={styles.rightContainer}>
             <h3 className={styles.sidebarTitle}>Rekomendasi Belajar</h3>
             <div className={styles.affiliateImageWrapper}>
-              <img 
+              {/* MENGGUNAKAN NEXT/IMAGE */}
+              <Image 
                 src={affiliateData.image} 
                 alt={affiliateData.title} 
-                className={styles.affiliateImage} 
+                width={250}
+                height={250}
+                className={styles.affiliateImage}
+                style={{ width: '100%', height: 'auto', objectFit: 'cover' }}
               />
             </div>
             <p className={styles.affiliateTitle}>
@@ -97,7 +102,15 @@ export default function RightSidebar({ affiliateData }) {
         <div className={styles.rightContainer}>
           <h3 className={styles.sidebarTitle}>Dukung Kami Yuk!</h3>
           <a href="https://saweria.co/MinatMatematika" target="_blank" rel="noreferrer">
-            <img className={styles.saweria} src="https://saweria.co/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fhomepage_characters.a1cf6cc4.svg&w=3840&q=75" alt="Dukung via Saweria"/>
+            {/* MENGGUNAKAN NEXT/IMAGE UNTUK LOGO SAWERIA */}
+            <Image 
+              src="https://saweria.co/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fhomepage_characters.a1cf6cc4.svg&w=3840&q=75" 
+              alt="Dukung via Saweria"
+              width={300}
+              height={100}
+              className={styles.saweria}
+              style={{ width: '100%', height: 'auto' }}
+            />
           </a>
         </div>
 

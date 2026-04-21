@@ -59,12 +59,7 @@ export default function RootLayout({ children }) {
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
-        <Script
-          async
-          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4365395677457990"
-          crossOrigin="anonymous"
-          strategy="afterInteractive"
-        />
+        {/* AdSense Dihapus dari Head agar tidak memblokir render awal */}
       </head>
       <body suppressHydrationWarning>
         <Providers>
@@ -82,6 +77,17 @@ export default function RootLayout({ children }) {
           <FloatingSettings />
         </Providers>
         
+        {/* ========================================== */}
+        {/* JURUS LAZY LOAD SCRIPT EKSTERNAL           */}
+        {/* ========================================== */}
+        
+        {/* Script AdSense - Baru akan di-load saat browser sedang santai */}
+        <Script
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4365395677457990"
+          crossOrigin="anonymous"
+          strategy="lazyOnload"
+        />
+
         {/* Script Saweria */}
         <Script id="saweria-widget" strategy="lazyOnload">
           {`

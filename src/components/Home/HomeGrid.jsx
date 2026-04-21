@@ -6,17 +6,33 @@ import Image from 'next/image';
 import styles from './HomeGrid.module.css';
 import LoadingSpinner from '../LoadingSpinner';
 
+// ==========================================
+// JURUS CACHING SISI KLIEN (IN-MEMORY)
+// Menyimpan data tab agar perpindahan menu instan 0 detik!
+// ==========================================
+const globalGridCache = {};
+
 export default function HomeGrid({ activeTab }) {
-  const [items, setItems] = useState([]);
-  const [loading, setLoading] = useState(true);
+  // Jika tab sudah pernah dibuka, langsung tampilkan datanya tanpa loading
+  const [items, setItems] = useState(globalGridCache[activeTab] || []);
+  const [loading, setLoading] = useState(!globalGridCache[activeTab]);
   const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchGridData = async () => {
+      if (!activeTab) return;
+
+      // Cek Brankas: Kalau data tab ini sudah ada, stop! Jangan fetch ke API lagi.
+      if (globalGridCache[activeTab]) {
+        setItems(globalGridCache[activeTab]);
+        setLoading(false);
+        return;
+      }
+
       setLoading(true);
       setError(null);
+      
       try {
-        // Memanggil API cerdas kita
         const response = await fetch(`/api/grid?tab=${activeTab}`);
         const result = await response.json();
         
@@ -24,6 +40,8 @@ export default function HomeGrid({ activeTab }) {
           throw new Error(result.error || 'Gagal mengambil data.');
         }
 
+        // Simpan data ke brankas agar jika tab ini diklik lagi, langsung instan
+        globalGridCache[activeTab] = result.data;
         setItems(result.data);
       } catch (err) {
         setError(err.message);
@@ -32,10 +50,7 @@ export default function HomeGrid({ activeTab }) {
       }
     };
 
-    // Pastikan activeTab tidak kosong
-    if (activeTab) {
-      fetchGridData();
-    }
+    fetchGridData();
   }, [activeTab]);
   
   if (loading) return <LoadingSpinner message="Menyusun majalah materi..." />;
@@ -62,7 +77,7 @@ export default function HomeGrid({ activeTab }) {
         {items.map((item) => (
           <Link 
             key={item._id} 
-            href={item.href} // href ini sudah ajaib, menyesuaikan dia soal atau materi
+            href={item.href}
             className={styles.masonryCard}
           >
             {/* Tag/Label kecil di atas gambar untuk membedakan Soal vs Materi */}
@@ -78,7 +93,7 @@ export default function HomeGrid({ activeTab }) {
                 height={500} 
                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                 className={styles.cardImage}
-                priority={false}
+                priority={false} /* Biarkan false (lazy load) karena ini di dalam grid */
               />
             </div>
             

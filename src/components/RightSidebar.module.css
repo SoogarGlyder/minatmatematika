@@ -6,6 +6,7 @@
   flex-direction: column;
   gap: 20px;
   color: var(--foreground);
+  align-self: stretch; 
 }
 
 .stickyWrapper {

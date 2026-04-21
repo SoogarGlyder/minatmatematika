@@ -3,14 +3,24 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import dynamic from 'next/dynamic'; // <-- 1. Import dynamic dari Next.js
 import { useFontSize } from '@/contexts/FontSizeContext'; 
 import styles from './PaketReadPage.module.css';
 import Breadcrumbs from '@/components/Breadcrumbs';
 import { useGlobalContext } from '@/app/providers'; 
 import { saveReadingHistory } from '@/utils/readingHistory';
 import RightSidebar from '@/components/RightSidebar';
-import MathContent from '@/components/MathContent';
 import CommentSection from '@/components/CommentSection'; 
+
+// --- 2. JURUS LAZY LOADING KOMPONEN BERAT ---
+const MathContent = dynamic(() => import('@/components/MathContent'), { 
+  ssr: false, // Matikan Server-Side Rendering untuk rumus agar tidak bentrok
+  loading: () => (
+    <div style={{ color: '#888', fontStyle: 'italic', textAlign: 'center', padding: '40px 0' }}>
+      ⏳ Memuat soal dan rumus matematika...
+    </div>
+  ) 
+});
 
 export default function PaketClient({
   kategoriSlug,
@@ -126,6 +136,7 @@ export default function PaketClient({
             
             <hr className={styles.divider} />
             <div className={`${styles.content} global-content`} style={{ fontSize: `${fontSize}px` }}>
+              {/* Komponen ini sekarang akan di-load belakangan! */}
               <MathContent content={post.content} />
             </div>
 
@@ -164,6 +175,7 @@ export default function PaketClient({
               </p>
             </div>
 
+            {/* Komentar juga dirender secara normal */}
             <CommentSection kategoriSlug={kategoriSlug} paketSlug={post.slug} />
 
       </main>

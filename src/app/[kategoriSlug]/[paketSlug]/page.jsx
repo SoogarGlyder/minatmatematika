@@ -1,14 +1,32 @@
+import { cache } from 'react'; // <-- IMPORT REACT CACHE
 import dbConnect from '@/lib/db';
 import Post from '@/models/Post';
 import PaketClient from './PaketClient';
 import { notFound } from 'next/navigation';
 
+// ==========================================
+// JURUS 1: ISR CACHING VERCEL
+// Halaman akan di-cache selama 60 detik. 
+// Super cepat dan sangat hemat kuota MongoDB!
+// ==========================================
+export const revalidate = 60;
+
+// ==========================================
+// JURUS 2: MEMOIZE DATABASE CALL
+// Mencegah Mongoose melakukan query 2x (untuk metadata dan untuk halaman)
+// ==========================================
+const getPost = cache(async (slug) => {
+  await dbConnect();
+  // Cegah akses langsung ke URL jika statusnya masih draft
+  return await Post.findOne({ slug, status: { $ne: 'draft' } }).lean();
+});
+
 export async function generateMetadata({ params }) {
   try {
     const { kategoriSlug, paketSlug } = await params;
-    await dbConnect();
 
-    const post = await Post.findOne({ slug: paketSlug }).lean();
+    // Menggunakan getPost yang sudah di-cache
+    const post = await getPost(paketSlug);
     
     if (!post) {
       return { title: 'Materi Tidak Ditemukan | Minat Matematika' };
@@ -64,17 +82,21 @@ export async function generateMetadata({ params }) {
 export default async function Page({ params }) {
   const { kategoriSlug, paketSlug } = await params;
   
-  await dbConnect();
-
-  const currentPost = await Post.findOne({ slug: paketSlug }).lean();
+  // Menggunakan getPost yang sudah di-cache (tidak perlu hit DB lagi)
+  const currentPost = await getPost(paketSlug);
   if (!currentPost) notFound();
 
   const categoryName = currentPost.categories && currentPost.categories.length > 0 
     ? currentPost.categories[0] 
     : "Umum";
 
-  // Mengambil semua post dalam kategori yang sama untuk Sidebar Kiri
-  const allPosts = await Post.find({ categories: categoryName })
+  // ==========================================
+  // JURUS 3: TUTUP KEBOCORAN DRAFT
+  // ==========================================
+  const allPosts = await Post.find({ 
+      categories: categoryName,
+      status: { $ne: 'draft' } // <-- Cegah paket draft muncul di sidebar & Prev/Next
+    })
     .select('title slug')
     .sort({ publishDate: 1 })
     .lean();

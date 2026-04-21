@@ -1,21 +1,35 @@
+import { cache } from 'react'; // <-- 1. IMPORT REACT CACHE
 import dbConnect from '@/lib/db';
 import Post from '@/models/Post';
-import Materi from '@/models/Materi'; // <-- IMPORT DATABASE MATERI
+import Materi from '@/models/Materi'; 
 import KategoriClient from './KategoriClient';
 import { redirect, notFound } from 'next/navigation';
 
+// ==========================================
+// 2. JURUS ISR CACHING VERCEL (60 Detik)
+// ==========================================
+export const revalidate = 60;
+
+// ==========================================
+// 3. JURUS MEMOIZE DATABASE CALL
+// Fungsi ini akan menyimpan hasil pencarian materi 
+// agar tidak dipanggil 2x oleh Metadata dan Page
+// ==========================================
+const getMateri = cache(async (slug) => {
+  await dbConnect();
+  return await Materi.findOne({ slug }).lean();
+});
+
 export async function generateMetadata({ params }) {
   const { kategoriSlug } = await params;
-  await dbConnect();
   
-  // Ambil data materi asli untuk Metadata SEO
-  const materi = await Materi.findOne({ slug: kategoriSlug }).lean();
+  // Ambil data menggunakan cache
+  const materi = await getMateri(kategoriSlug);
   
   const categoryName = materi ? materi.name : kategoriSlug.split('-')
     .map(word => word.charAt(0).toUpperCase() + word.slice(1))
     .join(' ');
 
-  // Gunakan deskripsi asli jika ada, jika tidak pakai default
   const rawDesc = materi?.description ? materi.description.replace(/<[^>]+>/g, '').substring(0, 160) : `Kumpulan paket latihan soal ${categoryName} untuk persiapan UTBK SNBT.`;
 
   return {
@@ -41,18 +55,20 @@ export async function generateMetadata({ params }) {
 
 export default async function Page({ params }) {
   const { kategoriSlug } = await params;
-  await dbConnect();
 
-  // 1. CARI DATA MATERI ASLI DARI DATABASE
-  const materi = await Materi.findOne({ slug: kategoriSlug }).lean();
+  // Ambil data menggunakan cache (GRATIS, tidak hit database lagi!)
+  const materi = await getMateri(kategoriSlug);
 
   const formattedCategoryName = materi ? materi.name : kategoriSlug.split('-')
     .map(word => word.charAt(0).toUpperCase() + word.slice(1))
     .join(' ');
 
+  // Tetap butuh dbConnect di sini untuk pencarian Post
+  await dbConnect();
+
   const postsInCategory = await Post.find({ 
       categories: formattedCategoryName,
-      status: { $ne: 'draft' } // <-- Tambahkan baris ini
+      status: { $ne: 'draft' } // <-- Filter draft Bos yang sudah sempurna!
     })
     .select('title slug categories publishDate')
     .sort({ publishDate: 1 }) 
@@ -67,7 +83,6 @@ export default async function Page({ params }) {
     }
   }
 
-  // Jika materi tidak ditemukan di DB, kembalikan 404 Not Found
   if (!materi && postsInCategory.length === 0) {
     notFound();
   }
@@ -78,7 +93,6 @@ export default async function Page({ params }) {
     publishDate: post.publishDate?.toISOString(),
   }));
 
-  // 2. MASUKKAN DATA ASLI KE DALAM OBJEK KATEGORI
   const categoryData = {
     slug: kategoriSlug,
     name: formattedCategoryName,

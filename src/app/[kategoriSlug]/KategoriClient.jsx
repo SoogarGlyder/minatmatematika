@@ -3,13 +3,23 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import dynamic from 'next/dynamic'; // <-- 1. Import dynamic dari Next.js
 import { useFontSize } from '@/contexts/FontSizeContext'; 
 import styles from './KategoriDetailPage.module.css';
 import Breadcrumbs from '@/components/Breadcrumbs';
 import { useGlobalContext } from '@/app/providers';
 import { getReadingHistory } from '@/utils/readingHistory';
 import RightSidebar from '@/components/RightSidebar';
-import MathContent from '@/components/MathContent'; // <-- IMPORT MATHCONTENT
+
+// --- 2. JURUS LAZY LOADING KOMPONEN BERAT ---
+const MathContent = dynamic(() => import('@/components/MathContent'), { 
+  ssr: false, // Matikan SSR untuk rumus
+  loading: () => (
+    <div style={{ color: '#888', fontStyle: 'italic', textAlign: 'center', padding: '40px 0' }}>
+      ⏳ Memuat deskripsi materi dan rumus...
+    </div>
+  ) 
+});
 
 export default function KategoriClient({ category, allPosts }) {
   const router = useRouter();
@@ -112,6 +122,7 @@ export default function KategoriClient({ category, allPosts }) {
         <hr className={styles.divider} />
         
         <div className={`${styles.content} global-content`} style={{ fontSize: `${fontSize}px` }}>
+          {/* Komponen ini sekarang akan di-load belakangan! */}
           <MathContent content={category.description} />
         </div>
 
