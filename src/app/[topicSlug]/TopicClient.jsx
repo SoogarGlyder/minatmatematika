@@ -169,7 +169,7 @@ export default function TopicClient({ initialTopic, initialPaketList }) {
         {/* 2. IKLAN ADSENSE DITEMPATKAN DI SINI */}
         <div style={{ margin: '30px 0', borderTop: '1px dashed var(--input-border)', borderBottom: '1px dashed var(--input-border)', padding: '20px 0' }}>
           <span style={{ fontSize: '0.75rem', color: '#888', display: 'block', textAlign: 'center', marginBottom: '5px' }}>Advertisement</span>
-          <AdBanner dataAdSlot="MASUKKAN_ANGKA_SLOT_DARI_ADSENSE_DI_SINI" />
+          <AdBanner dataAdSlot="6974185423" />
         </div>
 
         {/* NAVIGASI: Tombol Mulai Belajar */}

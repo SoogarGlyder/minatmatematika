@@ -79,7 +79,7 @@ function TopicList({ activeSerie, onNovelClick }) {
                 <span style={{ fontSize: '0.65rem', color: '#888', marginTop: '10px' }}>Sponsor</span>
                 {/* Kamu bisa menggunakan dataAdFormat="fluid" khusus untuk in-feed ads */}
                 <AdBanner 
-                  dataAdSlot="MASUKKAN_ANGKA_SLOT_IKLAN_INFEED" 
+                  dataAdSlot="8411690525" 
                   dataAdFormat="fluid" 
                 />
               </div>

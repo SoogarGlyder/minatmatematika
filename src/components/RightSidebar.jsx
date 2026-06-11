@@ -52,7 +52,7 @@ export default function RightSidebar({ affiliateData }) {
             Sponsor
           </h3>
           {/* Pastikan kamu mengganti tulisan di bawah ini dengan Angka Slot Iklanmu nanti */}
-          <AdBanner dataAdSlot="MASUKKAN_ANGKA_SLOT_DARI_ADSENSE_DI_SINI" />
+          <AdBanner dataAdSlot="4896743654" />
         </div>
 
         {hasAffiliate && (

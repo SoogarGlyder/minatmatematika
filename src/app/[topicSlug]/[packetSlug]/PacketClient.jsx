@@ -208,7 +208,7 @@ export default function PacketClient({
             {/* 3. IKLAN ADSENSE DITEMPATKAN DI SINI (SEBELUM TOMBOL NAVIGASI) */}
             <div style={{ margin: '30px 0', borderTop: '1px dashed var(--input-border)', paddingTop: '20px' }}>
               <span style={{ fontSize: '0.75rem', color: '#888', display: 'block', textAlign: 'center', marginBottom: '5px' }}>Advertisement</span>
-              <AdBanner dataAdSlot="MASUKKAN_ANGKA_SLOT_DARI_ADSENSE_DI_SINI" />
+              <AdBanner dataAdSlot="4564146092" />
             </div>
 
             {/* TOMBOL NAVIGASI BAWAH */}
