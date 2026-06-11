@@ -1,0 +1,367 @@
+/* File: src/app/styles/LandPages.module.css */
+
+.container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 4rem 20px;
+  color: var(--foreground);
+}
+
+.hero {
+  text-align: center;
+  margin-bottom: 3rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px dashed var(--input-border);
+}
+
+.title {
+  font-size: 2.5rem;
+  font-weight: 800;
+  margin-bottom: 1rem;
+  letter-spacing: -1px;
+}
+
+/* Mengubah gradien warna warni menjadi monokrom pekat */
+.highlight {
+  color: var(--foreground);
+  font-weight: 900;
+  text-decoration: underline;
+  text-decoration-color: var(--input-border);
+}
+
+.subtitle {
+  font-size: 1.1rem;
+  color: var(--foreground);
+  opacity: 0.7;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+
+/* Kotak peringatan diubah ke nuansa abu-abu netral */
+.alertBox {
+  background-color: var(--input-bg);
+  color: var(--foreground);
+  border: 1px solid var(--input-border);
+  border-radius: 12px;
+  padding: 1.5rem;
+  display: flex;
+  gap: 20px;
+  margin-bottom: 3rem;
+  align-items: flex-start;
+}
+
+.alertIcon {
+  font-size: 2rem;
+  line-height: 1;
+}
+
+.alertContent h3 {
+  margin-top: 0;
+  margin-bottom: 0.5rem;
+  font-size: 1.2rem;
+}
+
+.alertContent p {
+  margin: 0 0 10px 0;
+  line-height: 1.5;
+  font-size: 0.95rem;
+  text-align: justify;
+  padding-right: 35px;
+}
+
+.smallText {
+  font-size: 0.85rem;
+  opacity: 0.8;
+}
+
+.intro {
+  font-size: 1.05rem;
+  line-height: 1.8;
+  margin-bottom: 2.5rem;
+  text-align: justify;
+}
+
+.section {
+  margin-bottom: 2rem;
+}
+
+.sectionTitle {
+  text-align: left;
+  font-size: 1.5rem;
+  border-bottom: 2px solid var(--input-border);
+  padding-bottom: 10px;
+  margin-bottom: 1rem;
+}
+
+.section p {
+  text-align: justify;
+  line-height: 1.7;
+  opacity: 0.9;
+  margin-bottom: 1rem;
+  font-size: 1.05rem;
+}
+
+.section ul {
+  margin-bottom: 1rem;
+  padding-left: 20px;
+}
+
+.section ul li {
+  margin-bottom: 0.5rem;
+  line-height: 1.6;
+  opacity: 0.9;
+}
+
+/* Quote box diubah ke garis abu-abu/monokrom */
+.quoteBox {
+  background-color: var(--input-bg);
+  border-left: 5px solid var(--foreground);
+  padding: 1.5rem;
+  border-radius: 0 8px 8px 0;
+  font-style: italic;
+  font-weight: 500;
+  margin: 1.5rem 0;
+}
+
+.quoteBox p {
+  margin: 0;
+}
+
+.highlightBox {
+  background-color: var(--input-bg);
+  border: 1px dashed var(--input-border);
+  padding: 1.5rem;
+  border-radius: 8px;
+  margin-top: 1rem;
+}
+
+.highlightBox h4 {
+  margin-top: 0;
+  margin-bottom: 10px;
+}
+
+.highlightBox a {
+  color: var(--link);
+  text-decoration: underline;
+  font-weight: bold;
+}
+
+.features {
+  margin-bottom: 4rem;
+}
+
+.gridFeature {
+  margin-top: 20px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
+}
+
+.featureItem {
+  background-color: var(--card-bg);
+  padding: 2rem;
+  border-radius: 12px;
+  text-align: center;
+  border: 1px solid var(--input-border);
+  transition: transform 0.2s ease, border-color 0.2s ease;
+}
+
+.featureItem:hover {
+  transform: translateY(-5px);
+  border-color: var(--foreground);
+}
+
+.featureItem h4 {
+  margin: 0 0 0.5rem 0;
+  font-size: 1.1rem;
+}
+
+.featureItem p {
+  font-size: 0.9rem;
+  opacity: 0.7;
+  margin: 0;
+  line-height: 1.5;
+}
+
+.gridContact {
+  display: grid;
+  grid-template-columns: 1fr 1.2fr;
+  gap: 40px;
+  align-items: start;
+}
+
+.contactCard {
+  background-color: var(--card-bg);
+  border: 1px solid var(--input-border);
+  border-radius: 16px;
+  padding: 2.5rem;
+  text-align: center;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+}
+
+.iconWrapper {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+  background: var(--input-bg);
+  width: 80px;
+  height: 80px;
+  line-height: 80px;
+  border-radius: 50%;
+  margin-left: auto;
+  margin-right: auto;
+  border: 1px solid var(--input-border);
+}
+
+.contactCard h3 {
+  margin-bottom: 1rem;
+  font-size: 1.5rem;
+}
+
+.contactCard p {
+  opacity: 0.8;
+  margin-bottom: 2rem;
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+.emailBox {
+  background: var(--input-bg);
+  border: 1px dashed var(--input-border);
+  padding: 15px;
+  border-radius: 8px;
+  margin-bottom: 2rem;
+}
+
+.emailLabel {
+  display: block;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  opacity: 0.6;
+  margin-bottom: 5px;
+}
+
+.emailLink {
+  font-weight: 700;
+  color: var(--foreground);
+  text-decoration: none;
+  font-size: 1.1rem;
+  word-break: break-all;
+}
+
+.topicList {
+  list-style: none;
+  padding: 0 !important;
+  margin: 0;
+}
+
+.topicList li {
+  margin-bottom: 1.5rem !important;
+}
+
+.topicList li strong {
+  display: block;
+  font-size: 1.1rem;
+  margin-bottom: 0.5rem;
+  color: var(--foreground);
+}
+
+.topicList li p {
+  margin: 0;
+  opacity: 0.7;
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+.faqSection {
+  margin-top: 2rem;
+  padding-top: 2.5rem;
+  border-top: 1px solid var(--input-border);
+}
+
+.faqSection h3 {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.faqItem {
+  background-color: var(--card-bg);
+  padding: 1.5rem;
+  border-radius: 8px;
+  border-left: 4px solid var(--foreground);
+}
+
+.faqItem h4 {
+  margin: 0 0 10px 0;
+}
+
+.faqItem p {
+  margin: 0;
+  opacity: 0.8;
+}
+
+.closing {
+  text-align: center;
+  margin-top: 4rem;
+  padding-top: 2rem;
+  border-top: 1px dashed var(--input-border);
+}
+
+.closing p {
+  font-size: 1.1rem;
+  margin-bottom: 2rem;
+}
+
+.button {
+  display: inline-block;
+  background-color: var(--button-bg);
+  color: var(--button-text);
+  padding: 12px 30px;
+  border: 1px solid var(--input-border);
+  border-radius: 50px;
+  text-decoration: none;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+
+.button:hover {
+  background-color: var(--button-hover-bg);
+  color: var(--button-hover-text);
+}
+
+@media (max-width: 768px) {
+  .title {
+    font-size: 2rem;
+  }
+  
+  .gridFeature {
+    grid-template-columns: 1fr;
+  }
+
+  .gridContact {
+    grid-template-columns: 1fr;
+    gap: 30px;
+  }
+
+  .contactCard {
+    padding: 1.5rem;
+  }
+
+  .faqSection {
+    margin-top: 0;
+  }
+
+  .alertBox {
+    flex-direction: column;
+    gap: 10px;
+    text-align: center;
+  }
+  
+  .alertIcon {
+    margin: 0 auto;
+  }
+
+  .alertContent p {
+    padding-right: 0;
+  }
+}

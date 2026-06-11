@@ -1,0 +1,369 @@
+.holyGrailLayout {
+  display: flex;
+  width: 100%;
+  max-width: 1440px; 
+  justify-self: center;
+  align-items: flex-start; 
+  position: relative;
+  justify-content: center;
+}
+
+.mobileToggle {
+  display: none;
+}
+
+/* --- LEFT SIDEBAR --- */
+.leftSidebar {
+  width: min(14.3vw, 205.771px);
+  flex-shrink: 0; 
+  position: -webkit-sticky;
+  position: sticky;
+  top: var(--total-header-height);
+  height: calc(100vh - var(--total-header-height)); 
+  overflow-y: auto;
+  background: var(--background);
+  border-right: 1px solid var(--input-border);
+  scrollbar-width: thin;
+}
+.leftSidebarTitle {
+  padding: 10px;
+  color: var(--foreground);
+  font-weight: bold;
+}
+
+/* --- MAIN CONTENT (BAGIAN YANG DIPERBAIKI) --- */
+.mainContent {
+  flex-grow: 1; 
+  min-width: 0; /* PENTING: Mencegah layout melebar (offside) */
+  background: var(--card-bg);
+  color: var(--foreground);
+  padding: 10px 20px;
+  border-right: 1px solid var(--input-border);
+  padding-bottom: 20px;
+}
+
+/* KELAS 'content' - INI NYAWA TAMPILANNYA */
+.content {
+  display: block; /* JANGAN display: contents */
+  width: 100%;
+  max-width: 100%;
+  
+  /* Typography Novel */
+  font-size: var(--novel-font-size);
+  line-height: 1.8; 
+  color: var(--foreground);
+  
+  /* Rata Kiri (Agar spasi rapi, tidak bolong-bolong) */
+  text-align: justify; 
+  
+  /* Mencegah teks panjang merusak layout */
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  word-break: break-word;
+}
+
+/* Reset Paragraf agar ada jarak */
+.content p {
+  margin-bottom: 0;
+  margin-top: 0;
+}
+
+/* Reset Heading dalam konten */
+.content h2, .content h3 {
+  color: var(--foreground);
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+.content h2 {
+  font-size: 1.4em;
+}
+
+.content h3 {
+  font-size: 1.2em;
+}
+
+/* Reset Gambar dalam konten */
+.content img {
+    max-width: 100% !important; /* Paksa gambar tidak offside */
+    height: auto !important;
+    display: block;
+    margin: 15px auto;
+    border-radius: 5px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+/* Reset List */
+.content ul, .content ol {
+  padding-left: 20px;
+  margin-top: -0.75em;
+}
+
+.content li {
+  margin-top: 0em;
+}
+
+/* Reset Blockquote (Kutipan) */
+.content blockquote {
+  border-left: 4px solid var(--primary);
+  background: var(--input-bg);
+  padding: 10px 15px;
+  margin: 15px 0;
+  font-style: italic;
+  color: var(--foreground);
+  border-radius: 0 4px 4px 0;
+}
+
+/* Reset Break Line */
+.content br {
+    content: "";
+    display: block;
+    height: 0.5em;
+}
+
+.content a {
+  color: var(--foreground);
+  text-decoration: none;
+}
+
+.content a:hover {
+  color: var(--primary);
+  background: rgba(56, 182, 255, 0.15);
+}
+
+/* ------------------------------------------------ */
+
+.imageContainer {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.optimizedImageWrapper {
+  position: relative;
+  width: 100%;
+  max-width: 800px;
+  height: auto;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  margin: 20px auto;
+}
+
+.optimizedImageWrapper img {
+  display: block;
+}
+
+.chapterList {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.chapterLink {
+  background: none;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+  text-align: left;
+  font-family: inherit;
+  color: var(--foreground);
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  padding: 8px 10px;
+  transition: all 0.2s;
+  border-radius: 4px;
+}
+
+.chapterLink span {
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 1rem;
+  line-height: 1.4;
+  max-height: 1.4em;
+  word-break: break-word;
+}
+
+.chapterLink:hover {
+  background-color: var(--input-bg);
+  font-weight: bold;
+  font-size: 110%;
+}
+
+.chapterLink:hover span {
+  color: var(--primary);
+  background-color: var(--input-bg);
+}
+
+.activeChapter {
+  background-color: var(--primary);
+  color: white;
+  font-weight: bold;
+  font-size: 110%;
+}
+
+.activeChapter:hover {
+  background-color: var(--primary);
+  color: white;
+  font-weight: bold;
+  font-size: 110%;
+}
+
+.chapterHeader h1 {
+  font-size: 2em;
+  margin: 0;
+  line-height: 1.2;
+  color: var(--foreground);
+}
+
+.chapterHeader h2 {
+  font-size: 1.2em;
+  font-weight: 500;
+  color: var(--foreground);
+  opacity: 0.9;
+}
+
+.divider {
+  border: 0;
+  border-top: 2px solid var(--input-border);
+  margin-bottom: 15px;
+}
+
+.navigation {
+  padding: 20px 0px;
+  border-top: 2px solid var(--input-border);
+  border-bottom: 2px solid var(--input-border);
+  display: flex;
+  justify-content: space-between;
+}
+
+.disclaimer {
+  font-size: 0.85rem;
+  background: var(--input-bg);
+  color: var(--foreground);
+  margin-top: 15px;
+  padding: 15px;
+  border-radius: 5px;
+  border-left: 3px solid #ff4757;
+}
+
+.relatedSection {
+  margin-top: 40px;
+  padding-top: 20px;
+  border-top: 1px solid var(--input-border);
+}
+
+.relatedTitle {
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin-bottom: 20px;
+  color: var(--foreground);
+  border-left: 4px solid var(--primary);
+  padding-left: 10px;
+}
+
+.relatedGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* 3 Kolom di Desktop */
+  gap: 20px;
+}
+
+.relatedCard {
+  background: var(--input-bg);
+  border: 1px solid var(--input-border);
+  border-radius: 8px;
+  overflow: hidden;
+  transition: transform 0.2s, box-shadow 0.2s;
+  text-decoration: none;
+  color: inherit;
+  display: flex;
+  flex-direction: column;
+}
+
+.relatedCard:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.relatedImageWrapper {
+  position: relative;
+  width: 100%;
+  height: 150px; /* Tinggi gambar fixed agar rapi */
+  background-color: #eee;
+}
+
+.relatedImageWrapper img {
+  object-fit: cover;
+}
+
+.relatedContent {
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+.relatedCardTitle {
+  font-size: 1rem;
+  font-weight: bold;
+  margin-bottom: 8px;
+  line-height: 1.4;
+  
+  /* Batasi judul max 2 baris */
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.relatedCardDate {
+  font-size: 0.8rem;
+  color: #888;
+  margin-top: auto; /* Dorong ke paling bawah */
+}
+
+/* --- RESPONSIVE MOBILE --- */
+@media (max-width: 767px) {
+  .holyGrailLayout {
+    flex-direction: column;
+    padding-top: 0 !important;
+    padding: 10px;
+    gap: 10px;
+    align-items: center;
+  }
+  .leftSidebar {
+    display: none;
+  }
+  .mainContent {
+    order: 2;
+    width: 100%;
+    padding: 0 10px;
+    margin-left: unset;
+    margin-top: 10px;
+    border-right: none;
+    background: var(--card-bg);
+  }
+
+  .chapterHeader h1 {
+    font-size: 1.8em;
+  }
+  .navigation button{
+    border-radius: 4px;
+    font-size: 0.85rem;
+    padding: 8px;
+  }
+  .disclaimer {
+    text-align: left;
+  }
+  .relatedGrid {
+    grid-template-columns: 1fr; /* 1 Kolom di HP (Ke Bawah) */
+  }
+  
+  .relatedImageWrapper {
+    height: 180px; /* Gambar agak lebih tinggi di HP biar jelas */
+  }
+}

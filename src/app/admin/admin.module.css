@@ -1,0 +1,162 @@
+.adminContainer {
+    max-width: 1440px;
+    margin: auto;
+    padding: 20px;
+    background-color: var(--card-bg);
+    color: var(--foreground);
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.adminContainer h1 {
+    color: var(--primary);
+    border-bottom: 2px solid var(--input-border);
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+}
+
+.adminMenu ul {
+    list-style: none;
+    padding: 0;
+    margin-top: 10px;
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.adminMenu a {
+    background-color: var(--primary);
+    color: white;
+    padding: 8px 15px;
+    border-radius: 5px;
+    text-decoration: none;
+    transition: background-color 0.2s, opacity 0.2s;
+}
+
+.adminMenu a:hover {
+    opacity: 0.8;
+}
+
+.novelForm label {
+    display: block;
+    margin-top: 10px;
+    font-weight: 600;
+    color: var(--foreground);
+}
+
+.novelForm select {
+    display: block;
+    margin-top: 10px;
+    font-weight: 600;
+    color: var(--foreground);
+    background-color: var(--input-bg);
+}
+
+.novelForm input[type='text'], 
+.novelForm select, 
+.novelForm textarea {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+    border: 1px solid var(--input-border);
+    background-color: var(--input-bg); 
+    color: var(--foreground); 
+    border-radius: 4px;
+}
+
+.novelForm button {
+    margin-top: 15px;
+    padding: 10px 20px;
+    background-color: var(--primary);
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.error {
+    color: white;
+    background-color: #ff6347;
+    padding: 10px;
+    border-radius: 4px;
+    margin-bottom: 15px;
+}
+.success {
+    color: white;
+    background-color: #4CAF50;
+    padding: 10px;
+    border-radius: 4px;
+    margin-bottom: 15px;
+}
+
+.tableWrapper {
+    margin-top: 20px;
+    overflow-x: auto;
+    border: 1px solid var(--input-border);
+    border-radius: 8px;
+}
+
+.novelTable {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 0;
+}
+
+.novelTable th, .novelTable td {
+    padding: 12px;
+    border: 1px solid var(--input-border);
+    text-align: left;
+    vertical-align: top;
+    color: var(--foreground);
+}
+
+.novelTable th {
+    background-color: var(--input-bg);
+    font-weight: bold;
+    color: var(--foreground);
+}
+
+.novelTable tr:nth-child(even) {
+    background-color: rgba(127, 127, 127, 0.1); 
+}
+
+.novelTable tr:hover {
+    background-color: rgba(56, 182, 255, 0.1);
+}
+
+.scrollTopBtn {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 50px;
+    height: 50px;
+    background-color: var(--primary);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    font-size: 1.5rem;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    z-index: 999;
+    
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(20px);
+    transition: all 0.3s ease;
+    
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.showScroll {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.scrollTopBtn:hover {
+    background-color: #333;
+    transform: translateY(-5px);
+    box-shadow: 0 6px 15px rgba(0,0,0,0.3);
+}
