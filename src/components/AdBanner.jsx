@@ -3,7 +3,12 @@
 
 import React, { useEffect, useRef } from 'react';
 
-export default function AdBanner({ dataAdSlot, dataAdFormat = 'auto', dataFullWidthResponsive = true }) {
+export default function AdBanner({ 
+  dataAdSlot, 
+  dataAdFormat = 'auto', 
+  dataFullWidthResponsive = true,
+  style = {} // <--- KUNCI PERBAIKAN: Menambahkan parameter style dengan nilai default
+}) {
   const adLoaded = useRef(false);
 
   useEffect(() => {
@@ -34,7 +39,7 @@ export default function AdBanner({ dataAdSlot, dataAdFormat = 'auto', dataFullWi
         textAlign: 'center', 
         overflow: 'hidden', 
         minHeight: '90px',
-        ...style // <--- Menambahkan ini agar style dari luar bisa masuk
+        ...style
       }}
     >
       <ins
