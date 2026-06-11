@@ -20,7 +20,11 @@
   display: flex;
   align-items: center;
   justify-content: center;
+<<<<<<< HEAD
   font-size: 1rem;
+=======
+  font-size: 1.2rem;
+>>>>>>> a580d16725eebfdfebc9db385bbf2840d80e1b9b
   cursor: pointer;
   transition: transform 0.3s cubic-bezier(0.68, -0.55, 0.27, 1.55);
 }

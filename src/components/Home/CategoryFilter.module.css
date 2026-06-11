@@ -53,7 +53,11 @@
 
 .filterItem.active {
   background-color: var(--primary);
+<<<<<<< HEAD
   color: white;
+=======
+  color: var(--background); /* Teks putih/background kontras untuk Monokrom */
+>>>>>>> a580d16725eebfdfebc9db385bbf2840d80e1b9b
   font-size: 115%;
 }
 

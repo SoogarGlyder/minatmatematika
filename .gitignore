@@ -39,3 +39,9 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+<<<<<<< HEAD
+=======
+
+# misc
+bantu.html
+>>>>>>> a580d16725eebfdfebc9db385bbf2840d80e1b9b

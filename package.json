@@ -1,5 +1,9 @@
 {
+<<<<<<< HEAD
   "name": "minatmatemaika.com",
+=======
+  "name": "minatmatematika.com",
+>>>>>>> a580d16725eebfdfebc9db385bbf2840d80e1b9b
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -9,6 +13,7 @@
     "lint": "eslint"
   },
   "dependencies": {
+<<<<<<< HEAD
     "@next/third-parties": "^16.1.1",
     "@tiptap/extension-highlight": "^3.26.0",
     "@tiptap/extension-subscript": "^3.26.0",
@@ -28,10 +33,18 @@
     "katex": "^0.16.47",
     "mongoose": "^9.0.2",
     "next": "^16.1.6",
+=======
+    "@next/third-parties": "^16.0.10",
+    "dotenv": "^17.4.0",
+    "katex": "^0.16.27",
+    "mongoose": "^9.3.3",
+    "next": "16.0.10",
+>>>>>>> a580d16725eebfdfebc9db385bbf2840d80e1b9b
     "next-themes": "^0.4.6",
     "react": "19.2.1",
     "react-dom": "19.2.1",
     "react-icons": "^5.6.0",
+<<<<<<< HEAD
     "react-katex": "^3.1.0",
     "react-quill-new": "^3.7.0",
     "sanitize-html": "^2.17.0",
@@ -40,5 +53,19 @@
   "devDependencies": {
     "eslint": "^9",
     "eslint-config-next": "16.0.10"
+=======
+    "react-markdown": "^10.1.0",
+    "rehype-katex": "^7.0.1",
+    "rehype-raw": "^7.0.0",
+    "remark-gfm": "^4.0.1",
+    "remark-math": "^6.0.0"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4",
+    "@tailwindcss/typography": "^0.5.19",
+    "eslint": "^9",
+    "eslint-config-next": "16.0.10",
+    "tailwindcss": "^4"
+>>>>>>> a580d16725eebfdfebc9db385bbf2840d80e1b9b
   }
 }
