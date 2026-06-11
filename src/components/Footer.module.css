@@ -24,17 +24,11 @@
 
 .brandName {
   font-size: 1.5rem;
-<<<<<<< HEAD
   font-weight: 800;
   margin: 0;
   background: linear-gradient(45deg, #0070f3, #00c6ff);
   background-clip: text;
   -webkit-text-fill-color: transparent;
-=======
-  font-weight: 900;
-  margin: 0;
-  color: var(--primary);
->>>>>>> a580d16725eebfdfebc9db385bbf2840d80e1b9b
   display: inline-block;
 }
 
@@ -42,11 +36,7 @@
   font-size: 0.95rem;
   line-height: 1.6;
   opacity: 0.7;
-<<<<<<< HEAD
   max-width: 300px;
-=======
-  max-width: 350px;
->>>>>>> a580d16725eebfdfebc9db385bbf2840d80e1b9b
   margin: 0;
 }
 
@@ -86,11 +76,7 @@
 .linkList li a:hover {
   opacity: 1;
   transform: translateX(5px);
-<<<<<<< HEAD
   color: #0070f3;
-=======
-  color: var(--accent);
->>>>>>> a580d16725eebfdfebc9db385bbf2840d80e1b9b
 }
 
 .bottomBar {

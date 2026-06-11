@@ -1,13 +1,9 @@
-<<<<<<< HEAD
 // File: src/components/Home/CategoryFilter.jsx
-=======
->>>>>>> a580d16725eebfdfebc9db385bbf2840d80e1b9b
 'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
 import styles from './CategoryFilter.module.css';
 
-<<<<<<< HEAD
 // Di sinilah kita mendefinisikan kategori matematika baru kita
 const seriesTabs = [
   { id: 'Penalaran Umum', name: 'Penalaran Umum' },
@@ -16,27 +12,13 @@ const seriesTabs = [
   { id: 'PKS Kelas 10', name: 'PKS Kelas 10' },
   { id: 'PKS Kelas 11', name: 'PKS Kelas 11' },
   { id: 'PKS Kelas 12', name: 'PKS Kelas 12' },
-=======
-// Kategori disesuaikan dengan logika API Grid yang baru
-const seriesTabs = [
-  { id: 'terbaru', name: 'Terbaru' },
-  { id: 'PU', name: 'Penalaran Umum (PU)' },
-  { id: 'PK', name: 'Pengetahuan Kuantitatif (PK)' },
-  { id: 'PM', name: 'Penalaran Matematika (PM)' },
-  { id: 'PKS 10', name: 'PKS 10' },
-  { id: 'PKS 11', name: 'PKS 11' },
-  { id: 'PKS 12', name: 'PKS 12' },
->>>>>>> a580d16725eebfdfebc9db385bbf2840d80e1b9b
 ];
 
 export default function CategoryFilter({ activeTab, setActiveTab }) {
   const navRef = useRef(null);
   const [maskStyle, setMaskStyle] = useState({});
 
-<<<<<<< HEAD
   // Fungsi ini membiarkan efek bayangan saat kategori di-scroll di HP
-=======
->>>>>>> a580d16725eebfdfebc9db385bbf2840d80e1b9b
   const updateMask = () => {
     const el = navRef.current;
     if (!el) return;

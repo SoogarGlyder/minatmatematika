@@ -36,23 +36,16 @@
   cursor: pointer;
   transition: opacity 0.2s;
 }
-<<<<<<< HEAD
-=======
-
->>>>>>> a580d16725eebfdfebc9db385bbf2840d80e1b9b
 .logoLink:hover {
   opacity: 0.8;
 }
 
-<<<<<<< HEAD
 .logoImg {
   height: 60px;
   width: auto;
   object-fit: contain;
 }
 
-=======
->>>>>>> a580d16725eebfdfebc9db385bbf2840d80e1b9b
 .topNav {
   display: flex;
   align-items: center;
@@ -77,11 +70,7 @@
 
 .navActive {
   background-color: var(--primary);
-<<<<<<< HEAD
   color: white !important;
-=======
-  color: var(--background) !important;
->>>>>>> a580d16725eebfdfebc9db385bbf2840d80e1b9b
 }
 
 .themeToggleBtn {
@@ -90,21 +79,13 @@
   color: var(--foreground);
   cursor: pointer;
   padding: 8px;
-<<<<<<< HEAD
   border-radius: 50%; /* Bulat */
-=======
-  border-radius: 50%; 
->>>>>>> a580d16725eebfdfebc9db385bbf2840d80e1b9b
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 1rem;
   transition: all 0.2s ease;
-<<<<<<< HEAD
   margin-left: 10px; /* Memberi jarak sedikit dari menu teks */
-=======
-  margin-left: 10px; 
->>>>>>> a580d16725eebfdfebc9db385bbf2840d80e1b9b
   width: 36px;
   height: 36px;
 }
@@ -113,22 +94,14 @@
   background-color: var(--input-bg);
   color: var(--primary);
   border-color: var(--primary);
-<<<<<<< HEAD
   transform: rotate(15deg); /* Efek putar sedikit saat hover */
-=======
-  transform: rotate(15deg); 
->>>>>>> a580d16725eebfdfebc9db385bbf2840d80e1b9b
 }
 
 .navContainer {
     width: 100%;
     display: flex;
     justify-content: center;
-<<<<<<< HEAD
     height: var(--nav-height);
-=======
-    height: 45px;
->>>>>>> a580d16725eebfdfebc9db385bbf2840d80e1b9b
     background-color: var(--input-bg);
     border-bottom: 1px solid var(--input-border);
     overflow-x: auto;
@@ -162,7 +135,6 @@
 
 .navContent.active {
     background-color: var(--primary);
-<<<<<<< HEAD
     color: white;
     font-size: 115%;
 }
@@ -233,12 +205,6 @@
     justify-content: center;
 }
 
-=======
-    color: var(--background);
-    font-size: 115%;
-}
-
->>>>>>> a580d16725eebfdfebc9db385bbf2840d80e1b9b
 @media (max-width: 1024px) {
   .navContainer {
     justify-content: flex-start;
@@ -257,11 +223,7 @@
     justify-content: center;
   }
   .leftSection {
-<<<<<<< HEAD
   justify-content: center;
-=======
-    justify-content: center;
->>>>>>> a580d16725eebfdfebc9db385bbf2840d80e1b9b
   }
   .navContent {
     font-size: 0.9em;
@@ -272,7 +234,6 @@
   .navContent.active {
     font-size: 1.1em;
   }
-<<<<<<< HEAD
   .novelGallery {
     gap: 15px;
     padding: 15px 10px;
@@ -305,26 +266,4 @@
   .logoTextWrapper {
     display: none !important;
   }
-=======
-}
-
-/* --- OVERLAY UNTUK GRID MAGAZINE DI DROPDOWN --- */
-.dropdownOverlay {
-  position: fixed;
-  top: var(--total-header-height);
-  left: 0;
-  width: 100vw;
-  height: calc(100vh - var(--total-header-height));
-  background-color: rgba(0, 0, 0, 0.6); 
-  backdrop-filter: blur(5px);
-  z-index: 1000;
-  overflow-y: auto;
-}
-
-.dropdownGridContainer {
-  width: 100%;
-  max-width: 1440px;
-  margin: 0 auto;
-  padding: 30px 10px;
->>>>>>> a580d16725eebfdfebc9db385bbf2840d80e1b9b
 }

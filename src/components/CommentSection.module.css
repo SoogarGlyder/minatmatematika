@@ -1,38 +1,23 @@
 .container {
-<<<<<<< HEAD
   padding-top: 20px;
   border-top: 1px solid var(--border);
-=======
-  padding-top: 30px;
-  margin-top: 30px;
-  border-top: 2px solid var(--input-border);
->>>>>>> a580d16725eebfdfebc9db385bbf2840d80e1b9b
   width: 100%;
 }
 
 .title {
   font-size: 1.5rem;
-<<<<<<< HEAD
   margin-bottom: 10px;
   color: var(--foreground);
-=======
-  margin-bottom: 20px;
-  color: var(--primary);
-  font-weight: 800;
->>>>>>> a580d16725eebfdfebc9db385bbf2840d80e1b9b
 }
 
 .form {
   margin-bottom: 30px;
-<<<<<<< HEAD
   background: var(--card-bg, #f5f5f5);
   border-radius: 8px;
 }
 
 [data-theme='dark'] .form {
   background: #2a2a2a;
-=======
->>>>>>> a580d16725eebfdfebc9db385bbf2840d80e1b9b
 }
 
 .inputGroup {
@@ -41,7 +26,6 @@
 
 .input, .textarea {
   width: 100%;
-<<<<<<< HEAD
   padding: 12px;
   border: 1px solid #ccc;
   border-radius: 6px;
@@ -52,62 +36,26 @@
 
 .textarea {
   min-height: 100px;
-=======
-  padding: 15px;
-  border: 1px solid var(--input-border);
-  border-radius: 6px;
-  font-size: 1rem;
-  background: var(--input-bg);
-  color: var(--foreground);
-  font-family: inherit;
-  transition: border-color 0.2s ease;
-}
-
-.input:focus, .textarea:focus {
-  outline: none;
-  border-color: var(--accent);
-}
-
-.textarea {
-  min-height: 120px;
->>>>>>> a580d16725eebfdfebc9db385bbf2840d80e1b9b
   resize: vertical;
 }
 
 .button {
-<<<<<<< HEAD
   background-color: #0070f3;
   color: white;
   padding: 10px 20px;
-=======
-  background-color: var(--primary);
-  color: var(--background); /* Putih di light mode, gelap di dark mode */
-  padding: 12px 24px;
->>>>>>> a580d16725eebfdfebc9db385bbf2840d80e1b9b
   border: none;
   border-radius: 6px;
   cursor: pointer;
   font-weight: bold;
-<<<<<<< HEAD
   transition: background 0.2s;
 }
 
 .button:disabled {
   background-color: #ccc;
-=======
-  font-size: 1rem;
-  transition: transform 0.2s ease, background-color 0.2s ease;
-}
-
-.button:disabled {
-  background-color: var(--input-border);
-  color: var(--accent);
->>>>>>> a580d16725eebfdfebc9db385bbf2840d80e1b9b
   cursor: not-allowed;
 }
 
 .button:hover:not(:disabled) {
-<<<<<<< HEAD
   background-color: #005bb5;
 }
 
@@ -115,58 +63,27 @@
   margin-top: 10px;
   font-size: 0.9rem;
   color: #28a745;
-=======
-  background-color: var(--accent);
-  color: var(--background);
-  transform: translateY(-2px);
-}
-
-.message {
-  margin-top: 15px;
-  font-size: 0.9rem;
-  font-weight: bold;
->>>>>>> a580d16725eebfdfebc9db385bbf2840d80e1b9b
 }
 
 .item {
   margin-bottom: 20px;
-<<<<<<< HEAD
   padding-bottom: 20px;
   border-bottom: 1px solid var(--border);
-=======
-  padding: 20px;
-  background: var(--card-bg);
-  border: 1px solid var(--input-border);
-  border-radius: 8px;
->>>>>>> a580d16725eebfdfebc9db385bbf2840d80e1b9b
 }
 
 .header {
   display: flex;
   justify-content: space-between;
-<<<<<<< HEAD
   margin-bottom: 8px;
-=======
-  margin-bottom: 12px;
-  align-items: center;
-  border-bottom: 1px dashed var(--input-border);
-  padding-bottom: 8px;
->>>>>>> a580d16725eebfdfebc9db385bbf2840d80e1b9b
 }
 
 .author {
   font-weight: bold;
-<<<<<<< HEAD
   color: var(--foreground);
-=======
-  color: var(--primary);
-  font-size: 1.05rem;
->>>>>>> a580d16725eebfdfebc9db385bbf2840d80e1b9b
 }
 
 .date {
   font-size: 0.85rem;
-<<<<<<< HEAD
   color: #888;
 }
 
@@ -174,14 +91,4 @@
   line-height: 1.6;
   white-space: pre-wrap;
   color: var(--foreground);
-=======
-  color: var(--accent);
-}
-
-.content {
-  line-height: 1.7;
-  white-space: pre-wrap;
-  color: var(--foreground);
-  font-size: 0.95rem;
->>>>>>> a580d16725eebfdfebc9db385bbf2840d80e1b9b
 }

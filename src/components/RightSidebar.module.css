@@ -1,32 +1,18 @@
 .rightSidebar {
-<<<<<<< HEAD
   width: 200px;
   margin: 20px; 
   flex-shrink: 0;
   align-self: stretch; 
-=======
-  width: 250px;
-  margin: 20px 0; 
-  flex-shrink: 0;
->>>>>>> a580d16725eebfdfebc9db385bbf2840d80e1b9b
   display: flex; 
   flex-direction: column;
   gap: 20px;
   color: var(--foreground);
-<<<<<<< HEAD
-=======
-  align-self: stretch; 
->>>>>>> a580d16725eebfdfebc9db385bbf2840d80e1b9b
 }
 
 .stickyWrapper {
   position: -webkit-sticky;
   position: sticky;
-<<<<<<< HEAD
   top: calc(var(--total-header-height) + 20px);
-=======
-  top: calc(var(--total-header-height, 100px) + 20px);
->>>>>>> a580d16725eebfdfebc9db385bbf2840d80e1b9b
   display: flex;
   flex-direction: column;
   gap: 20px;
@@ -34,19 +20,11 @@
 
 .rightContainer {
   width: 100%;
-<<<<<<< HEAD
   background-color: var(--input-bg);
   padding: 15px;
   border-radius: 8px;
   border: 1px solid var(--input-border);
   box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-=======
-  background-color: var(--card-bg);
-  padding: 20px;
-  border-radius: 12px;
-  border: 1px solid var(--input-border);
-  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
->>>>>>> a580d16725eebfdfebc9db385bbf2840d80e1b9b
   display: flex;
   flex-direction: column;
 }
@@ -54,14 +32,9 @@
 .sidebarTitle {
   text-align: center;
   font-size: 0.95rem;
-<<<<<<< HEAD
   font-weight: 700;
   margin: 0;
   color: var(--foreground);
-=======
-  font-weight: 800;
-  color: var(--primary);
->>>>>>> a580d16725eebfdfebc9db385bbf2840d80e1b9b
   margin-bottom: 15px;
 }
 
@@ -74,45 +47,29 @@
 }
 
 .fontBtn {
-<<<<<<< HEAD
   background-color: var(--card-bg);
   border: 1px solid var(--input-border);
   color: var(--foreground);
   border-radius: 6px;
-=======
-  background-color: var(--background);
-  border: 1px solid var(--input-border);
-  color: var(--foreground);
-  border-radius: 8px;
->>>>>>> a580d16725eebfdfebc9db385bbf2840d80e1b9b
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
   transition: all 0.2s ease;
   font-size: 0.9rem;
-<<<<<<< HEAD
   height: 36px; 
-=======
-  height: 40px; 
->>>>>>> a580d16725eebfdfebc9db385bbf2840d80e1b9b
   flex: 1;
 }
 
 .fontBtn:hover {
   background-color: var(--primary);
-<<<<<<< HEAD
   color: white;
-=======
-  color: var(--background);
->>>>>>> a580d16725eebfdfebc9db385bbf2840d80e1b9b
   border-color: var(--primary);
 }
 
 .saweria {
   width: 100%;
   height: auto;
-<<<<<<< HEAD
   border-radius: 4px;
   display: block;
   transition: transform 0.2s;
@@ -120,32 +77,14 @@
 
 .saweria:hover {
   transform: scale(1.02);
-=======
-  border-radius: 8px;
-  display: block;
-  transition: transform 0.2s;
-  background-color: #fce7b0;
-  padding: 10px;
-}
-
-.saweria:hover {
-  transform: scale(1.03);
->>>>>>> a580d16725eebfdfebc9db385bbf2840d80e1b9b
 }
 
 .affiliateImageWrapper {
   width: 100%;
-<<<<<<< HEAD
   aspect-ratio: 1000 / 1430;
   border-radius: 8px;
   overflow: hidden;
   margin-bottom: 10px;
-=======
-  aspect-ratio: 1 / 1;
-  border-radius: 8px;
-  overflow: hidden;
-  margin-bottom: 12px;
->>>>>>> a580d16725eebfdfebc9db385bbf2840d80e1b9b
   border: 1px solid var(--input-border);
 }
 
@@ -159,11 +98,7 @@
 .affiliateTitle {
   font-size: 0.85rem;
   font-weight: 600;
-<<<<<<< HEAD
   margin: 0 0 10px 0;
-=======
-  margin: 0 0 12px 0;
->>>>>>> a580d16725eebfdfebc9db385bbf2840d80e1b9b
   line-height: 1.4;
   text-align: center;
 }
@@ -176,36 +111,22 @@
 
 .affiliateBtn {
   background-color: #ee4d2d;
-<<<<<<< HEAD
   color: white;
   border: none;
   padding: 8px 0;
   border-radius: 6px;
-=======
-  color: white; /* Shopee brand color tetap putih agar mencolok */
-  border: none;
-  padding: 10px 0;
-  border-radius: 8px;
->>>>>>> a580d16725eebfdfebc9db385bbf2840d80e1b9b
   cursor: pointer;
   font-weight: bold;
   width: 100%;
   font-size: 0.85rem;
   transition: all 0.2s ease;
-<<<<<<< HEAD
   display: block;
   text-align: center;
-=======
-  display: flex;
-  align-items: center;
-  justify-content: center;
->>>>>>> a580d16725eebfdfebc9db385bbf2840d80e1b9b
 }
 
 .affiliateBtn:hover {
   background-color: #d74022;
   transform: translateY(-2px);
-<<<<<<< HEAD
   box-shadow: 0 4px 8px rgba(238, 77, 45, 0.3);
 }
 
@@ -215,35 +136,21 @@
 }
 
 @media (max-width: 767px) {
-=======
-}
-
-/* Responsif: Di HP Sidebar turun ke bawah */
-@media (max-width: 900px) {
->>>>>>> a580d16725eebfdfebc9db385bbf2840d80e1b9b
   .rightSidebar {
     order: 3;
     width: 100%;
     max-width: none;
     position: static;
-<<<<<<< HEAD
     margin: 0;
     align-items: stretch; 
     padding: 0 10px;
     margin-bottom: 40px;
-=======
-    margin: 20px 0;
-    align-items: stretch; 
->>>>>>> a580d16725eebfdfebc9db385bbf2840d80e1b9b
   }
   
   .rightContainer {
     width: 100%;
-<<<<<<< HEAD
     max-width: 400px;
     margin: 0 auto;
-=======
->>>>>>> a580d16725eebfdfebc9db385bbf2840d80e1b9b
   }
 
   .stickyWrapper {

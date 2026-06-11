@@ -44,19 +44,11 @@ const ReadingProgressBar = () => {
     <div 
       style={{
         position: 'absolute',
-<<<<<<< HEAD
         top: 'var(--total-header-height)',
         left: 0,
         width: `${width}%`,
         height: '4px', 
         backgroundColor: 'var(--primary, #38b6ff)',
-=======
-        top: 'var(--total-header-height, 105px)',
-        left: 0,
-        width: `${width}%`,
-        height: '4px', 
-        backgroundColor: 'var(--accent)',
->>>>>>> a580d16725eebfdfebc9db385bbf2840d80e1b9b
         zIndex: 1002, 
         transition: 'width 0.1s ease-out',
         borderTopRightRadius: '2px',
