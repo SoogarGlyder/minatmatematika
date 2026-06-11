@@ -28,17 +28,18 @@ export default function AdBanner({ dataAdSlot, dataAdFormat = 'auto', dataFullWi
   return (
     <div 
       style={{ 
-        width: '100%',     /* Memaksa elemen memiliki lebar penuh dari tempatnya berada */
-        display: 'block',  /* Memastikan kotak memiliki sifat blok standar */
+        width: '100%',
+        display: 'block',
         margin: '20px auto', 
         textAlign: 'center', 
         overflow: 'hidden', 
-        minHeight: '90px' 
+        minHeight: '90px',
+        ...style // <--- Menambahkan ini agar style dari luar bisa masuk
       }}
     >
       <ins
         className="adsbygoogle"
-        style={{ display: 'block', width: '100%' }} /* Menegaskan lebar penuh untuk ins */
+        style={{ display: 'block', width: '100%', height: '100%' }}
         data-ad-client="ca-pub-4365395677457990"
         data-ad-slot={dataAdSlot}
         data-ad-format={dataAdFormat}
