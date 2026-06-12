@@ -48,12 +48,12 @@ export default function RightSidebar({ affiliateData }) {
       {/* KOTAK AFILIASI DAN DONASI (STICKY) */}
       <div className={styles.stickyWrapper}>
         <div className={styles.rightContainer}>
-          <h3 className={styles.sidebarTitle} style={{ fontSize: '0.8rem', color: '#888' }}>
+          <h3 className={styles.sidebarTitle} style={{ fontSize: '0.8rem', color: '#888', margin: '0' }}>
             Sponsor
           </h3>
           <AdBanner
             dataAdSlot="4896743654"
-            style={{ width: '160px', height: '300px' }} 
+            style={{ width: '160px', height: '300px', alignSelf: 'center'}} 
             dataAdFormat=""
             dataFullWidthResponsive={false}
           />
