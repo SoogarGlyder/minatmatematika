@@ -53,7 +53,7 @@ export default function RightSidebar({ affiliateData }) {
           </h3>
           <AdBanner
             dataAdSlot="4896743654"
-            style={{ width: '160px', height: '300px', alignSelf: 'center'}} 
+            style={{ width: '160px', height: '300px', alignSelf: 'center', margin: '12px 0 0 0 !important' }} 
             dataAdFormat=""
             dataFullWidthResponsive={false}
           />
