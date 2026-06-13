@@ -52,7 +52,6 @@ export default function RightSidebar({ affiliateData }) {
           flexDirection: 'column', 
           alignItems: 'center',
           width: '100%',
-          marginBottom: '15px' 
         }}>
           <AdBanner
             dataAdSlot="4896743654"
@@ -60,6 +59,7 @@ export default function RightSidebar({ affiliateData }) {
               display: 'block',
               width: '100%',
               minHeight: '250px',
+              maxHeight: '600px',
               margin: '0' 
             }}
             dataAdFormat="auto"
