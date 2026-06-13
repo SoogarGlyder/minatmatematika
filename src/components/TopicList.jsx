@@ -8,34 +8,42 @@ import styles from './Header.module.css';
 import { useTopicList } from '../hooks/useTopicData';
 import LoadingSpinner from './LoadingSpinner';
 
-// 1. IMPORT KOMPONEN IKLAN
+// Mengimpor komponen iklan yang sudah kita sempurnakan sebelumnya
 import AdBanner from './AdBanner';
 
 function TopicList({ activeSerie, onNovelClick }) {
   const { topics, loading, error } = useTopicList(activeSerie);
 
   const renderContent = () => {
+    // 1. Menangani saat data masih dimuat
     if (loading) return <LoadingSpinner />;
 
-    if (error) return (
-      <div className={styles.novelListWrapper} style={{ color: 'var(--foreground)', padding: '20px' }}>
-        Error: {error}
-      </div>
-    );
+    // 2. Menangani jika terjadi error
+    if (error) {
+      return (
+        <div className={styles.novelListWrapper} style={{ color: 'var(--foreground)', padding: '20px', textAlign: 'center' }}>
+          Terjadi kesalahan: {error}
+        </div>
+      );
+    }
     
-    if (!topics || topics.length === 0) return (
-      <div className={styles.novelListWrapper} style={{ color: 'var(--foreground)', padding: '20px' }}>
-        Tidak ada materi yang ditemukan.
-      </div>
-    );
+    // 3. Menangani jika kategori materi kosong
+    if (!topics || topics.length === 0) {
+      return (
+        <div className={styles.novelListWrapper} style={{ color: 'var(--foreground)', padding: '20px', textAlign: 'center' }}>
+          Tidak ada materi yang ditemukan.
+        </div>
+      );
+    }
     
+    // 4. Jika data sukses ditarik, mari kita tampilkan
     return (
       <div className={styles.novelGallery}>
-        {/* 2. MENGGUNAKAN REDUCE UNTUK MENYISIPKAN IKLAN */}
+        {/* Menggunakan reduce untuk menyisipkan iklan secara dinamis */}
         {topics.reduce((acc, topic, index) => {
           const href = `/${topic.slug}`;
           
-          // A. Memasukkan Kartu Materi Asli ke dalam grid
+          // --- BAGIAN A: Memasukkan Kartu Materi Asli ---
           acc.push(
             <Link 
               key={topic._id} 
@@ -59,33 +67,39 @@ function TopicList({ activeSerie, onNovelClick }) {
             </Link>
           );
 
-          // B. Memasukkan Kartu Iklan setiap 4 materi (bisa disesuaikan angkanya)
-          // Menggunakan sisa bagi (modulo) % 4
+          // --- BAGIAN B: Memasukkan Kartu Iklan ---
+          // Logika (index + 1) % 4 === 0 berarti iklan muncul setiap 4 materi.
+          // Kamu bisa mengubah angka 4 menjadi 5 atau 6 jika ingin iklan lebih jarang.
           if ((index + 1) % 4 === 0) {
             acc.push(
               <div 
-                key={`ad-${index}`} 
+                key={`ad-${topic._id}-${index}`} // Kunci unik agar React tidak bingung
                 className={styles.contentCover} 
                 style={{ 
                   display: 'flex', 
                   flexDirection: 'column',
                   alignItems: 'center', 
                   justifyContent: 'center', 
-                  backgroundColor: 'var(--input-bg)',
+                  backgroundColor: 'var(--input-bg)', // Menyesuaikan dengan mode gelap/terang
                   border: '1px dashed var(--input-border)',
                   overflow: 'hidden'
                 }}
               >
-                <span style={{ fontSize: '0.65rem', color: '#888', marginTop: '10px' }}>Sponsor</span>
-                {/* Kamu bisa menggunakan dataAdFormat="fluid" khusus untuk in-feed ads */}
+                <span style={{ fontSize: '0.65rem', color: '#888', marginTop: '10px' }}>
+                  Sponsor
+                </span>
+                
+                {/* Memanggil AdBanner dengan format fluid khusus untuk In-feed */}
                 <AdBanner 
-                  dataAdSlot="8411690525" 
+                  dataAdSlot="8411690525" // Pastikan slot ini adalah tipe "In-feed Ads" di AdSense
                   dataAdFormat="fluid" 
+                  style={{ width: '100%', height: '100%', margin: '0' }}
                 />
               </div>
             );
           }
 
+          // Wajib mengembalikan keranjang (acc) agar proses reduce terus berjalan
           return acc;
         }, [])}
       </div>
