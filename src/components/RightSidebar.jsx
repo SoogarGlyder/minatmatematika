@@ -46,9 +46,10 @@ export default function RightSidebar({ affiliateData }) {
       </div>
 
       <div className={styles.stickyWrapper}>        
-        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginBottom: '20px' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
           <AdBanner
             dataAdSlot="4896743654"
+            style={{ width: '200px', height: '200px', margin: '0' }}
             dataAdFormat=""
             dataFullWidthResponsive={false}
           />
