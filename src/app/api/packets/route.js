@@ -6,7 +6,6 @@ import PaketSoal from '@/models/PaketSoal';
 export async function GET() {
     try {
         await dbConnect();
-        // Mengambil paket dan menampilkan info materi induknya agar muncul di tabel admin
         const packets = await PaketSoal.find().populate('topic', 'title slug category').sort({ createdAt: -1 });
         return NextResponse.json(packets);
     } catch (error) {
@@ -19,7 +18,6 @@ export async function POST(request) {
         await dbConnect();
         const body = await request.json();
         
-        // Validasi sederhana
         if (!body.topic || !body.title || !body.paket_number) {
             return NextResponse.json({ error: "Materi Induk, Judul, dan Nomor Paket wajib diisi!" }, { status: 400 });
         }
@@ -28,9 +26,9 @@ export async function POST(request) {
         return NextResponse.json({ message: "Paket soal berhasil dibuat", data: newPacket }, { status: 201 });
     } catch (error) {
         console.error("Error API POST Packet:", error);
-        // Error code 11000 artinya ada data ganda (duplikat slug/judul) di database
+        
         if (error.code === 11000) {
-            return NextResponse.json({ error: "Gagal! Slug URL atau Judul ini sudah ada. Gunakan yang lain." }, { status: 400 });
+            return NextResponse.json({ error: "Gagal! Paket soal ini sudah ada di dalam Materi/Topik tersebut." }, { status: 400 });
         }
         return NextResponse.json({ message: "Gagal membuat paket soal", error: error.message }, { status: 500 });
     }

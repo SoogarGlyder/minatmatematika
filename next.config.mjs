@@ -19,6 +19,18 @@ const nextConfig = {
         protocol: 'https',
         hostname: 'via.placeholder.com',
       },
+      {
+        // Menambahkan izin untuk gambar dari Unsplash
+        protocol: 'https',
+        hostname: 'images.unsplash.com',
+        pathname: '/**',
+      },
+      {
+        // Menambahkan izin untuk gambar bawaan website
+        protocol: 'https',
+        hostname: 'minatmatematika.com',
+        pathname: '/**',
+      },
     ],
   },
 };

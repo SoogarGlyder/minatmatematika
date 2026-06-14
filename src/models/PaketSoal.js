@@ -29,6 +29,8 @@ const PaketSoalSchema = new mongoose.Schema({
   },
 });
 
+PaketSoalSchema.index({ topic: 1, paket_slug: 1 }, { unique: true });
+
 function createSlug(text) {
   return text
     .toString()
