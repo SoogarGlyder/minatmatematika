@@ -172,3 +172,7 @@ select {
     --logo-height: 60px;
   }
 }
+
+.katex {
+  font-size: 0.97em !important;
+}
