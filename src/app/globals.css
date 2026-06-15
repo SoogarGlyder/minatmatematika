@@ -176,4 +176,22 @@ select {
 .katex {
   font-size: 0.97em !important;
   font: inherit !important;
+  display: inline-block;
+  max-width: 100%;
+  overflow-x: auto !important;
+  overflow-y: hidden;
+  vertical-align: middle;
+  white-space: nowrap; /* Mencegah rumus patah ke bawah */
+  padding-top: 1px;
+  padding-bottom: 1px;
+}
+
+.katex::-webkit-scrollbar {
+  height: 0px;
+}
+.katex::-webkit-scrollbar-thumb {
+  border-radius: 0px;
+}
+.katex::-webkit-scrollbar-track {
+  background: transparent;
 }
