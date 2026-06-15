@@ -116,6 +116,9 @@ export default function PacketClient({
         'img': ['src', 'alt', 'width', 'height', 'title'],
         'div': ['class', 'style', 'id'],
         'span': ['class', 'style', 'id'],
+        'ul': ['class', 'style', 'id'],
+        'ol': ['class', 'style', 'id'],
+        'li': ['class', 'style', 'id'],
         'h1': ['class', 'style', 'id'],
         'h2': ['class', 'style', 'id'],
         'h3': ['class', 'style', 'id'],
@@ -136,7 +139,8 @@ export default function PacketClient({
     if (!htmlString) return "";
     return htmlString.replace(/\$([^\$]+)\$/g, (match, rumus) => {
       try {
-         return katex.renderToString(rumus, { throwOnError: false });
+         const safeRumus = rumus.replaceAll('&amp;', '&');
+         return katex.renderToString(safeRumus, { throwOnError: false });
       } catch (e) {
          return match;
       }
