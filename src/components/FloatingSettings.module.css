@@ -1,3 +1,4 @@
+/* File: src/components/FloatingSettings.module.css */
 .container {
   position: fixed;
   bottom: 20px;
@@ -56,14 +57,69 @@
   pointer-events: all;
 }
 
+/* Animasi Muncul Berurutan (Ditambahkan sampai anak ke-5) */
 .container.active .actionBtn:nth-child(2) { transition-delay: 0.05s; }
 .container.active .actionBtn:nth-child(3) { transition-delay: 0.1s; }
 .container.active .actionBtn:nth-child(4) { transition-delay: 0.15s; }
+.container.active .actionBtn:nth-child(5) { transition-delay: 0.2s; }
 
 .actionBtn:hover {
   background-color: var(--primary);
   color: white;
   transform: scale(1.1);
+}
+
+/* =======================================
+   STYLING KHUSUS PANEL SAWERIA DI KIRI
+   ======================================= */
+.saweriaPanel {
+  position: absolute;
+  /* Mendorong panel ke kiri tombol (lebar tombol 50px + gap) */
+  right: 70px; 
+  /* Ketinggian agar sejajar manis dengan tombol-tombol aksi */
+  bottom: 70px; 
+  
+  /* Menyesuaikan warna dengan tema tombol Anda */
+  background-color: var(--card-bg);
+  border: 1px solid var(--input-border);
+  color: var(--foreground);
+  border-radius: 12px;
+  padding: 12px;
+  width: 210px; /* Ukuran pas agar barcode mudah di-scan */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  
+  /* Animasi Awal: Tersembunyi dan sedikit bergeser ke kanan */
+  opacity: 0;
+  transform: translateX(20px) scale(0.9);
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  pointer-events: none;
+}
+
+.container.active .saweriaPanel {
+  /* Efek saat menu dibuka: Muncul perlahan */
+  opacity: 1;
+  transform: translateX(0) scale(1);
+  pointer-events: all;
+  transition-delay: 0.25s; /* Muncul paling akhir setelah tombol font/tema */
+}
+
+.saweriaTitle {
+  font-size: 0.85rem;
+  font-weight: bold;
+  margin-bottom: 8px;
+  text-align: center;
+}
+
+.saweriaImg {
+  width: 100%;
+  height: auto;
+  border-radius: 6px;
+  background-color: transparent; 
+  padding: 4px;
 }
 
 @media (max-width: 767px) {

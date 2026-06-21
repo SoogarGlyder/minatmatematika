@@ -1,3 +1,4 @@
+// File: src/components/FloatingSettings.jsx
 'use client';
 
 import { useState, useEffect } from 'react';
@@ -31,6 +32,8 @@ export default function FloatingSettings() {
 
   return (
     <div className={`${styles.container} ${isOpen ? styles.active : ''}`}>
+      
+      {/* Tombol 1: Pengaturan Utama */}
       <button 
         className={`${styles.mainBtn} ${isOpen ? styles.open : ''}`} 
         onClick={toggleMenu}
@@ -39,6 +42,7 @@ export default function FloatingSettings() {
         <FaCog /> 
       </button>
 
+      {/* Tombol 2: Tema */}
       <button 
         className={styles.actionBtn}
         onClick={toggleTheme}
@@ -49,6 +53,7 @@ export default function FloatingSettings() {
         {resolvedTheme === 'dark' ? <FaSun /> : <FaMoon />}
       </button>
 
+      {/* Tombol 3: Kecilkan Huruf */}
       <button 
         className={styles.actionBtn}
         onClick={() => changeFontSize(-1)}
@@ -59,6 +64,7 @@ export default function FloatingSettings() {
         <FaMinus />
       </button>
 
+      {/* Tombol 4: Reset Huruf */}
       <button 
         className={styles.actionBtn}
         onClick={resetFontSize}
@@ -69,6 +75,7 @@ export default function FloatingSettings() {
         <FaRedoAlt />
       </button>
 
+      {/* Tombol 5: Besarkan Huruf */}
       <button 
         className={styles.actionBtn}
         onClick={() => changeFontSize(1)}
@@ -78,6 +85,14 @@ export default function FloatingSettings() {
       >
         <FaPlus />
       </button>
+
+      {/* --- PANEL BARU: Kotak Saweria --- */}
+      <div className={styles.saweriaPanel}>
+        <span className={styles.saweriaTitle}>Dukung Kami Yuk!</span>
+        <a href="https://saweria.co/SoogarGlyder" target="_blank" rel="noreferrer">
+          <img className={styles.saweriaImg} src="/saweria.png" alt="QR Code Saweria"/>
+        </a>
+      </div>
 
     </div>
   );

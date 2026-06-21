@@ -7,7 +7,7 @@ import { FaMinus, FaPlus, FaRedoAlt, FaShoppingBag } from 'react-icons/fa';
 import { useFontSize } from '@/contexts/FontSizeContext';
 import styles from './RightSidebar.module.css'; 
 
-// 1. IMPORT KOMPONEN IKLAN
+// IMPORT KOMPONEN IKLAN
 import AdBanner from '@/components/AdBanner';
 
 export default function RightSidebar({ affiliateData }) {
@@ -17,56 +17,70 @@ export default function RightSidebar({ affiliateData }) {
   return (
     <aside className={styles.rightSidebar}>
       
-      {/* KOTAK UKURAN FONT */}
-      <div className={styles.rightContainer}>
-        <h3 className={styles.sidebarTitle}>Ukuran Font</h3>
-        <div className={styles.fontControlButtons}>
-          <button 
-            onClick={() => changeFontSize(-1)} 
-            className={styles.fontBtn} 
-            title="Kecilkan Huruf"
-          >
-            <FaMinus />
-          </button>
-          <button 
-            onClick={resetFontSize} 
-            className={styles.fontBtn} 
-            title="Reset Ukuran Huruf"
-          >
-            <FaRedoAlt />
-          </button>
-          <button 
-            onClick={() => changeFontSize(1)} 
-            className={styles.fontBtn} 
-            title="Besarkan Huruf"
-          >
-            <FaPlus />
-          </button>
+      {/* --- AREA ATAS (NON-STICKY) --- */}
+      {/* Dibagi 2 Kolom untuk Desktop: Font & Saweria */}
+      <div className={styles.topSection}>
+        
+        {/* 1. KOTAK UKURAN FONT */}
+        <div className={styles.rightContainer}>
+          <h3 className={styles.sidebarTitle}>Ukuran Font</h3>
+          <div className={styles.fontControlButtons}>
+            {/* Baris Atas: Minus & Plus */}
+            <div className={styles.fontRow}>
+              <button 
+                onClick={() => changeFontSize(-1)} 
+                className={styles.fontBtn} 
+                title="Kecilkan Huruf"
+              >
+                <FaMinus />
+              </button>
+              <button 
+                onClick={() => changeFontSize(1)} 
+                className={styles.fontBtn} 
+                title="Besarkan Huruf"
+              >
+                <FaPlus />
+              </button>
+            </div>
+            {/* Baris Bawah: Reset */}
+            <div className={styles.fontRow}>
+              <button 
+                onClick={resetFontSize} 
+                className={styles.fontBtn} 
+                title="Reset Ukuran Huruf"
+              >
+                <FaRedoAlt />
+              </button>
+            </div>
+          </div>
         </div>
+
+        {/* 2. KOTAK SAWERIA */}
+        <div className={styles.rightContainer}>
+          <h3 className={styles.sidebarTitle}>Dukung Kami!</h3>
+          <a href="https://saweria.co/SoogarGlyder" target="_blank" rel="noreferrer" className={styles.saweriaLink}>
+            <img className={styles.saweria} src="/saweria.png" alt="QR Code Saweria"/>
+          </a>
+        </div>
+
       </div>
 
+      {/* --- AREA BAWAH (STICKY MELAYANG) --- */}
       <div className={styles.stickyWrapper}>        
         
-        <div style={{ 
-          display: 'flex', 
-          flexDirection: 'column', 
-          alignItems: 'center',
-          width: '100%',
-        }}>
+        {/* IKLAN ATAS (FIXED 300x250) */}
+        <div className={styles.adWrapper}>
           <AdBanner
             dataAdSlot="4896743654"
             style={{ 
-              display: 'block',
-              width: '100%',
-              minHeight: '250px',
-              maxHeight: '600px',
-              margin: '0' 
+              display: 'inline-block',
+              width: '300px',
+              height: '250px'
             }}
-            dataAdFormat="auto"
-            dataFullWidthResponsive={true}
           />
         </div>
 
+        {/* KOTAK AFFILIATE (Muncul jika datanya ada) */}
         {hasAffiliate && (
           <div className={styles.rightContainer}>
             <h3 className={styles.sidebarTitle}>Koleksi Merch</h3>
@@ -86,18 +100,23 @@ export default function RightSidebar({ affiliateData }) {
               rel="noopener noreferrer" 
               className={styles.affiliateLink}
             >
-              <div className={styles.affiliateBtn}>
+              <button className={styles.affiliateBtn}>
                  Cek di Shopee <FaShoppingBag />
-              </div>
+              </button>
             </a>
           </div>
         )}
 
-        <div className={styles.rightContainer}>
-          <h3 className={styles.sidebarTitle}>Dukung Kami Yuk!</h3>
-          <a href="https://saweria.co/SoogarGlyder" target="_blank" rel="noreferrer">
-            <img className={styles.saweria} src="/saweria.png" alt="QR Code Saweria"/>
-          </a>
+        {/* IKLAN BAWAH (FIXED 300x250) */}
+        <div className={styles.adWrapper}>
+          <AdBanner
+            dataAdSlot="8398202563" 
+            style={{ 
+              display: 'inline-block',
+              width: '300px',
+              height: '250px'
+            }}
+          />
         </div>
 
       </div>

@@ -1,12 +1,21 @@
+/* File: src/components/RightSidebar.module.css */
+
 .rightSidebar {
-  width: 200px;
-  margin: 20px; 
+  width: 300px;
+  margin: 10px; 
   flex-shrink: 0;
   align-self: stretch; 
   display: flex; 
   flex-direction: column;
-  gap: 20px;
   color: var(--foreground);
+}
+
+/* PEMBAGIAN 2 KOLOM (TIDAK STICKY) */
+.topSection {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px; /* Jarak antar kotak font & saweria */
+  margin-bottom: 20px;
 }
 
 .stickyWrapper {
@@ -18,27 +27,40 @@
   gap: 20px;
 }
 
+/* Menyesuaikan padding agar pas untuk kotak dibagi 2 */
 .rightContainer {
   width: 100%;
   background-color: var(--input-bg);
-  padding: 15px;
+  padding: 12px;
   border-radius: 8px;
   border: 1px solid var(--input-border);
   box-shadow: 0 1px 3px rgba(0,0,0,0.05);
   display: flex;
   flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
+/* Dikecilkan sedikit agar teks tidak luber */
 .sidebarTitle {
   text-align: center;
-  font-size: 0.95rem;
+  font-size: 0.85rem;
   font-weight: 700;
   margin: 0;
   color: var(--foreground);
-  margin-bottom: 15px;
+  margin-bottom: 12px;
+  line-height: 1.2;
 }
 
+/* PENGATURAN GRID TOMBOL FONT */
 .fontControlButtons {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+}
+
+.fontRow {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -58,7 +80,7 @@
   transition: all 0.2s ease;
   font-size: 0.9rem;
   height: 36px; 
-  flex: 1;
+  flex: 1; /* Tombol otomatis membagi ruang rata */
 }
 
 .fontBtn:hover {
@@ -67,8 +89,16 @@
   border-color: var(--primary);
 }
 
+.saweriaLink {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
 .saweria {
   width: 100%;
+  max-width: 90px; /* Maksimal agak dikecilkan karena ruang sempit */
   height: auto;
   border-radius: 4px;
   display: block;
@@ -76,9 +106,18 @@
 }
 
 .saweria:hover {
-  transform: scale(1.02);
+  transform: scale(1.05);
 }
 
+.adWrapper {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  border-radius: 8px;
+  overflow: hidden; /* Mencegah iklan menonjol keluar dari tepi lengkung */
+}
+
+/* --- KOTAK AFFILIATE --- */
 .affiliateImageWrapper {
   width: 100%;
   aspect-ratio: 1000 / 1430;
@@ -120,8 +159,10 @@
   width: 100%;
   font-size: 0.85rem;
   transition: all 0.2s ease;
-  display: block;
-  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
 }
 
 .affiliateBtn:hover {
@@ -135,25 +176,9 @@
   box-shadow: none;
 }
 
+/* --- TAMPILAN HP --- */
 @media (max-width: 767px) {
   .rightSidebar {
-    order: 3;
-    width: 100%;
-    max-width: none;
-    position: static;
-    margin: 0;
-    align-items: stretch; 
-    padding: 0 10px;
-    margin-bottom: 40px;
-  }
-  
-  .rightContainer {
-    width: 100%;
-    max-width: 400px;
-    margin: 0 auto;
-  }
-
-  .stickyWrapper {
-    position: static;
+    display: none;
   }
 }

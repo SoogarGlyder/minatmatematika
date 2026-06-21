@@ -179,7 +179,7 @@
   .mainContent {
     order: 2;
     width: 100%;
-    padding: 0 10px;
+    padding: 10px;
     margin-left: unset;
     border-right: none;
     background: var(--card-bg);
