@@ -80,6 +80,7 @@
   color: var(--foreground);
   text-align: justify;
   margin-bottom: 1em;
+  margin-top: -24px;
 }
 
 .mainContent .content img {

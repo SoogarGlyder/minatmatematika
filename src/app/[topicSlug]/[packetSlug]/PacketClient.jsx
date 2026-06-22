@@ -2,8 +2,8 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-// 1. TAMBAHKAN useSearchParams
-import { useRouter, useSearchParams, usePathname } from 'next/navigation';
+// 1. HAPUS useSearchParams, cukup gunakan useRouter dan usePathname
+import { useRouter, usePathname } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
 import parse, { domToReact } from 'html-react-parser';
@@ -25,7 +25,6 @@ export default function PacketClient({
   topic, packet, allPackets, prevPacket, nextPacket 
 }) {
   const router = useRouter();
-  const searchParams = useSearchParams();
   const pathname = usePathname();
   
   const { setPageSerie } = useGlobalContext();
@@ -33,8 +32,8 @@ export default function PacketClient({
   const [isListVisible, setIsListVisible] = useState(false);
 
   // --- STATE SYSTEM CBT SIMULATOR ---
-  // Membaca dari URL: Apakah ada ?mode=cbt di linknya?
-  const isCbtMode = searchParams.get('mode') === 'cbt'; 
+  // 2. KUNCI: Membaca dari ujung URL, apakah berakhiran '/cbt'?
+  const isCbtMode = pathname.endsWith('/cbt'); 
   
   const [cbtQuestions, setCbtQuestions] = useState([]);
   const [currentCbtIndex, setCurrentCbtIndex] = useState(0);
@@ -168,16 +167,17 @@ export default function PacketClient({
     setShowScoreModal(false);
   };
 
-  // --- KUNCI: Fungsi Toggle URL ---
+  // --- 3. KUNCI: Fungsi Toggle URL Menggunakan Path ---
   const toggleCbtMode = () => {
     if (isCbtMode) {
       if (window.confirm('Apakah Anda yakin ingin membatalkan ujian dan kembali ke Mode Baca?')) {
         handleResetCbt();
-        router.push(pathname); // Menghilangkan ?mode=cbt dari URL
+        // Menghilangkan folder '/cbt' dari ujung URL
+        router.push(pathname.replace(/\/cbt$/, '')); 
       }
     } else {
-      // Menambahkan ?mode=cbt ke URL, ini akan memicu Offerwall AdSense
-      router.push(`${pathname}?mode=cbt`);
+      // Menambahkan folder '/cbt' ke ujung URL, ini akan memicu Offerwall AdSense
+      router.push(`${pathname}/cbt`);
     }
   };
 
@@ -231,7 +231,7 @@ export default function PacketClient({
               </div>
 
               <div className={styles.singleToggleContainer}>
-                {/* Tombol kini memanggil toggleCbtMode yang mengubah URL */}
+                {/* Tombol memanggil toggleCbtMode yang mengubah URL */}
                 <button 
                   onClick={toggleCbtMode} 
                   className={`${styles.toggleBtn} ${isCbtMode ? styles.toggleBtnActive : ''}`}
@@ -276,7 +276,7 @@ export default function PacketClient({
                       </button>
                       {!isCbtSubmitted ? (
                         currentCbtIndex === cbtQuestions.length - 1 ? (
-                          <button onClick={handleSubmitCbt} className={styles.submitCbtBtn}>🏁 Selesai & Koreksi</button>
+                          <button onClick={handleSubmitCbt} className={styles.submitCbtBtn}>Selesai</button>
                         ) : (
                           <button onClick={() => setCurrentCbtIndex(prev => Math.min(cbtQuestions.length - 1, prev + 1))} disabled={currentCbtIndex === cbtQuestions.length - 1} className={styles.navCbtBtn}>
                             Selanjutnya »
@@ -292,6 +292,10 @@ export default function PacketClient({
                         )
                       )}
                     </div>
+                  </div>
+                  <div style={{ paddingTop: '20px' }}>
+                    <span style={{ fontSize: '0.75rem', color: '#888', display: 'block', textAlign: 'center', marginBottom: '20px' }}>Advertisement</span>
+                    <AdBanner dataAdSlot="4564146092" />
                   </div>
                 </div>
 
@@ -322,7 +326,7 @@ export default function PacketClient({
             ) : (
               /* VIEW MODE BACA */
               <>
-                <span style={{ fontSize: '0.9rem', color: '#888', display: 'block', marginBottom: '15px', marginTop: '-15px' }}>
+                <span style={{ fontSize: '0.9rem', color: '#888', display: 'block', marginBottom: '35px', marginTop: '-15px' }}>
                   Estimasi waktu pengerjaan: {readingTime} menit
                 </span>
                 <div className={styles.content} style={{ fontSize: `${fontSize}px` }}>{parse(finalHtmlContent, options)}</div>
