@@ -38,7 +38,7 @@ export default async function sitemap() {
       priority: 1,
     },
     {
-      url: `${BASE_URL}/blog`,
+      url: `${BASE_URL}/materi`,
       lastModified: new Date(),
       changeFrequency: 'daily',
       priority: 0.9,
@@ -90,7 +90,7 @@ export default async function sitemap() {
   }).filter(Boolean);
 
   const articleRoutes = articles.map((article) => ({
-    url: `${BASE_URL}/blog/${article.slug}`,
+    url: `${BASE_URL}/materi/${article.slug}`, // DIPERBAIKI: dari /blog/slug menjadi /materi/slug
     lastModified: article.updatedAt || article.date || new Date(),
     changeFrequency: 'weekly',
     priority: 0.7,

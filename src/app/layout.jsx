@@ -10,7 +10,7 @@ import Footer from '@/components/Footer';
 import FloatingSettings from '@/components/FloatingSettings';
 
 export const viewport = {
-  themeColor: '#ECECEC', // Disesuaikan dengan tema monochrome terang
+  themeColor: '#ECECEC', 
   width: 'device-width',
   initialScale: 1,
 };
@@ -46,7 +46,7 @@ export const metadata = {
     type: 'website',
     images: [
       {
-        url: '/social-cover.jpg', // Pastikan kamu ganti gambar ini di folder public nanti
+        url: '/social-cover.jpg', 
         width: 1200,
         height: 630,
       }
@@ -56,10 +56,13 @@ export const metadata = {
     card: 'summary_large_image',
   },
   other: {
-    "google-adsense-account": "ca-pub-4365395677457990" // Biarkan jika masih pakai AdSense yang sama
+    "google-adsense-account": "ca-pub-4365395677457990" 
   }, 
   verification: {
-    google: 'evACUKravhwfZaodVDz4gMcDa3CiVHWpkKcDuh-3FC0', // Biarkan jika masih pakai Search Console yang sama
+    google: 'HPNrPSuwx1xFIx9U5VDoQY_0thMbF9XoBP-9eeIVy00', 
+    other: {
+      'msvalidate.01': 'EFA03E9EE68ACF70EECA43E122B69AE7',
+    },
   },
 }; 
 
@@ -109,7 +112,7 @@ export default function RootLayout({ children }) {
         
         <SpeedInsights />
         <Analytics /> 
-        <GoogleAnalytics gaId="G-3Y3LMERW26" />
+        <GoogleAnalytics gaId="G-MT95S7505K" />
       </body>
     </html>
   );

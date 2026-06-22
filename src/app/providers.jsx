@@ -40,9 +40,7 @@ export function Providers({ children }) {
         <GlobalContext.Provider value={value}>
           {children}
         </GlobalContext.Provider>
-        
       </FontSizeProvider>
-
     </ThemeProvider>
   );
 }
