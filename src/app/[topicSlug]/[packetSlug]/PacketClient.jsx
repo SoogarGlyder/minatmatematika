@@ -2,7 +2,8 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+// 1. TAMBAHKAN useSearchParams
+import { useRouter, useSearchParams, usePathname } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
 import parse, { domToReact } from 'html-react-parser';
@@ -24,24 +25,26 @@ export default function PacketClient({
   topic, packet, allPackets, prevPacket, nextPacket 
 }) {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const pathname = usePathname();
+  
   const { setPageSerie } = useGlobalContext();
   const { fontSize } = useFontSize(); 
   const [isListVisible, setIsListVisible] = useState(false);
 
   // --- STATE SYSTEM CBT SIMULATOR ---
-  const [isCbtMode, setIsCbtMode] = useState(false);
+  // Membaca dari URL: Apakah ada ?mode=cbt di linknya?
+  const isCbtMode = searchParams.get('mode') === 'cbt'; 
+  
   const [cbtQuestions, setCbtQuestions] = useState([]);
   const [currentCbtIndex, setCurrentCbtIndex] = useState(0);
   const [userAnswers, setUserAnswers] = useState({}); 
   const [isCbtSubmitted, setIsCbtSubmitted] = useState(false);
   const [score, setScore] = useState(0);
-  
-  // State untuk menampilkan Modal Pop-Up Skor
   const [showScoreModal, setShowScoreModal] = useState(false);
   
   const topicSlug = topic.slug;
   const packetSlug = packet.paket_slug;
-  
   const { topics: categoryTopics } = useTopicList(topic.category);
 
   useEffect(() => {
@@ -152,7 +155,7 @@ export default function PacketClient({
       cbtQuestions.forEach((q, idx) => { if (userAnswers[idx] === q.correctKey) correctCount++; });
       setScore(Math.round((correctCount / cbtQuestions.length) * 100));
       setIsCbtSubmitted(true);
-      setShowScoreModal(true); // Memunculkan Modal Pop Up
+      setShowScoreModal(true); 
       setCurrentCbtIndex(0); 
     }
   };
@@ -165,11 +168,24 @@ export default function PacketClient({
     setShowScoreModal(false);
   };
 
+  // --- KUNCI: Fungsi Toggle URL ---
+  const toggleCbtMode = () => {
+    if (isCbtMode) {
+      if (window.confirm('Apakah Anda yakin ingin membatalkan ujian dan kembali ke Mode Baca?')) {
+        handleResetCbt();
+        router.push(pathname); // Menghilangkan ?mode=cbt dari URL
+      }
+    } else {
+      // Menambahkan ?mode=cbt ke URL, ini akan memicu Offerwall AdSense
+      router.push(`${pathname}?mode=cbt`);
+    }
+  };
+
   return (
     <div className={styles.holyGrailLayout}>
 
-       {/* MODAL POP UP SKOR (Hanya tampil jika showScoreModal bernilai true) */}
-       {showScoreModal && (
+      {/* MODAL POP UP SKOR PASCA UJIAN TETAP ADA */}
+      {showScoreModal && (
         <div className={styles.modalOverlay}>
           <div className={styles.modalContent}>
             <h3 style={{ margin: '0 0 15px 0' }}>Skor Try Out Anda</h3>
@@ -215,17 +231,9 @@ export default function PacketClient({
               </div>
 
               <div className={styles.singleToggleContainer}>
+                {/* Tombol kini memanggil toggleCbtMode yang mengubah URL */}
                 <button 
-                  onClick={() => { 
-                    if (isCbtMode) {
-                      if (window.confirm('Apakah Anda yakin ingin membatalkan ujian dan kembali ke Mode Baca?')) {
-                        setIsCbtMode(false); 
-                        handleResetCbt(); 
-                      }
-                    } else {
-                      setIsCbtMode(true);
-                    }
-                  }} 
+                  onClick={toggleCbtMode} 
                   className={`${styles.toggleBtn} ${isCbtMode ? styles.toggleBtnActive : ''}`}
                 >
                   {isCbtMode ? 'Mode CBT: ON' : 'Mode CBT: OFF'}
@@ -239,13 +247,12 @@ export default function PacketClient({
                 <div className={styles.cbtWorkspace}>
                   {/* WORKSPACE SOAL AKTIF */}
                   <div className={styles.cbtQuestionBox}>
-
-                    <div className={styles.content} style={{ fontSize: `${fontSize}px`, marginTop: `-24px` }}>
+                    <div className={styles.content} style={{ fontSize: `${fontSize}px` }}>
                       {cbtQuestions[currentCbtIndex] ? parse(renderLaTeX(cbtQuestions[currentCbtIndex].htmlContent), options) : <p>Memuat soal...</p>}
                     </div>
 
                     <div className={styles.cbtAnswerSelector}>
-                      <p className={styles.selectorLabel}>Jawaban Anda:</p>
+                      <p className={styles.selectorLabel}>Pilih Lembar Jawaban Anda:</p>
                       <div className={styles.optionButtonGroup}>
                         {['A', 'B', 'C', 'D', 'E'].map((opt) => {
                           const isSelected = userAnswers[currentCbtIndex] === opt;
@@ -269,7 +276,7 @@ export default function PacketClient({
                       </button>
                       {!isCbtSubmitted ? (
                         currentCbtIndex === cbtQuestions.length - 1 ? (
-                          <button onClick={handleSubmitCbt} className={styles.submitCbtBtn}>Selesai</button>
+                          <button onClick={handleSubmitCbt} className={styles.submitCbtBtn}>🏁 Selesai & Koreksi</button>
                         ) : (
                           <button onClick={() => setCurrentCbtIndex(prev => Math.min(cbtQuestions.length - 1, prev + 1))} disabled={currentCbtIndex === cbtQuestions.length - 1} className={styles.navCbtBtn}>
                             Selanjutnya »
@@ -286,15 +293,8 @@ export default function PacketClient({
                       )}
                     </div>
                   </div>
-                  <div style={{ paddingTop: '20px' }}>
-                    <span style={{ fontSize: '0.75rem', color: '#888', display: 'block', textAlign: 'center', marginBottom: '20px' }}>Advertisement</span>
-                    <AdBanner dataAdSlot="4564146092" />
-                  </div>
                 </div>
 
-                {/* ========================================================= */}
-                {/* TAMBAHAN BARU: PETA NOMOR SOAL MELAYANG KHUSUS HP         */}
-                {/* ========================================================= */}
                 <div className={styles.mobileCbtGrid}>
                   {cbtQuestions.map((_, idx) => {
                     const hasAnswered = userAnswers[idx] !== undefined;
@@ -318,7 +318,6 @@ export default function PacketClient({
                     );
                   })}
                 </div>
-
               </div>
             ) : (
               /* VIEW MODE BACA */
@@ -356,7 +355,6 @@ export default function PacketClient({
             <CommentSection topicSlug={topicSlug} paketSlug={packetSlug} />
       </main>
       
-      {/* Meneruskan props CBT ke RightSidebar untuk tampilan Desktop */}
       <RightSidebar 
         isCbtMode={isCbtMode}
         cbtProps={{
