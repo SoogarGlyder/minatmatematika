@@ -35,7 +35,7 @@ export default function AdBanner({
       style={{ 
         width: '100%',
         display: 'block',
-        margin: '20px auto', 
+        margin: '0px auto', 
         overflow: 'hidden', 
         minHeight: '90px',
         ...style

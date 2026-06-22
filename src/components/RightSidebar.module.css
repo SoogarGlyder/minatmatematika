@@ -15,13 +15,13 @@
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 10px; /* Jarak antar kotak font & saweria */
-  margin-bottom: 20px;
+  margin-bottom: 10px;
 }
 
 .stickyWrapper {
   position: -webkit-sticky;
   position: sticky;
-  top: calc(var(--total-header-height) + 20px);
+  top: calc(var(--total-header-height) + 10px);
   display: flex;
   flex-direction: column;
   gap: 20px;

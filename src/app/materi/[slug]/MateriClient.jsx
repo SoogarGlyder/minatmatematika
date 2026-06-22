@@ -1,4 +1,4 @@
-// File: src/app/blog/[slug]/MateriClient.jsx
+// File: src/app/materi/[slug]/MateriClient.jsx
 'use client';
 
 import React, { useState, useEffect } from 'react';
@@ -13,6 +13,9 @@ import RightSidebar from '@/components/RightSidebar';
 import 'katex/dist/katex.min.css'; 
 import { BlockMath, InlineMath } from 'react-katex';
 import CommentSection from '@/components/CommentSection';
+
+// IMPORT KOMPONEN IKLAN
+import AdBanner from '@/components/AdBanner';
 
 export default function MateriClient({ article }) {
   const { fontSize } = useFontSize();
@@ -182,10 +185,18 @@ export default function MateriClient({ article }) {
             
             <hr className={styles.divider} />
             
+            {/* AREA ISI ARTIKEL */}
             <div className={styles.content} style={{ fontSize: `${fontSize}px` }}>
                {parse(cleanContent, options)}
             </div>
 
+            {/* --- IKLAN ADSENSE DITEMPATKAN DI SINI --- */}
+            <div style={{ margin: '30px 0', borderTop: '1px dashed var(--input-border)', borderBottom: '1px dashed var(--input-border)', padding: '20px 0' }}>
+              <span style={{ fontSize: '0.75rem', color: '#888', display: 'block', textAlign: 'center', marginBottom: '20px' }}>Advertisement</span>
+              <AdBanner dataAdSlot="4564146092" />
+            </div>
+
+            {/* AREA ARTIKEL TERKAIT */}
             {relatedArticles.length > 0 && (
                 <div className={styles.relatedSection}>
                     <h3 className={styles.relatedTitle}>Materi Lainnya</h3>
@@ -218,6 +229,7 @@ export default function MateriClient({ article }) {
                 />
             </div>
       </main>
+      
       <RightSidebar 
         affiliateData={{
           title: article.affiliate_title,
