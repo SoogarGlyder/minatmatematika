@@ -94,16 +94,29 @@ export default function TopicClient({ initialTopic, initialPaketList }) {
              </div>
          );
       }
+
+      // --- KUNCI: Mengubah placeholder iklan menjadi <AdBanner /> ---
+      if (domNode.attribs && domNode.attribs.class === 'ad-placeholder') {
+        const adSlot = domNode.attribs['data-ad-slot'];
+        return (
+          <div style={{ margin: '30px 0', borderTop: '1px dashed var(--input-border)', borderBottom: '1px dashed var(--input-border)', padding: '20px 0' }}>
+            <span style={{ fontSize: '0.75rem', color: '#888', display: 'block', textAlign: 'center', marginBottom: '5px' }}>Advertisement</span>
+            <AdBanner dataAdSlot={adSlot} />
+          </div>
+        );
+      }
     }
   };
 
   const contentWithBreaks = (topic.description || '').replace(/\n/g, '');
+  
+  // --- IZINKAN ATRIBUT data-ad-slot ---
   const cleanContent = sanitizeHtml(contentWithBreaks, {
     allowedTags: sanitizeHtml.defaults.allowedTags.concat([ 'img', 'div', 'span', 'br', 'hr' ]),
     allowedAttributes: {
       ...sanitizeHtml.defaults.allowedAttributes,
       'img': ['src', 'alt', 'width', 'height', 'title'],
-      'div': ['class', 'style', 'id'],
+      'div': ['class', 'style', 'id', 'data-ad-slot'], // <-- Ditambahkan di sini
       'span': ['class', 'style'],
       'p': ['class', 'style']
     },
@@ -162,11 +175,12 @@ export default function TopicClient({ initialTopic, initialPaketList }) {
         </div>
         <hr className={styles.divider} />
         
+        {/* TAMPILKAN KONTEN DAN IKLAN DARI DATABASE */}
         <div className={styles.content} style={{ fontSize: `${fontSize}px` }}>
           {parse(cleanContent, options)}
         </div>
 
-        {/* 2. IKLAN ADSENSE DITEMPATKAN DI SINI */}
+        {/* IKLAN ADSENSE PENUTUP BAWAH */}
         <div style={{ margin: '30px 0', borderTop: '1px dashed var(--input-border)', borderBottom: '1px dashed var(--input-border)', padding: '20px 0' }}>
           <span style={{ fontSize: '0.75rem', color: '#888', display: 'block', textAlign: 'center', marginBottom: '20px' }}>Advertisement</span>
           <AdBanner dataAdSlot="6974185423" />

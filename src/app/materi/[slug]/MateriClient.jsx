@@ -115,11 +115,23 @@ export default function MateriClient({ article }) {
          if (domNode.name === 'h2') return <h2 id={id}>{domToReact(domNode.children)}</h2>;
          if (domNode.name === 'h3') return <h3 id={id}>{domToReact(domNode.children)}</h3>;
       }
+      
+      // --- KUNCI: Mengubah placeholder iklan menjadi <AdBanner /> ---
+      if (domNode.attribs && domNode.attribs.class === 'ad-placeholder') {
+        const adSlot = domNode.attribs['data-ad-slot'];
+        return (
+          <div style={{ margin: '30px 0', borderTop: '1px dashed var(--input-border)', borderBottom: '1px dashed var(--input-border)', padding: '20px 0' }}>
+            <span style={{ fontSize: '0.75rem', color: '#888', display: 'block', textAlign: 'center', marginBottom: '20px' }}>Advertisement</span>
+            <AdBanner dataAdSlot={adSlot} />
+          </div>
+        );
+      }
     }
   };
   
   const contentWithBreaks = (article.content || '').replace(/\n/g, '');
   
+  // --- IZINKAN ATRIBUT data-ad-slot ---
   const cleanContent = sanitizeHtml(contentWithBreaks, {
     allowedTags: sanitizeHtml.defaults.allowedTags.concat([ 
         'img', 'div', 'span', 'br', 'hr', 'h2', 'h3', 'blockquote', 'ul', 'ol', 'li', 'b', 'strong', 'i', 'em' 
@@ -128,7 +140,7 @@ export default function MateriClient({ article }) {
         ...sanitizeHtml.defaults.allowedAttributes,
         'img': ['src', 'alt', 'width', 'height', 'title'],
         'h2': ['id'], 'h3': ['id'],
-        'div': ['class', 'style', 'data-math'], 
+        'div': ['class', 'style', 'data-math', 'data-ad-slot'], // <-- Ditambahkan di sini
         'span': ['class', 'style', 'data-math']
     }
   });
@@ -185,15 +197,15 @@ export default function MateriClient({ article }) {
             
             <hr className={styles.divider} />
             
-            {/* AREA ISI ARTIKEL */}
+            {/* AREA ISI ARTIKEL (BISA DISISIPKAN IKLAN DARI DATABASE) */}
             <div className={styles.content} style={{ fontSize: `${fontSize}px` }}>
                {parse(cleanContent, options)}
             </div>
 
-            {/* --- IKLAN ADSENSE DITEMPATKAN DI SINI --- */}
+            {/* --- IKLAN ADSENSE PENUTUP BAWAH --- */}
             <div style={{ margin: '30px 0', borderTop: '1px dashed var(--input-border)', borderBottom: '1px dashed var(--input-border)', padding: '20px 0' }}>
-              <span style={{ fontSize: '0.75rem', color: '#888', display: 'block', textAlign: 'center', marginBottom: '20px' }}>Advertisement</span>
-              <AdBanner dataAdSlot="4564146092" />
+              <span style={{ fontSize: '0.75rem', color: '#888', display: 'block', textAlign: 'center', marginBottom: '5px' }}>Advertisement</span>
+              <AdBanner dataAdSlot="8983567716" />
             </div>
 
             {/* AREA ARTIKEL TERKAIT */}

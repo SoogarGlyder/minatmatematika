@@ -78,8 +78,10 @@ export default function PacketClient({
   const wordCount = packet.content ? packet.content.replace(/<[^>]*>/g, '').split(/\s+/).length : 0;
   const readingTime = Math.ceil(wordCount / 150); 
 
+  // --- LOGIKA PARSER (MENGGANTI PLACEHOLDER HTML MENJADI KOMPONEN REACT) ---
   const options = {
     replace: (domNode) => {
+      // Mengubah tag img menjadi komponen Image Next.js
       if (domNode.type === 'tag' && domNode.name === 'img') {
         const { src, alt } = domNode.attribs;
         return (
@@ -97,6 +99,8 @@ export default function PacketClient({
           </div>
         );
       }
+      
+      // Pembungkus khusus gambar
       if (domNode.attribs && domNode.attribs.class === 'chapter-image-center') {
          return (
              <div className={styles.imageContainer}>
@@ -104,17 +108,31 @@ export default function PacketClient({
              </div>
          );
       }
+
+      // --- INI KUNCINYA: Mengubah placeholder iklan menjadi <AdBanner /> ---
+      if (domNode.attribs && domNode.attribs.class === 'ad-placeholder') {
+        const adSlot = domNode.attribs['data-ad-slot']; // Mengambil ID dari atribut HTML
+        return (
+          <div style={{ margin: '30px 0', borderTop: '1px dashed var(--input-border)', borderBottom: '1px dashed var(--input-border)', padding: '20px 0' }}>
+            <span style={{ fontSize: '0.75rem', color: '#888', display: 'block', textAlign: 'center', marginBottom: '5px' }}>Advertisement</span>
+            {/* Memanggil komponen AdBanner dengan ID yang diambil dari HTML */}
+            <AdBanner dataAdSlot={adSlot} />
+          </div>
+        );
+      }
     }
   };
 
   const contentWithBreaks = (packet.content || '').replace(/\n/g, '');
   
+  // --- IZINKAN ATRIBUT KHUSUS IKLAN DI SANITIZER ---
   const cleanContent = sanitizeHtml(contentWithBreaks, {
     allowedTags: sanitizeHtml.defaults.allowedTags.concat([ 'img', 'div', 'span', 'br', 'hr', 'details', 'summary' ]),
     allowedAttributes: {
         ...sanitizeHtml.defaults.allowedAttributes,
         'img': ['src', 'alt', 'width', 'height', 'title'],
-        'div': ['class', 'style', 'id'],
+        // PERHATIAN: Izinkan atribut data-ad-slot agar tidak dihapus saat dibersihkan
+        'div': ['class', 'style', 'id', 'data-ad-slot'],
         'span': ['class', 'style', 'id'],
         'ul': ['class', 'style', 'id'],
         'ol': ['class', 'style', 'id'],
@@ -204,12 +222,12 @@ export default function PacketClient({
             
             <hr className={styles.divider} />
 
-            {/* TAMPILKAN KONTEN FINAL YANG SUDAH JADI RUMUS */}
+            {/* TAMPILKAN KONTEN FINAL YANG SUDAH JADI RUMUS DAN IKLAN */}
             <div className={styles.content} style={{ fontSize: `${fontSize}px` }}>
                {parse(finalHtmlContent, options)}
             </div>
 
-            {/* 3. IKLAN ADSENSE DITEMPATKAN DI SINI (SEBELUM TOMBOL NAVIGASI) */}
+            {/* IKLAN ADSENSE BAWAH (SEBELUM TOMBOL NAVIGASI) */}
             <div style={{ margin: '30px 0', borderTop: '1px dashed var(--input-border)', paddingTop: '20px' }}>
               <span style={{ fontSize: '0.75rem', color: '#888', display: 'block', textAlign: 'center', marginBottom: '20px' }}>Advertisement</span>
               <AdBanner dataAdSlot="4564146092" />
