@@ -1,5 +1,8 @@
 /* File: src/components/RightSidebar.module.css */
 
+/* ========================================================= */
+/* 1. LAYOUT UTAMA & CONTAINER                               */
+/* ========================================================= */
 .rightSidebar {
   width: 300px;
   margin: 10px; 
@@ -10,11 +13,10 @@
   color: var(--foreground);
 }
 
-/* PEMBAGIAN 2 KOLOM (TIDAK STICKY) */
 .topSection {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 10px; /* Jarak antar kotak font & saweria */
+  gap: 10px; 
   margin-bottom: 10px;
 }
 
@@ -27,7 +29,6 @@
   gap: 20px;
 }
 
-/* Menyesuaikan padding agar pas untuk kotak dibagi 2 */
 .rightContainer {
   width: 100%;
   background-color: var(--input-bg);
@@ -41,7 +42,6 @@
   justify-content: center;
 }
 
-/* Dikecilkan sedikit agar teks tidak luber */
 .sidebarTitle {
   text-align: center;
   font-size: 0.85rem;
@@ -52,20 +52,22 @@
   line-height: 1.2;
 }
 
-/* PENGATURAN GRID TOMBOL FONT */
-.fontControlButtons {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  width: 100%;
+/* ========================================================= */
+/* 2. WIDGET KONTROL FONT                                    */
+/* ========================================================= */
+.fontControlButtons { 
+  display: flex; 
+  flex-direction: column; 
+  gap: 8px; 
+  width: 100%; 
 }
 
-.fontRow {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 8px;
-  width: 100%;
+.fontRow { 
+  display: flex; 
+  align-items: center; 
+  justify-content: space-between; 
+  gap: 8px; 
+  width: 100%; 
 }
 
 .fontBtn {
@@ -80,105 +82,199 @@
   transition: all 0.2s ease;
   font-size: 0.9rem;
   height: 36px; 
-  flex: 1; /* Tombol otomatis membagi ruang rata */
+  flex: 1; 
 }
 
-.fontBtn:hover {
-  background-color: var(--primary);
-  color: white;
-  border-color: var(--primary);
+.fontBtn:hover { 
+  background-color: var(--primary); 
+  color: white; 
+  border-color: var(--primary); 
 }
 
-.saweriaLink {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
+/* ========================================================= */
+/* 3. WIDGET DUKUNGAN (SAWERIA)                              */
+/* ========================================================= */
+.saweriaLink { 
+  display: flex; 
+  justify-content: center; 
+  align-items: center; 
+  width: 100%; 
 }
 
-.saweria {
-  width: 100%;
-  max-width: 90px; /* Maksimal agak dikecilkan karena ruang sempit */
-  height: auto;
-  border-radius: 4px;
-  display: block;
-  transition: transform 0.2s;
+.saweria { 
+  width: 100%; 
+  max-width: 90px; 
+  height: auto; 
+  border-radius: 4px; 
+  display: block; 
+  transition: transform 0.2s; 
 }
 
-.saweria:hover {
-  transform: scale(1.05);
+.saweria:hover { 
+  transform: scale(1.05); 
 }
 
+/* ========================================================= */
+/* 4. WIDGET IKLAN & AFILIASI (MERCH)                        */
+/* ========================================================= */
 .adWrapper {
-  display: flex;
-  justify-content: center;
-  width: 100%;
-  border-radius: 8px;
-  overflow: hidden; /* Mencegah iklan menonjol keluar dari tepi lengkung */
+  display: flex; 
+  justify-content: center; 
+  width: 100%; 
+  border-radius: 8px; 
+  overflow: hidden;
 }
 
-/* --- KOTAK AFFILIATE --- */
 .affiliateImageWrapper {
-  width: 100%;
-  aspect-ratio: 1000 / 1430;
-  border-radius: 8px;
-  overflow: hidden;
-  margin-bottom: 10px;
+  width: 100%; 
+  aspect-ratio: 1000 / 1430; 
+  border-radius: 8px; 
+  overflow: hidden; 
+  margin-bottom: 10px; 
   border: 1px solid var(--input-border);
 }
 
-.affiliateImage {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
+.affiliateImage { 
+  width: 100%; 
+  height: 100%; 
+  object-fit: cover; 
+  display: block; 
 }
 
-.affiliateTitle {
-  font-size: 0.85rem;
-  font-weight: 600;
-  margin: 0 0 10px 0;
-  line-height: 1.4;
-  text-align: center;
+.affiliateTitle { 
+  font-size: 0.85rem; 
+  font-weight: 600; 
+  margin: 0 0 10px 0; 
+  line-height: 1.4; 
+  text-align: center; 
 }
 
-.affiliateLink {
-  width: 100%;
-  text-decoration: none;
-  display: block;
+.affiliateLink { 
+  width: 100%; 
+  text-decoration: none; 
+  display: block; 
 }
 
 .affiliateBtn {
-  background-color: #ee4d2d;
-  color: white;
-  border: none;
-  padding: 8px 0;
-  border-radius: 6px;
-  cursor: pointer;
-  font-weight: bold;
-  width: 100%;
-  font-size: 0.85rem;
-  transition: all 0.2s ease;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  background-color: #ee4d2d; 
+  color: white; 
+  border: none; 
+  padding: 8px 0; 
+  border-radius: 6px; 
+  cursor: pointer; 
+  font-weight: bold; 
+  width: 100%; 
+  font-size: 0.85rem; 
+  transition: all 0.2s ease; 
+  display: flex; 
+  justify-content: center; 
+  align-items: center; 
   gap: 8px;
 }
 
-.affiliateBtn:hover {
-  background-color: #d74022;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(238, 77, 45, 0.3);
+.affiliateBtn:hover { 
+  background-color: #d74022; 
+  transform: translateY(-2px); 
+  box-shadow: 0 4px 8px rgba(238, 77, 45, 0.3); 
 }
 
-.affiliateBtn:active {
-  transform: translateY(0) scale(0.96);
-  box-shadow: none;
+.affiliateBtn:active { 
+  transform: translateY(0) scale(0.96); 
+  box-shadow: none; 
 }
 
-/* --- TAMPILAN HP --- */
+/* ========================================================= */
+/* 5. PETA SOAL CBT (TAMPILAN DESKTOP)                       */
+/* ========================================================= */
+.cbtAnswerGridMap {
+  background-color: var(--card-bg);
+  border: 1px solid var(--input-border);
+  border-radius: 12px;
+  padding: 15px; 
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.cbtAnswerGridMap h4 { 
+  margin: 0 0 15px 0; 
+  font-size: 0.95rem; 
+  font-weight: bold; 
+  text-align: center; 
+}
+
+.gridContainer { 
+  display: grid; 
+  grid-template-columns: repeat(5, 1fr); 
+  gap: 6px; 
+  width: 100%; 
+}
+
+.gridTile {
+  width: 100%; 
+  aspect-ratio: 1 / 1;
+  border-radius: 6px;
+  border: 1px solid var(--input-border);
+  background-color: var(--input-bg);
+  color: var(--foreground);
+  font-size: 0.85rem;
+  font-weight: bold;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  padding: 0; 
+  margin: 0;
+  box-sizing: border-box;
+  overflow: hidden; 
+  transition: all 0.15s ease;
+}
+
+.gridTileAnswered { 
+  background-color: #374151; 
+  color: white; 
+  border-color: #374151; 
+}
+
+.gridTileCurrent { 
+  border-color: var(--primary) !important; 
+  background-color: var(--primary) !important; 
+  color: white !important; 
+}
+
+.gridTileCorrect { 
+  background-color: #2ed573 !important; 
+  color: white !important; 
+  border-color: #2ed573 !important; 
+}
+
+.gridTileWrong { 
+  background-color: #ff4757 !important; 
+  color: white !important; 
+  border-color: #ff4757 !important; 
+}
+
+.gridTileCurrentReview { 
+  border-color: #1e90ff !important; 
+  box-shadow: inset 0 0 0 1px #1e90ff !important;
+  z-index: 2;
+}
+
+.miniLabel { 
+  font-size: 0.65rem; 
+  opacity: 0.8; 
+  display: block; 
+  margin-top: 1px; 
+  line-height: 1;
+}
+
+/* ========================================================= */
+/* 6. RESPONSIVE MOBILE                                      */
+/* ========================================================= */
 @media (max-width: 767px) {
   .rightSidebar {
-    display: none;
+    /* Memastikan Right Sidebar hilang sepenuhnya di layar HP */
+    display: none !important;
   }
 }

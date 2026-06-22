@@ -1,3 +1,8 @@
+/* File: src/app/[topicSlug]/[packetSlug]/PacketReadPage.module.css */
+
+/* ========================================================= */
+/* 1. KOTAK & LAYOUT UTAMA (HOLY GRAIL)                      */
+/* ========================================================= */
 .holyGrailLayout {
   display: flex;
   width: 100%;
@@ -6,10 +11,6 @@
   align-items: flex-start; 
   position: relative;
   justify-content: center;
-}
-
-.mobileToggle {
-  display: none;
 }
 
 .leftSidebar {
@@ -25,12 +26,6 @@
   scrollbar-width: thin;
 }
 
-.leftSidebarTitle {
-  padding: 10px;
-  color: var(--foreground);
-  font-weight: bold;
-}
-
 .mainContent {
   flex-grow: 1; 
   min-width: 0; 
@@ -39,6 +34,52 @@
   padding: 10px 20px;
   border-right: 1px solid var(--input-border);
   padding-bottom: 100px;
+}
+
+.divider {
+  border: 0;
+  border-top: 2px solid var(--input-border);
+  margin-bottom: 15px;
+}
+
+/* ========================================================= */
+/* 2. TIPOGRAFI & HEADER                                     */
+/* ========================================================= */
+.leftSidebarTitle {
+  padding: 10px;
+  color: var(--foreground);
+  font-weight: bold;
+}
+
+.chapterHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
+.chapterHeader h1 {
+  font-size: 2em;
+  margin: 0;
+  line-height: 1.2;
+  color: var(--foreground);
+}
+
+.chapterHeader h2 {
+  font-size: 1.2em;
+  font-weight: 500;
+  color: var(--foreground);
+  opacity: 0.9;
+}
+
+/* ========================================================= */
+/* 3. KOMPONEN KONTEN (GAMBAR, LIST, NAVIGASI)               */
+/* ========================================================= */
+.content {
+  font-size: var(--novel-font-size);
+  line-height: 1.8; 
+  color: var(--foreground);
+  text-align: justify;
+  margin-bottom: 1em;
 }
 
 .mainContent .content img {
@@ -91,100 +132,12 @@
   font-size: 110%;
 }
 
-.activeChapter {
+.activeChapter, .activeChapter:hover {
   background-color: var(--primary);
   color: white;
   font-weight: bold;
   font-size: 110%;
 }
-
-.activeChapter:hover {
-  background-color: var(--primary);
-  color: white;
-  font-weight: bold;
-  font-size: 110%;
-}
-
-.chapterHeader h1 {
-  font-size: 2em;
-  margin: 0;
-  line-height: 1.2;
-  color: var(--foreground);
-}
-
-.chapterHeader h2 {
-  font-size: 1.2em;
-  font-weight: 500;
-  color: var(--foreground);
-  opacity: 0.9;
-}
-
-.divider {
-  border: 0;
-  border-top: 2px solid var(--input-border);
-  margin-bottom: 15px;
-}
-
-.content {
-  font-size: var(--novel-font-size);
-  line-height: 1.8; 
-  color: var(--foreground);
-  text-align: justify;
-  margin-bottom: 1em;
-}
-
-/* =========================================
-   STYLING KHUSUS DROPDOWN PEMBAHASAN 
-   ========================================= */
-
-/* Area luar kotak dropdown */
-.content details {
-  margin-top: 15px;
-  margin-bottom: 25px;
-  padding: 15px;
-  background-color: var(--input-bg); /* Otomatis abu-abu terang/gelap sesuai tema */
-  border: 1px solid var(--input-border);
-  border-radius: 8px;
-  transition: background-color 0.3s ease;
-}
-
-/* Tombol tulisan "Lihat Pembahasan" */
-.content summary {
-  font-weight: bold;
-  cursor: pointer;
-  color: var(--foreground);
-  outline: none;
-  list-style: none; /* Menghilangkan panah bawaan browser */
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-/* Custom ikon panah agar rapi */
-.content summary::before {
-  content: '▼';
-  font-size: 0.8em;
-  color: var(--link);
-  transition: transform 0.3s ease;
-}
-
-/* Memutar panah saat dropdown terbuka */
-.content details[open] summary::before {
-  transform: rotate(180deg);
-}
-
-/* Menghapus panah sisa di Safari/Chrome */
-.content summary::-webkit-details-marker {
-  display: none;
-}
-
-/* Garis pembatas antara tombol dan isi pembahasan */
-.content details > div {
-  margin-top: 15px;
-  padding-top: 15px;
-  border-top: 1px dashed var(--input-border);
-}
-/* ========================================= */
 
 .navigation {
   padding: 20px 0px;
@@ -194,22 +147,289 @@
   justify-content: space-between;
 }
 
-.disclaimer {
-  font-size: 0.85rem;
+/* ========================================================= */
+/* 4. DROPDOWN PEMBAHASAN (DETAILS & SUMMARY)                */
+/* ========================================================= */
+.content details {
+  margin-top: 15px;
+  margin-bottom: 25px;
+  padding: 15px;
+  background-color: var(--input-bg); 
+  border: 1px solid var(--input-border);
+  border-radius: 8px;
+  transition: background-color 0.3s ease;
+}
+
+.content summary {
+  font-weight: bold;
+  cursor: pointer;
+  color: var(--foreground);
+  outline: none;
+  list-style: none; 
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.content summary::before {
+  content: '▼';
+  font-size: 0.8em;
+  color: var(--link);
+  transition: transform 0.3s ease;
+}
+
+.content details[open] summary::before {
+  transform: rotate(180deg);
+}
+
+.content summary::-webkit-details-marker {
+  display: none;
+}
+
+.content details > div {
+  margin-top: 15px;
+  padding-top: 15px;
+  border-top: 1px dashed var(--input-border);
+}
+
+/* ========================================================= */
+/* 5. CBT SIMULATOR: TOMBOL TOGGLE ON/OFF                    */
+/* ========================================================= */
+.singleToggleContainer {
+  margin-top: 15px;
+  display: flex;
+  justify-content: flex-start; 
+}
+
+.toggleBtn {
+  padding: 10px 20px;
+  margin-bottom: 4px;
+  border-radius: 8px; 
+  border: 1px solid var(--input-border);
+  background-color: var(--card-bg);
+  color: var(--foreground);
+  font-weight: bold;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+
+.toggleBtn:hover {
+  background-color: var(--input-bg);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.08);
+}
+
+.toggleBtnActive {
+  background-color: #ff4757; 
+  color: white;
+  border-color: #ff4757;
+  box-shadow: 0 4px 12px rgba(255, 71, 87, 0.3);
+}
+
+.toggleBtnActive:hover {
+  background-color: #ff6b81;
+}
+
+/* ========================================================= */
+/* 6. CBT SIMULATOR: AREA KERJA SOAL                         */
+/* ========================================================= */
+.cbtSimulatorLayout {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 100%;
+}
+
+.cbtQuestionBox {
+  background-color: var(--card-bg);
+  border: 1px solid var(--input-border);
+  border-radius: 8px;
+  padding: 15px;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.02);
+  width: 100%;
+}
+
+.cbtAnswerSelector {
+  padding-top: 20px;
+  border-top: 1px dashed var(--input-border);
+}
+
+.selectorLabel {
+  font-weight: bold;
+  font-size: 0.9rem;
+  margin-bottom: 15px;
+}
+
+.optionButtonGroup {
+  display: flex;
+  gap: 15px;
+  flex-wrap: wrap;
+}
+
+.optBtn, .optBtnSelected, .optBtnCorrectKey {
+  width: 50px;
+  height: 50px;
+  border-radius: 8px;
+  font-size: 1.1rem;
+  font-weight: bold;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  border: 2px solid var(--input-border);
+  background-color: var(--input-bg);
+  color: var(--foreground);
+}
+
+.optBtn:hover { border-color: var(--primary); color: var(--primary); }
+.optBtnSelected { background-color: var(--primary); border-color: var(--primary); color: white !important; }
+.optBtnCorrectKey { background-color: #2ed573 !important; border-color: #2ed573 !important; color: white !important; box-shadow: 0 0 10px rgba(46, 213, 115, 0.4); }
+
+.cbtFooterNav {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 30px;
+  padding-top: 20px;
+  border-top: 1px solid var(--input-border);
+}
+
+.navCbtBtn {
+  background-color: var(--input-bg);
+  border: 1px solid var(--input-border);
+  color: var(--foreground);
+  padding: 10px 20px;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.submitCbtBtn {
+  background-color: #ff4757;
+  color: white;
+  border: none;
+  padding: 10px 24px;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+/* ========================================================= */
+/* 7. CBT SIMULATOR: MODAL POP-UP SKOR                       */
+/* ========================================================= */
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.6);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(4px);
+}
+
+.modalContent {
+  background: var(--card-bg);
+  color: var(--foreground);
+  padding: 30px;
+  border-radius: 12px;
+  text-align: center;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+  max-width: 400px;
+  width: 90%;
+  border: 1px solid var(--input-border);
+  animation: popIn 0.3s ease-out;
+}
+
+@keyframes popIn {
+  0% { transform: scale(0.9); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+.scoreCircle {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: white;
+  color: #1e90ff;
+  font-size: 2rem;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+}
+
+.modalActions {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+}
+
+.closeModalBtn {
+  background: var(--primary);
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+  flex: 1;
+  transition: opacity 0.2s;
+}
+
+.closeModalBtn:hover {
+  opacity: 0.85;
+}
+
+.resetModalBtn {
   background: var(--input-bg);
   color: var(--foreground);
-  margin-top: 15px;
-  padding: 15px;
-  border-radius: 5px;
-  border-left: 3px solid #ff4757;
+  border: 1px solid var(--input-border);
+  padding: 10px 20px;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.resetModalBtn:hover {
+  background-color: var(--card-bg);
+}
+
+/* ========================================================= */
+/* 8. CBT SIMULATOR: PETA SOAL MOBILE (GRID MELAYANG)        */
+/* ========================================================= */
+.mobileCbtGrid {
+  display: none; 
+}
+
+.miniLabel { 
+  font-size: 0.65rem; 
+  opacity: 0.8; 
+  display: block; 
+  margin-top: 1px; 
+  line-height: 1;
+}
+
+/* ========================================================= */
+/* 9. ATURAN RESPONSIVE MOBILE (PENGGABUNGAN)                */
+/* ========================================================= */
+.mobileToggle {
+  display: none;
 }
 
 @media (max-width: 767px) {
+  /* Layout Dasar Mobile */
   .holyGrailLayout {
     flex-direction: column;
     padding-top: 0 !important;
     padding: 10px;
-    gap: 10px;
     align-items: center;
   }
   .leftSidebar {
@@ -223,6 +443,20 @@
     border-bottom: 1px solid var(--input-border);
     border-right: 0px;
   }
+  .leftSidebarTitle {
+    display: none;
+  }
+  .mainContent {
+    order: 2;
+    width: 100%;
+    padding: 10px;
+    margin-top: 10px;
+    margin-left: unset;
+    border-right: none;
+    background: var(--card-bg);
+  }
+  
+  /* Komponen UI Mobile */
   .mobileToggle {
     display: block;
     padding: 4.5px;
@@ -241,17 +475,6 @@
     font-size: 0.95em;
     text-align: center;
   }
-  .leftSidebarTitle {
-    display: none;
-  }
-  .mainContent {
-    order: 2;
-    width: 100%;
-    padding: 10px;
-    margin-left: unset;
-    border-right: none;
-    background: var(--card-bg);
-  }
   .chapterHeader h1 {
     font-size: 1.8em;
   }
@@ -260,7 +483,49 @@
     font-size: 0.85rem;
     padding: 8px;
   }
-  .disclaimer {
-    text-align: left;
+  
+  /* CBT Khusus Mobile */
+  
+  .mobileCbtGrid {
+    display: flex;
+    position: fixed;
+    bottom: 15px; 
+    left: 25px;
+    right: 90px; 
+    padding: 10px;
+    gap: 8px;
+    overflow-x: auto; 
+    z-index: 99;
+    -ms-overflow-style: none;  
+    scrollbar-width: none;  
   }
+  
+  .mobileCbtGrid::-webkit-scrollbar {
+    display: none;
+  }
+  
+  .mobileGridTile {
+    flex: 0 0 auto; 
+    width: 48px;
+    height: 48px;
+    border-radius: 8px;
+    border: 1px solid var(--input-border);
+    background-color: var(--input-bg);
+    color: var(--foreground);
+    font-size: 0.9rem;
+    font-weight: bold;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+  }
+
+  .mobileGridTileAnswered { background-color: #374151; color: white; border-color: #374151; }
+  .mobileGridTileCurrent { border-color: var(--primary) !important; background-color: var(--primary) !important; color: white !important; }
+  .mobileGridTileCorrect { background-color: #2ed573 !important; color: white !important; border-color: #2ed573 !important; }
+  .mobileGridTileWrong { background-color: #ff4757 !important; color: white !important; border-color: #ff4757 !important; }
+  .mobileGridTileCurrentReview { border-color: #1e90ff !important; box-shadow: inset 0 0 0 1px #1e90ff !important; }
 }
