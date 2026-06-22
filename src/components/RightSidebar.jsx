@@ -72,6 +72,8 @@ export default function RightSidebar({ affiliateData }) {
         <div className={styles.adWrapper}>
           <AdBanner
             dataAdSlot="4896743654"
+            dataAdFormat=""
+            dataFullWidthResponsive={false}
             style={{ 
               display: 'inline-block',
               width: '300px',
@@ -111,6 +113,8 @@ export default function RightSidebar({ affiliateData }) {
         <div className={styles.adWrapper}>
           <AdBanner
             dataAdSlot="8398202563" 
+            dataAdFormat=""
+            dataFullWidthResponsive={false}
             style={{ 
               display: 'inline-block',
               width: '300px',
