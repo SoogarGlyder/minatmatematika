@@ -1,14 +1,14 @@
 {
-  "name": "Baca Light Novel SAO Bahasa Indonesia",
-  "short_name": "linkstart.id",
-  "description": "Platform baca novel Sword Art Online (SAO) terlengkap Bahasa Indonesia. Mulai dari Aincrad hingga Unital Ring.",
+  "name": "Minat Matematika - Platform Belajar & CBT",
+  "short_name": "Minat MTK",
+  "description": "Platform belajar, latihan soal, dan Try Out CBT Matematika terlengkap dan interaktif.",
   "start_url": "/",
   "display": "standalone",
   "orientation": "portrait",
   "background_color": "#ffffff",
-  "theme_color": "#38b6ff",
+  "theme_color": "#1e90ff",
   "scope": "/",
-  "categories": ["books", "entertainment"],
+  "categories": ["education", "books"],
   "icons": [
     {
       "src": "/favicon.ico",
@@ -34,10 +34,10 @@
   ],
   "shortcuts": [
     {
-      "name": "Cari Novel",
-      "short_name": "Cari",
-      "description": "Cari novel favoritmu",
-      "url": "/?search=",
+      "name": "Mulai Try Out",
+      "short_name": "Try Out",
+      "description": "Ikuti Try Out CBT terbaru",
+      "url": "/",
       "icons": [{ "src": "/icon-192.png", "sizes": "192x192" }]
     }
   ]

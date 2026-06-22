@@ -10,6 +10,8 @@ export default function robots() {
         '/admin/',
         '/api/',
         '/_next/',
+        '/*/*/cbt',
+        '/*/*/cbt/',
       ],
     },
     sitemap: `${baseUrl}/sitemap.xml`,
