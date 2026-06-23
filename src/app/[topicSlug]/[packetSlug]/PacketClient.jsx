@@ -172,12 +172,10 @@ export default function PacketClient({
     if (isCbtMode) {
       if (window.confirm('Apakah Anda yakin ingin membatalkan ujian dan kembali ke Mode Baca?')) {
         handleResetCbt();
-        // Menghilangkan folder '/cbt' dari ujung URL
         router.push(pathname.replace(/\/cbt$/, '')); 
       }
     } else {
-      // Menambahkan folder '/cbt' ke ujung URL, ini akan memicu Offerwall AdSense
-      router.push(`${pathname}/cbt`);
+      window.location.href = `${pathname}/cbt`;
     }
   };
 
