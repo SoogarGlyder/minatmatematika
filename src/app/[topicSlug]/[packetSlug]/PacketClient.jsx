@@ -30,8 +30,6 @@ export default function PacketClient({
   const { fontSize } = useFontSize(); 
   const [isListVisible, setIsListVisible] = useState(false);
 
-  // --- REVISI STATE SYSTEM CBT SIMULATOR ---
-  // KUNCI: Membaca dari AWAL URL, apakah berawalan '/cbt'?
   const isCbtMode = pathname.startsWith('/cbt'); 
   
   const [cbtQuestions, setCbtQuestions] = useState([]);
@@ -61,22 +59,73 @@ export default function PacketClient({
     if (packet && topic) saveReadingHistory(topic.slug, packet.paket_slug, packet.title, packet.paket_number);
   }, [topic, packet, setPageSerie]);
 
-  // ENGINE POTONG HTML
+  // ENGINE POTONG HTML (SUPERCHARGED: PGK & INTERACTIVE A-E OPTIONS)
   useEffect(() => {
     if (packet?.content) {
       const tokens = packet.content.split(/(?=<h3.*?>Nomor \d+<\/h3>)/g);
       const filteredQuestions = [];
+      let rawSupportText = '';
 
       tokens.forEach((token) => {
-        if (token.includes('<h3>') || token.includes('<h3 ')) {
+        if (!token.match(/<h3.*?>Nomor \d+<\/h3>/i)) {
+          rawSupportText += token; 
+          return; 
+        }
+
+        if (token.match(/<h3.*?>Nomor \d+<\/h3>/i)) {
+          let validSupportText = '';
+          if (rawSupportText.match(/teks\s+(pendukung|\d+)/i)) {
+             validSupportText = rawSupportText; 
+          }
+
           const ansMatch = token.match(/Jawaban:\s*<strong>([A-E])<\/strong>/i) || token.match(/<strong>Jawaban:\s*([A-E])<\/strong>/i);
-          const correctAnswer = ansMatch ? ansMatch[1].toUpperCase() : '';
           
+          let qType = 'standard';
+          let correctAnswer = ansMatch ? ansMatch[1].toUpperCase() : null;
+          let hasInteractiveOptions = false;
+          
+          if (!correctAnswer) {
+             const pgkMatches = [...token.matchAll(/Pernyataan \d+:\s*<(?:strong|b|em)>(YA|TIDAK|BENAR|SALAH)<\/(?:strong|b|em)>/ig)];
+             if (pgkMatches.length === 0) {
+                const pgkMatches2 = [...token.matchAll(/Pernyataan \d+:\s*(YA|TIDAK|BENAR|SALAH)/ig)];
+                if (pgkMatches2.length > 0) {
+                    qType = 'complex';
+                    correctAnswer = pgkMatches2.map(m => m[1].toUpperCase());
+                }
+             } else {
+                 qType = 'complex';
+                 correctAnswer = pgkMatches.map(m => m[1].toUpperCase());
+             }
+          }
+
           let cleanedHtml = token;
           const detailsEndIndex = token.lastIndexOf('</details>');
           if (detailsEndIndex !== -1) cleanedHtml = token.substring(0, detailsEndIndex + 10);
           
-          filteredQuestions.push({ htmlContent: cleanedHtml, correctKey: correctAnswer });
+          // --- SULAP OPSI A-E MENJADI KARTU INTERAKTIF ---
+          if (correctAnswer && qType === 'standard') {
+              const optionsRegex = /<(?:p|div)>[\s\u00A0]*A\.[\s\u00A0]*(.*?)<br\s*\/?>[\s\u00A0]*B\.[\s\u00A0]*(.*?)<br\s*\/?>[\s\u00A0]*C\.[\s\u00A0]*(.*?)<br\s*\/?>[\s\u00A0]*D\.[\s\u00A0]*(.*?)<br\s*\/?>[\s\u00A0]*E\.[\s\u00A0]*(.*?)<\/(?:p|div)>/is;
+              
+              if (optionsRegex.test(cleanedHtml)) {
+                  cleanedHtml = cleanedHtml.replace(optionsRegex, (match, a, b, c, d, e) => {
+                      return `<div class="cbt-options-container">
+                          <div class="cbt-opt-row" data-opt="A">${a}</div>
+                          <div class="cbt-opt-row" data-opt="B">${b}</div>
+                          <div class="cbt-opt-row" data-opt="C">${c}</div>
+                          <div class="cbt-opt-row" data-opt="D">${d}</div>
+                          <div class="cbt-opt-row" data-opt="E">${e}</div>
+                      </div>`;
+                  });
+                  hasInteractiveOptions = true;
+              }
+          }
+
+          filteredQuestions.push({ 
+            htmlContent: validSupportText + cleanedHtml, 
+            correctKey: correctAnswer || '',
+            qType: qType,
+            hasInteractiveOptions: hasInteractiveOptions 
+          });
         }
       });
       setCbtQuestions(filteredQuestions);
@@ -87,6 +136,20 @@ export default function PacketClient({
 
   const wordCount = packet.content ? packet.content.replace(/<[^>]*>/g, '').split(/\s+/).length : 0;
   const readingTime = Math.ceil(wordCount / 150); 
+
+  const handleComplexAnswer = (statementIndex, value) => {
+    if (isCbtSubmitted) return;
+    setUserAnswers(prev => {
+       const prevQAns = prev[currentCbtIndex] || {};
+       return {
+          ...prev,
+          [currentCbtIndex]: {
+             ...prevQAns,
+             [statementIndex]: value 
+          }
+       };
+    });
+  };
 
   const options = {
     replace: (domNode) => {
@@ -110,24 +173,104 @@ export default function PacketClient({
           </div>
         );
       }
-      if (isCbtMode) {
-        if (!isCbtSubmitted && domNode.name === 'details') return <></>; 
-        if (domNode.name === 'hr') return <></>;
+      
+      if (isCbtMode && !isCbtSubmitted && domNode.name === 'details') return <></>; 
+      if (isCbtMode && domNode.name === 'hr') return <></>;
+
+      // --- KARTU OPSI BERBASIS CSS CLASS ---
+      if (isCbtMode && domNode.name === 'div' && domNode.attribs?.class === 'cbt-opt-row') {
+          const opt = domNode.attribs['data-opt'];
+          const currentSelection = userAnswers[currentCbtIndex];
+          const isSelected = currentSelection === opt;
+          const correctAns = isCbtSubmitted ? cbtQuestions[currentCbtIndex]?.correctKey : null;
+
+          let cardClass = [styles.optCard];
+          let iconClass = [styles.optCardIcon, styles.iconDefault];
+
+          if (isCbtSubmitted) {
+              cardClass.push(styles.optCardDisabled);
+              if (correctAns === opt) {
+                  cardClass.push(styles.optCardCorrect);
+                  iconClass = [styles.optCardIcon, styles.iconCorrect];
+              } else if (isSelected && correctAns !== opt) {
+                  cardClass.push(styles.optCardWrong);
+                  iconClass = [styles.optCardIcon, styles.iconWrong];
+              }
+          } else {
+              if (isSelected) {
+                  cardClass.push(styles.optCardSelected);
+                  iconClass = [styles.optCardIcon, styles.iconSelected];
+              }
+          }
+
+          return (
+              <div onClick={() => handleSelectAnswer(opt)} className={cardClass.join(' ')}>
+                  <span className={iconClass.join(' ')}>
+                      {isSelected ? '■' : '□'}
+                  </span>
+                  <div style={{ flex: 1, margin: 0, color: 'inherit' }}>
+                      <span style={{ fontWeight: 'bold', marginRight: '6px' }}>{opt}.</span>
+                      {domToReact(domNode.children, options)}
+                  </div>
+              </div>
+          );
+      }
+
+      // --- TABEL PGK BERBASIS CSS CLASS ---
+      if (isCbtMode && domNode.name === 'tr' && domNode.parent?.name === 'tbody' && cbtQuestions[currentCbtIndex]?.qType === 'complex') {
+          const trs = domNode.parent.children.filter(c => c.name === 'tr');
+          const rowIndex = trs.indexOf(domNode);
+
+          const currentSelection = userAnswers[currentCbtIndex]?.[rowIndex];
+          const correctAns = isCbtSubmitted ? cbtQuestions[currentCbtIndex].correctKey[rowIndex] : null;
+
+          const statementTd = domNode.children.filter(c => c.name === 'td')[0];
+
+          const getPgkClass = (val) => {
+               let classes = [styles.pgkCell];
+               if (isCbtSubmitted) classes.push(styles.pgkCellDisabled);
+               
+               if (isCbtSubmitted) {
+                   if (correctAns === val) classes.push(styles.pgkCellCorrect);
+                   else if (currentSelection === val && correctAns !== val) classes.push(styles.pgkCellWrong);
+               } else {
+                   if (currentSelection === val) classes.push(styles.pgkCellSelected);
+               }
+               return classes.join(' ');
+          };
+
+          return (
+              <tr>
+                  {domToReact([statementTd], options)}
+                  <td className={getPgkClass('YA')} onClick={() => handleComplexAnswer(rowIndex, 'YA')}>
+                      {currentSelection === 'YA' ? '●' : '○'}
+                  </td>
+                  <td className={getPgkClass('TIDAK')} onClick={() => handleComplexAnswer(rowIndex, 'TIDAK')}>
+                      {currentSelection === 'TIDAK' ? '●' : '○'}
+                  </td>
+              </tr>
+          );
       }
     }
   };
 
   const cleanContent = sanitizeHtml((packet.content || '').replace(/\n/g, ''), {
-    allowedTags: sanitizeHtml.defaults.allowedTags.concat([ 'img', 'div', 'span', 'br', 'hr', 'details', 'summary' ]),
+    allowedTags: sanitizeHtml.defaults.allowedTags.concat([ 
+      'img', 'div', 'span', 'br', 'hr', 'details', 'summary',
+      'table', 'thead', 'tbody', 'tr', 'th', 'td' 
+    ]),
     allowedAttributes: {
         ...sanitizeHtml.defaults.allowedAttributes,
         'img': ['src', 'alt', 'width', 'height', 'title'],
-        'div': ['class', 'style', 'id', 'data-ad-slot'],
+        'div': ['class', 'style', 'id', 'data-ad-slot', 'data-opt'], 
         'span': ['class', 'style', 'id'],
         'ul': ['class', 'style', 'id'], 'ol': ['class', 'style', 'id'], 'li': ['class', 'style', 'id'],
         'h1': ['class', 'style', 'id'], 'h2': ['class', 'style', 'id'], 'h3': ['class', 'style', 'id'],
         'hr': ['class', 'style', 'id'], 'br': ['class', 'style', 'id'], 'p': ['class', 'style', 'id'],
-        'a': ['href', 'target', 'id'], 'details': ['style', 'class', 'open'], 'summary': ['style', 'class'] 
+        'a': ['href', 'target', 'id'], 'details': ['style', 'class', 'open'], 'summary': ['style', 'class'],
+        'table': ['style', 'class', 'width'],
+        'thead': ['style', 'class'], 'tbody': ['style', 'class'], 'tr': ['style', 'class'],
+        'th': ['style', 'class'], 'td': ['style', 'class']
     },
     allowedSchemes: [ 'http', 'https', 'data', 'mailto' ]
   });
@@ -150,7 +293,15 @@ export default function PacketClient({
   const handleSubmitCbt = () => {
     if (window.confirm('Apakah Anda yakin ingin mengakhiri dan mengoreksi try out ini?')) {
       let correctCount = 0;
-      cbtQuestions.forEach((q, idx) => { if (userAnswers[idx] === q.correctKey) correctCount++; });
+      cbtQuestions.forEach((q, idx) => { 
+        if (q.qType === 'standard') {
+            if (userAnswers[idx] === q.correctKey) correctCount++; 
+        } else if (q.qType === 'complex' && Array.isArray(q.correctKey)) {
+            const userAnsObj = userAnswers[idx] || {};
+            const isAllCorrect = q.correctKey.every((key, i) => userAnsObj[i] === key);
+            if (isAllCorrect) correctCount++;
+        }
+      });
       setScore(Math.round((correctCount / cbtQuestions.length) * 100));
       setIsCbtSubmitted(true);
       setShowScoreModal(true); 
@@ -166,19 +317,27 @@ export default function PacketClient({
     setShowScoreModal(false);
   };
 
-  // --- REVISI: Fungsi Toggle URL Menggunakan Path Baru ---
   const toggleCbtMode = () => {
     if (isCbtMode) {
       if (window.confirm('Apakah Anda yakin ingin membatalkan ujian dan kembali ke Mode Baca?')) {
         handleResetCbt();
-        // Menghapus '/cbt' dari bagian depan string URL
         router.push(pathname.replace(/^\/cbt/, '')); 
       }
     } else {
-      // Menambahkan '/cbt' di bagian depan string URL
       window.location.href = `/cbt${pathname}`;
     }
   };
+
+  const activeQuestion = cbtQuestions[currentCbtIndex];
+
+  const safeUserAnswersForSidebar = {};
+  Object.keys(userAnswers).forEach(key => {
+    if (typeof userAnswers[key] === 'object') {
+      safeUserAnswersForSidebar[key] = '✓'; 
+    } else {
+      safeUserAnswersForSidebar[key] = userAnswers[key];
+    }
+  });
 
   return (
     <div className={styles.holyGrailLayout}>
@@ -242,27 +401,47 @@ export default function PacketClient({
                 <div className={styles.cbtWorkspace}>
                   <div className={styles.cbtQuestionBox}>
                     <div className={styles.content} style={{ fontSize: `${fontSize}px` }}>
-                      {cbtQuestions[currentCbtIndex] ? parse(renderLaTeX(cbtQuestions[currentCbtIndex].htmlContent), options) : <p>Memuat soal...</p>}
+                      {activeQuestion ? parse(renderLaTeX(activeQuestion.htmlContent), options) : <p>Memuat soal...</p>}
                     </div>
 
-                    <div className={styles.cbtAnswerSelector}>
-                      <p className={styles.selectorLabel}>Pilih Lembar Jawaban Anda:</p>
-                      <div className={styles.optionButtonGroup}>
-                        {['A', 'B', 'C', 'D', 'E'].map((opt) => {
-                          const isSelected = userAnswers[currentCbtIndex] === opt;
-                          const isCorrectKey = cbtQuestions[currentCbtIndex]?.correctKey === opt;
-                          let btnStyle = styles.optBtn;
-                          if (isSelected) btnStyle = styles.optBtnSelected;
-                          if (isCbtSubmitted && isCorrectKey) btnStyle = styles.optBtnCorrectKey;
+                    {/* HANYA TAMPIL JIKA GAGAL MENYULAP OPSI (FALLBACK) */}
+                    {activeQuestion?.qType === 'standard' && !activeQuestion?.hasInteractiveOptions && (
+                      <div className={styles.cbtAnswerSelector}>
+                        <p className={styles.selectorLabel}>Pilih Lembar Jawaban Anda:</p>
+                        <div className={styles.optionButtonGroup}>
+                          {['A', 'B', 'C', 'D', 'E'].map((opt) => {
+                            const isSelected = userAnswers[currentCbtIndex] === opt;
+                            const isCorrectKey = activeQuestion?.correctKey === opt;
+                            let btnStyle = styles.optBtn;
+                            if (isSelected) btnStyle = styles.optBtnSelected;
+                            if (isCbtSubmitted && isCorrectKey) btnStyle = styles.optBtnCorrectKey;
 
-                          return (
-                            <button key={opt} onClick={() => handleSelectAnswer(opt)} className={btnStyle} disabled={isCbtSubmitted}>
-                              <span className={styles.optLetter}>{opt}</span>
-                            </button>
-                          );
-                        })} 
+                            return (
+                              <button key={opt} onClick={() => handleSelectAnswer(opt)} className={btnStyle} disabled={isCbtSubmitted}>
+                                <span className={styles.optLetter}>{opt}</span>
+                              </button>
+                            );
+                          })} 
+                        </div>
                       </div>
-                    </div>
+                    )}
+                    
+                    {/* INSTRUKSI ELEGAN JIKA OPSI BERHASIL DISULAP */}
+                    {activeQuestion?.qType === 'standard' && activeQuestion?.hasInteractiveOptions && (
+                      <div className={styles.cbtAnswerSelector} style={{ borderTop: 'none', paddingTop: 0 }}>
+                         <p className={styles.selectorLabel} style={{ color: '#0ea5e9' }}>
+                           <em>Silakan klik langsung pada pilihan kotak di atas untuk menjawab.</em>
+                         </p>
+                      </div>
+                    )}
+
+                    {activeQuestion?.qType === 'complex' && (
+                      <div className={styles.cbtAnswerSelector} style={{ borderTop: 'none', paddingTop: 0 }}>
+                         <p className={styles.selectorLabel} style={{ color: '#0ea5e9' }}>
+                           <em>Silakan klik langsung pada tabel di atas untuk menjawab Pernyataan (Ya/Tidak)</em>
+                         </p>
+                      </div>
+                    )}
 
                     <div className={styles.cbtFooterNav}>
                       <button onClick={() => setCurrentCbtIndex(prev => Math.max(0, prev - 1))} disabled={currentCbtIndex === 0} className={styles.navCbtBtn}>
@@ -278,7 +457,7 @@ export default function PacketClient({
                         )
                       ) : (
                         currentCbtIndex === cbtQuestions.length - 1 ? (
-                          <button onClick={handleResetCbt} className={styles.submitCbtBtn} style={{ background: '#374151' }}>🔄 Ulangi Ujian</button>
+                          <button onClick={handleResetCbt} className={styles.submitCbtBtn} style={{ background: '#374151' }}>Ulangi Ujian</button>
                         ) : (
                           <button onClick={() => setCurrentCbtIndex(prev => Math.min(cbtQuestions.length - 1, prev + 1))} disabled={currentCbtIndex === cbtQuestions.length - 1} className={styles.navCbtBtn}>
                             Selanjutnya »
@@ -294,8 +473,14 @@ export default function PacketClient({
                 </div>
 
                 <div className={styles.mobileCbtGrid}>
-                  {cbtQuestions.map((_, idx) => {
-                    const hasAnswered = userAnswers[idx] !== undefined;
+                  {cbtQuestions.map((q, idx) => {
+                    let hasAnswered = false;
+                    if (q.qType === 'standard') {
+                       hasAnswered = userAnswers[idx] !== undefined;
+                    } else if (q.qType === 'complex' && Array.isArray(q.correctKey)) {
+                       hasAnswered = userAnswers[idx] && Object.keys(userAnswers[idx]).length === q.correctKey.length;
+                    }
+
                     const isCurrent = currentCbtIndex === idx;
 
                     let tileStyle = styles.mobileGridTile;
@@ -303,15 +488,24 @@ export default function PacketClient({
                     if (isCurrent) tileStyle += ` ${styles.mobileGridTileCurrent}`;
                     
                     if (isCbtSubmitted) {
-                      const isTileCorrect = userAnswers[idx] === cbtQuestions[idx].correctKey;
+                      let isTileCorrect = false;
+                      if (q.qType === 'standard') {
+                         isTileCorrect = userAnswers[idx] === q.correctKey;
+                      } else if (q.qType === 'complex') {
+                         const userAnsObj = userAnswers[idx] || {};
+                         isTileCorrect = q.correctKey.every((key, i) => userAnsObj[i] === key);
+                      }
+                      
                       tileStyle += isTileCorrect ? ` ${styles.mobileGridTileCorrect}` : ` ${styles.mobileGridTileWrong}`;
                       if (isCurrent) tileStyle += ` ${styles.mobileGridTileCurrentReview}`;
                     }
+                    
+                    const miniLabel = q.qType === 'standard' ? (userAnswers[idx] || '-') : (hasAnswered ? '✓' : 'PGK');
 
                     return (
                       <button key={`mob-grid-${idx}`} onClick={() => setCurrentCbtIndex(idx)} className={tileStyle}>
                         {idx + 1}
-                        <span className={styles.miniLabel}>{userAnswers[idx] || '-'}</span>
+                        <span className={styles.miniLabel}>{miniLabel}</span>
                       </button>
                     );
                   })}
@@ -357,7 +551,7 @@ export default function PacketClient({
         cbtProps={{
           cbtQuestions,
           currentCbtIndex,
-          userAnswers,
+          userAnswers: safeUserAnswersForSidebar,
           isCbtSubmitted,
           setCurrentCbtIndex
         }}

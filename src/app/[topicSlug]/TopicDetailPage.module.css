@@ -57,13 +57,13 @@
 }
 .activeChapter {
   background-color: var(--primary);
-  color: white;
+  color: var(--background);
   font-weight: bold;
   font-size: 110%;
 }
 .activeChapter:hover {
   background-color: var(--primary);
-  color: white;
+  color: var(--background);
   font-weight: bold;
   font-size: 110%;
 }
@@ -93,17 +93,18 @@
 }
 
 .navigation {
-  padding: 20px 0px;
   border-top: 2px solid var(--input-border);
   border-bottom: 2px solid var(--input-border);
   display: flex;
   justify-content: space-between;
 }
+
+.navButton {
+  margin: 15px 0;
+}
 .lastRead {
-  padding: 15px;
-  background-color: var(--input-bg); 
-  border-left: 5px solid var(--primary);
-  border-radius: 4px;
+  padding: 15px 0;
+  background-color: var(--input-bg);
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -111,7 +112,7 @@
 }
 .lastRead a {
   background-color: var(--primary);
-  color: white; 
+  color: var(--background); 
   padding: 8px 16px;
   border-radius: 4px;
   text-decoration: none;
@@ -124,7 +125,7 @@
 .lastRead a:hover {
   opacity: 0.9;
   transform: scale(1.05);
-  color: white;
+  color: var(--background);
 }
 .disclaimer {
   font-size: 0.85rem;

@@ -131,7 +131,7 @@
 
 .activeChapter, .activeChapter:hover {
   background-color: var(--primary);
-  color: white;
+  color: var(--background);
   font-weight: bold;
   font-size: 110%;
 }
@@ -525,4 +525,91 @@
   .mobileGridTileCorrect { background-color: #2ed573 !important; color: white !important; border-color: #2ed573 !important; }
   .mobileGridTileWrong { background-color: #ff4757 !important; color: white !important; border-color: #ff4757 !important; }
   .mobileGridTileCurrentReview { border-color: #1e90ff !important; box-shadow: inset 0 0 0 1px #1e90ff !important; }
+}
+
+/* =========================================
+   STYLE TABEL GLOBAL (AGAR HTML LEBIH BERSIH)
+   ========================================= */
+.content table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 16px;
+  font-size: 0.95em;
+}
+.content th, .content td {
+  border: 1px solid var(--input-border) !important;
+  padding: 10px;
+}
+.content th {
+  background-color: var(--input-bg) !important;
+  text-align: center;
+}
+
+/* =========================================
+   STYLE UI: TABEL PGK INTERAKTIF (YA/TIDAK)
+   ========================================= */
+.pgkCell {
+  text-align: center;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+.pgkCellDisabled {
+  cursor: default;
+}
+.pgkCellSelected {
+  background-color: #dbeafe; /* Biru */
+  color: #1e3a8a;
+}
+.pgkCellCorrect {
+  background-color: #bbf7d0; /* Hijau */
+  color: #14532d;
+}
+.pgkCellWrong {
+  background-color: #fecaca; /* Merah */
+  color: #7f1d1d;
+}
+
+/* =========================================
+   STYLE UI: KARTU OPSI (A, B, C, D, E)
+   ========================================= */
+.optCard {
+  padding: 12px 16px;
+  margin: 8px 0;
+  border: 2px solid var(--input-border);
+  border-radius: 10px;
+  cursor: pointer;
+  background-color: transparent;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  transition: all 0.2s ease;
+}
+.optCardDisabled {
+  cursor: default;
+}
+.optCardSelected {
+  background-color: rgba(59, 130, 246, 0.1);
+  border-color: #3b82f6;
+}
+.optCardCorrect {
+  background-color: rgba(34, 197, 94, 0.1);
+  border-color: #22c55e;
+}
+.optCardWrong {
+  background-color: rgba(239, 68, 68, 0.1);
+  border-color: #ef4444;
+}
+
+/* Warna Ikon Kotak (■ / □) */
+.iconDefault { color: #9ca3af; }
+.iconSelected { color: #3b82f6; }
+.iconCorrect { color: #22c55e; }
+.iconWrong { color: #ef4444; }
+
+.optCardIcon {
+  font-weight: bold;
+  font-size: 1.4em;
+  line-height: 0.8;
+  margin-top: 5px;
 }

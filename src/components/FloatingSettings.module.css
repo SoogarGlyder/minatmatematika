@@ -14,8 +14,8 @@
   width: 55px;
   height: 55px;
   border-radius: 50%;
-  background-color: var(--primary);
-  color: white;
+  background-color: #ff4757 !important;
+  color: white !important;
   border: none;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
   display: flex;
@@ -28,7 +28,7 @@
 
 .mainBtn.open {
   transform: rotate(45deg);
-  background-color: #ff4757;
+  background-color: #ff4757 !important;
 }
 
 .actionBtn {

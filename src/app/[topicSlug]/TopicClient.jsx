@@ -14,8 +14,12 @@ import { useGlobalContext } from '../providers';
 import { getReadingHistory } from '../../utils/readingHistory';
 import RightSidebar from '@/components/RightSidebar';
 
-// 1. IMPORT KOMPONEN IKLAN ADSENSE
+// IMPORT KOMPONEN IKLAN ADSENSE
 import AdBanner from '@/components/AdBanner';
+
+// IMPORT KATEX UNTUK MEMBACA RUMUS ($...$)
+import katex from 'katex';
+import 'katex/dist/katex.min.css';
 
 export default function TopicClient({ initialTopic, initialPaketList }) {
   const router = useRouter();
@@ -43,7 +47,6 @@ export default function TopicClient({ initialTopic, initialPaketList }) {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  // Menyimpan kategori agar menu Header di atas ikut menyala
   useEffect(() => {
     if (topic) {
         setPageSerie(topic.category); 
@@ -53,7 +56,6 @@ export default function TopicClient({ initialTopic, initialPaketList }) {
     window.scrollTo(0, 0);
   }, [topic, setPageSerie, setDropdownSerie, setIsListOpen]);
 
-  // Mengambil riwayat belajar terakhir
   useEffect(() => {
     if (topicSlug) {
       const historyData = getReadingHistory(topicSlug);
@@ -95,7 +97,6 @@ export default function TopicClient({ initialTopic, initialPaketList }) {
          );
       }
 
-      // --- KUNCI: Mengubah placeholder iklan menjadi <AdBanner /> ---
       if (domNode.attribs && domNode.attribs.class === 'ad-placeholder') {
         const adSlot = domNode.attribs['data-ad-slot'];
         return (
@@ -110,22 +111,41 @@ export default function TopicClient({ initialTopic, initialPaketList }) {
 
   const contentWithBreaks = (topic.description || '').replace(/\n/g, '');
   
-  // --- IZINKAN ATRIBUT data-ad-slot ---
+  // IZINKAN TAG TABEL DAN ATRIBUTNYA
   const cleanContent = sanitizeHtml(contentWithBreaks, {
-    allowedTags: sanitizeHtml.defaults.allowedTags.concat([ 'img', 'div', 'span', 'br', 'hr' ]),
+    allowedTags: sanitizeHtml.defaults.allowedTags.concat([ 
+        'img', 'div', 'span', 'br', 'hr',
+        'table', 'thead', 'tbody', 'tr', 'th', 'td' // Tag tabel diizinkan
+    ]),
     allowedAttributes: {
       ...sanitizeHtml.defaults.allowedAttributes,
       'img': ['src', 'alt', 'width', 'height', 'title'],
-      'div': ['class', 'style', 'id', 'data-ad-slot'], // <-- Ditambahkan di sini
+      'div': ['class', 'style', 'id', 'data-ad-slot'], 
       'span': ['class', 'style'],
-      'p': ['class', 'style']
+      'p': ['class', 'style'],
+      'table': ['style', 'class', 'width'],
+      'thead': ['style', 'class'], 'tbody': ['style', 'class'], 'tr': ['style', 'class'],
+      'th': ['style', 'class'], 'td': ['style', 'class']
     },
     allowedSchemes: [ 'http', 'https', 'data', 'mailto' ]
   });
 
+  // FUNGSI UNTUK MERENDER RUMUS LATEX
+  const renderLaTeX = (htmlString) => {
+    if (!htmlString) return "";
+    return htmlString.replace(/\$([^\$]+)\$/g, (match, rumus) => {
+      try { 
+        return katex.renderToString(rumus.replaceAll('&amp;', '&'), { throwOnError: false }); 
+      } 
+      catch (e) { return match; }
+    });
+  };
+
+  // Bungkus cleanContent dengan fungsi renderLaTeX
+  const finalHtmlContent = renderLaTeX(cleanContent);
+
   return (
     <div className={styles.holyGrailLayout}>
-      {/* SIDEBAR KIRI: Daftar Paket Soal */}
       <aside className={styles.leftSidebar}>
         <button
           className={styles.mobileToggle}
@@ -161,7 +181,6 @@ export default function TopicClient({ initialTopic, initialPaketList }) {
         )}
       </aside>
 
-      {/* KONTEN UTAMA: Deskripsi Materi */}
       <main className={styles.mainContent}>
         <Breadcrumbs 
           items={[
@@ -175,31 +194,16 @@ export default function TopicClient({ initialTopic, initialPaketList }) {
         </div>
         <hr className={styles.divider} />
         
-        {/* TAMPILKAN KONTEN DAN IKLAN DARI DATABASE */}
+        {/* PARSE finalHtmlContent YANG SUDAH DIRENDER LATEX */}
         <div className={styles.content} style={{ fontSize: `${fontSize}px` }}>
-          {parse(cleanContent, options)}
+          {parse(finalHtmlContent, options)}
         </div>
 
-        {/* IKLAN ADSENSE PENUTUP BAWAH */}
-        <div style={{ margin: '30px 0', borderTop: '1px dashed var(--input-border)', borderBottom: '1px dashed var(--input-border)', padding: '20px 0' }}>
-          <span style={{ fontSize: '0.75rem', color: '#888', display: 'block', textAlign: 'center', marginBottom: '20px' }}>Advertisement</span>
-          <AdBanner dataAdSlot="6974185423" />
-        </div>
-
-        {/* NAVIGASI: Tombol Mulai Belajar */}
         <div className={styles.navigation} style={{ marginTop: '20px' }}>
           {lastRead && (
             <div className={styles.lastRead}>
-              <div>
-                <span style={{ display: 'block', fontSize: '0.85rem', marginRight: '20px' }}>
-                  Terakhir dipelajari:
-                </span>
-                <strong>
-                  {lastRead.chapterTitle}
-                </strong>
-              </div>
               <Link href={`/${topicSlug}/${lastRead.chapterSlug}`}>
-                Lanjut Belajar »
+                Lanjut <span>{lastRead.chapterTitle}</span>
               </Link>
             </div>
           )}
@@ -209,16 +213,13 @@ export default function TopicClient({ initialTopic, initialPaketList }) {
                onClick={() => router.push(`/${topicSlug}/${firstPaketSlug}`)}
                className={styles.navButton} 
              >
-               Mulai Latihan &raquo;
+               Mulai &raquo;
              </button>
           )}
         </div>
-
-        {/* DISCLAIMER BAWAH */}
-        <div className={styles.disclaimer}>
-          <p>
-            <strong>Disclaimer:</strong> Materi dan soal yang disajikan di platform ini ditujukan sebagai sarana pembelajaran dan latihan mandiri untuk membantu memahami konsep matematika.
-          </p>
+        <div style={{ margin: '30px 0', borderTop: '1px dashed var(--input-border)', borderBottom: '1px dashed var(--input-border)', padding: '20px 0' }}>
+          <span style={{ fontSize: '0.75rem', color: '#888', display: 'block', textAlign: 'center', marginBottom: '20px' }}>Advertisement</span>
+          <AdBanner dataAdSlot="6974185423" />
         </div>
       </main>
       

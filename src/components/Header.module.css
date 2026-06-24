@@ -135,7 +135,7 @@
 
 .navContent.active {
     background-color: var(--primary);
-    color: white;
+    color: var(--button-bg);
     font-size: 115%;
 }
 
