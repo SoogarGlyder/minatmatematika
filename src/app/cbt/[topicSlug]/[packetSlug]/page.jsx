@@ -1,6 +1,8 @@
-// File: src/app/[topicSlug]/[packetSlug]/cbt/page.jsx
+// File baru: src/app/cbt/[topicSlug]/[packetSlug]/page.jsx
 import React from 'react';
-import PacketPageContent from '../page.jsx'; 
+
+// Menggunakan alias @ untuk langsung mengarah ke folder src/
+import PacketPageContent from '@/app/[topicSlug]/[packetSlug]/page'; 
 
 export const metadata = {
   title: 'Mode CBT',

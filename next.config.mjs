@@ -33,6 +33,16 @@ const nextConfig = {
       },
     ],
   },
+
+  async redirects() {
+    return [
+      {
+        source: '/:topicSlug/:packetSlug/cbt',
+        destination: '/cbt/:topicSlug/:packetSlug',
+        permanent: true,
+      },
+    ]
+  },
 };
 
 export default nextConfig;
