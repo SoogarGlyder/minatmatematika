@@ -12,14 +12,13 @@ export default function robots() {
           '/admin/',
           '/api/',
           '/_next/',
-          '/*/*/cbt',   // Tetap blokir dari hasil pencarian
-          '/*/*/cbt/',
+          '/cbt/', // Memblokir folder CBT dengan struktur URL yang baru
         ],
       },
       {
         // Aturan VIP KHUSUS untuk Robot Google AdSense
         userAgent: 'Mediapartners-Google',
-        allow: '/', // Mengizinkan AdSense merayapi seluruh situs, termasuk /cbt
+        allow: '/', // Mengizinkan AdSense merayapi seluruh situs agar iklan & offerwall tetap jalan
       }
     ],
     sitemap: `${baseUrl}/sitemap.xml`,

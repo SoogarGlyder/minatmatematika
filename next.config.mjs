@@ -1,3 +1,4 @@
+// File: next.config.mjs
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   trailingSlash: false,
@@ -37,9 +38,27 @@ const nextConfig = {
   async redirects() {
     return [
       {
+        // Menangkap format URL CBT lama
         source: '/:topicSlug/:packetSlug/cbt',
+        // Mengalihkan secara otomatis ke format URL CBT baru
         destination: '/cbt/:topicSlug/:packetSlug',
         permanent: true,
+      },
+    ]
+  },
+
+  // BARU: Menambahkan HTTP Headers pelarangan indeks untuk folder CBT
+  async headers() {
+    return [
+      {
+        // Targetkan semua rute yang dimulai dengan /cbt/
+        source: '/cbt/:path*',
+        headers: [
+          {
+            key: 'X-Robots-Tag',
+            value: 'noindex, nofollow, nocache', // Instruksi tegas ke mesin pencari
+          },
+        ],
       },
     ]
   },

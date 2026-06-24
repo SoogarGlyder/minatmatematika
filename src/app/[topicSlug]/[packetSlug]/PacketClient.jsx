@@ -2,7 +2,6 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-// 1. HAPUS useSearchParams, cukup gunakan useRouter dan usePathname
 import { useRouter, usePathname } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -31,9 +30,9 @@ export default function PacketClient({
   const { fontSize } = useFontSize(); 
   const [isListVisible, setIsListVisible] = useState(false);
 
-  // --- STATE SYSTEM CBT SIMULATOR ---
-  // 2. KUNCI: Membaca dari ujung URL, apakah berakhiran '/cbt'?
-  const isCbtMode = pathname.endsWith('/cbt'); 
+  // --- REVISI STATE SYSTEM CBT SIMULATOR ---
+  // KUNCI: Membaca dari AWAL URL, apakah berawalan '/cbt'?
+  const isCbtMode = pathname.startsWith('/cbt'); 
   
   const [cbtQuestions, setCbtQuestions] = useState([]);
   const [currentCbtIndex, setCurrentCbtIndex] = useState(0);
@@ -167,22 +166,23 @@ export default function PacketClient({
     setShowScoreModal(false);
   };
 
-  // --- 3. KUNCI: Fungsi Toggle URL Menggunakan Path ---
+  // --- REVISI: Fungsi Toggle URL Menggunakan Path Baru ---
   const toggleCbtMode = () => {
     if (isCbtMode) {
       if (window.confirm('Apakah Anda yakin ingin membatalkan ujian dan kembali ke Mode Baca?')) {
         handleResetCbt();
-        router.push(pathname.replace(/\/cbt$/, '')); 
+        // Menghapus '/cbt' dari bagian depan string URL
+        router.push(pathname.replace(/^\/cbt/, '')); 
       }
     } else {
-      window.location.href = `${pathname}/cbt`;
+      // Menambahkan '/cbt' di bagian depan string URL
+      window.location.href = `/cbt${pathname}`;
     }
   };
 
   return (
     <div className={styles.holyGrailLayout}>
 
-      {/* MODAL POP UP SKOR PASCA UJIAN TETAP ADA */}
       {showScoreModal && (
         <div className={styles.modalOverlay}>
           <div className={styles.modalContent}>
@@ -199,7 +199,6 @@ export default function PacketClient({
         </div>
       )}
 
-       {/* SIDEBAR KIRI TETAP HILANG SAAT MODE CBT */}
        {!isCbtMode && (
          <aside className={styles.leftSidebar}>
             <button className={styles.mobileToggle} onClick={() => setIsListVisible(!isListVisible)}>Daftar Paket {isListVisible ? '▴' : '▾'}</button>
@@ -219,7 +218,6 @@ export default function PacketClient({
         </aside>
        )}
 
-      {/* AREA UTAMA SOAL */}
       <main className={styles.mainContent}>
             <Breadcrumbs items={[{ label: topic.title, link: `/${topicSlug}` }, { label: packet.title, link: null }]} />
             <div className={styles.chapterHeader}>
@@ -229,7 +227,6 @@ export default function PacketClient({
               </div>
 
               <div className={styles.singleToggleContainer}>
-                {/* Tombol memanggil toggleCbtMode yang mengubah URL */}
                 <button 
                   onClick={toggleCbtMode} 
                   className={`${styles.toggleBtn} ${isCbtMode ? styles.toggleBtnActive : ''}`}
@@ -243,7 +240,6 @@ export default function PacketClient({
             {isCbtMode ? (
               <div className={styles.cbtSimulatorLayout}>
                 <div className={styles.cbtWorkspace}>
-                  {/* WORKSPACE SOAL AKTIF */}
                   <div className={styles.cbtQuestionBox}>
                     <div className={styles.content} style={{ fontSize: `${fontSize}px` }}>
                       {cbtQuestions[currentCbtIndex] ? parse(renderLaTeX(cbtQuestions[currentCbtIndex].htmlContent), options) : <p>Memuat soal...</p>}
@@ -322,7 +318,6 @@ export default function PacketClient({
                 </div>
               </div>
             ) : (
-              /* VIEW MODE BACA */
               <>
                 <span style={{ fontSize: '0.9rem', color: '#888', display: 'block', marginBottom: '35px', marginTop: '-15px' }}>
                   Estimasi waktu pengerjaan: {readingTime} menit
