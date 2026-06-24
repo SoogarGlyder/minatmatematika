@@ -513,7 +513,7 @@ export default function PacketClient({
               </div>
             ) : (
               <>
-                <span style={{ fontSize: '0.9rem', color: '#888', display: 'block', marginBottom: '35px', marginTop: '-15px' }}>
+                <span style={{ fontSize: '0.9rem', color: '#888', display: 'block', marginBottom: '10px', marginTop: '-15px' }}>
                   Estimasi waktu pengerjaan: {readingTime} menit
                 </span>
                 <div className={styles.content} style={{ fontSize: `${fontSize}px` }}>{parse(finalHtmlContent, options)}</div>
