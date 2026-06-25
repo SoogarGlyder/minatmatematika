@@ -167,7 +167,7 @@ export default function PacketClient({
       if (domNode.attribs && domNode.attribs.class === 'ad-placeholder') {
         const adSlot = domNode.attribs['data-ad-slot']; 
         return (
-          <div style={{ margin: '0', borderTop: '2px dashed var(--input-border)', borderBottom: '2px dashed var(--input-border)', padding: '20px 0' }}>
+          <div style={{ margin: '0', marginBottom: '20px',borderTop: '2px dashed var(--input-border)', borderBottom: '2px dashed var(--input-border)', padding: '20px 0' }}>
             <span style={{ fontSize: '0.75rem', color: '#888', display: 'block', textAlign: 'center', marginBottom: '20px' }}>Advertisement</span>
             <AdBanner dataAdSlot={adSlot} />
           </div>
@@ -205,9 +205,6 @@ export default function PacketClient({
 
           return (
               <div onClick={() => handleSelectAnswer(opt)} className={cardClass.join(' ')}>
-                  <span className={iconClass.join(' ')}>
-                      {isSelected ? '■' : '□'}
-                  </span>
                   <div style={{ flex: 1, margin: 0, color: 'inherit' }}>
                       <span style={{ fontWeight: 'bold', marginRight: '6px' }}>{opt}.</span>
                       {domToReact(domNode.children, options)}
