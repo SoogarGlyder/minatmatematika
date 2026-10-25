@@ -45,7 +45,7 @@ function Header() {
   const isBlogPage = pathname?.startsWith('/materi') || pathname?.startsWith('/articles');
   const isOtherPage = isBlogPage; 
 
-  const isChapterPage = pathname && !isOtherPage && !isHomePage && !isAdminPage
+  const isPacketPage = pathname && !isOtherPage && !isHomePage && !isAdminPage
     ? pathname.split('/').filter(Boolean).length === 2 
     : false;
 
@@ -182,13 +182,13 @@ function Header() {
             })}
           </nav>
         )}
-        {isChapterPage && <ReadingProgressBar />}
+        {isPacketPage && <ReadingProgressBar />}
       </div>
 
       {!isHomePage && isListOpen && (
         <TopicList 
           activeSerie={dropdownSerie}
-          onNovelClick={() => setIsListOpen(false)}
+          onTopicClick={() => setIsListOpen(false)}
           navigate={router.push} 
           isOverlay={true}
        />

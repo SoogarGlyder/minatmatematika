@@ -7,7 +7,7 @@ import styles from './Materi.module.css';
 import dbConnect from '@/lib/dbConnect';
 import Article from '@/models/Article';
 
-export const dynamic = 'force-dynamic'; 
+export const revalidate = 600; // cache 10 menit; juga di-refresh saat admin menyimpan
 export const metadata = {
   title: 'Materi & Artikel | Minat Matematika',
   description: 'Kumpulan materi ringkas, panduan belajar, pembahasan mendalam, dan tips jitu seputar matematika UTBK/SNBT hanya di Minat Matematika.',

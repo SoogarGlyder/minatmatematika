@@ -11,7 +11,7 @@ import LoadingSpinner from './LoadingSpinner';
 // Mengimpor komponen iklan yang sudah kita sempurnakan sebelumnya
 import AdBanner from './AdBanner';
 
-function TopicList({ activeSerie, onNovelClick }) {
+function TopicList({ activeSerie, onTopicClick }) {
   const { topics, loading, error } = useTopicList(activeSerie);
 
   const renderContent = () => {
@@ -49,7 +49,7 @@ function TopicList({ activeSerie, onNovelClick }) {
               key={topic._id} 
               href={href}
               className={styles.contentCover}
-              onClick={onNovelClick}
+              onClick={onTopicClick}
             >
               <div style={{ position: 'relative', width: '100%', height: '100%' }}>
                 <Image 

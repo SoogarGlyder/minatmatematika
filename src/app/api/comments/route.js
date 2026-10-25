@@ -33,9 +33,14 @@ export async function POST(request) {
     try {
         await dbConnect();
         const body = await request.json();
-        
-        // Menyimpan komentar (body harus berisi: name, content, topicSlug, paketSlug)
-        const newComment = await Comment.create(body);
+
+        // Hanya ambil field yang diizinkan (cegah pengisian createdAt/_id dari luar)
+        const { name, content, topicSlug, paketSlug } = body || {};
+        if ([name, content, topicSlug, paketSlug].some((v) => typeof v !== 'string' || !v.trim())) {
+            return NextResponse.json({ message: "Nama, komentar, topicSlug, dan paketSlug wajib diisi" }, { status: 400 });
+        }
+
+        const newComment = await Comment.create({ name, content, topicSlug, paketSlug });
         return NextResponse.json({ message: "Komentar berhasil ditambahkan", data: newComment }, { status: 201 });
     } catch (error) {
         return NextResponse.json({ message: "Gagal menambahkan komentar", error: error.message }, { status: 500 });

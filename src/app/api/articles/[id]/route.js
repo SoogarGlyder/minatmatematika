@@ -1,3 +1,4 @@
+import { revalidatePath } from 'next/cache';
 import { NextResponse } from 'next/server';
 import dbConnect from '@/lib/dbConnect';
 import Article from '@/models/Article';
@@ -30,10 +31,12 @@ export async function PUT(request, { params }) {
     });
 
     if (!updatedArticle) return NextResponse.json({ error: 'Not found' }, { status: 404 });
+    revalidatePath('/materi');
+    revalidatePath(`/materi/${updatedArticle.slug}`);
 
     // 🚀 PING INDEXNOW: Beritahu Bing bahwa konten artikel ini baru saja di-update!
     if (updatedArticle.slug) {
-      pingIndexNow(`/blog/${updatedArticle.slug}`);
+      pingIndexNow(`/materi/${updatedArticle.slug}`);
     }
 
     return NextResponse.json({ success: true, article: updatedArticle });
@@ -49,10 +52,12 @@ export async function DELETE(request, { params }) {
   try {
     const deletedArticle = await Article.findByIdAndDelete(id);
     if (!deletedArticle) return NextResponse.json({ error: 'Not found' }, { status: 404 });
+    revalidatePath('/materi');
+    revalidatePath('/sitemap.xml');
 
     // 🚀 PING INDEXNOW: Beritahu Bing untuk segera menghapus URL ini dari hasil pencarian (mencegah 404)
     if (deletedArticle.slug) {
-      pingIndexNow(`/blog/${deletedArticle.slug}`);
+      pingIndexNow(`/materi/${deletedArticle.slug}`);
     }
 
     return NextResponse.json({ success: true });

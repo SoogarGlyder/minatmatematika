@@ -4,26 +4,13 @@
 import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { useTopicList } from '@/hooks/useTopicData'; 
 import styles from './HomeGrid.module.css';
-import LoadingSpinner from '../LoadingSpinner';
 
 // 1. IMPORT AdBanner ke sini
 import AdBanner from '@/components/AdBanner'; 
 
-export default function HomeGrid({ activeSerie }) {
-  const { topics, loading, error } = useTopicList(activeSerie);
-  
-  if (loading) return <LoadingSpinner />;
-
-  if (error) {
-    return (
-      <div style={{ textAlign: 'center', padding: '40px', color: 'red' }}>
-        Error: {error}
-      </div>
-    );
-  }
-  
+// Data topik datang dari Server Component (page.jsx), jadi tidak perlu fetch/loading di browser.
+export default function HomeGrid({ topics }) {
   if (!topics || topics.length === 0) {
     return (
       <div style={{ textAlign: 'center', padding: '60px', opacity: 0.7, color: 'var(--foreground)' }}>

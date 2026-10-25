@@ -1,3 +1,4 @@
+import { revalidatePath } from 'next/cache';
 // File: src/app/api/topics/[id]/route.js
 import { NextResponse } from 'next/server';
 import dbConnect from '@/lib/dbConnect';
@@ -15,6 +16,8 @@ export async function PUT(request, { params }) {
             return NextResponse.json({ message: "Materi tidak ditemukan" }, { status: 404 });
         }
         
+        revalidatePath('/');
+        revalidatePath(`/${updatedTopic.slug}`);
         return NextResponse.json({ message: "Materi berhasil diupdate", data: updatedTopic });
     } catch (error) {
         return NextResponse.json({ message: "Gagal update materi", error: error.message }, { status: 500 });
@@ -32,6 +35,8 @@ export async function DELETE(request, { params }) {
             return NextResponse.json({ message: "Materi tidak ditemukan" }, { status: 404 });
         }
         
+        revalidatePath('/');
+        revalidatePath('/sitemap.xml');
         return NextResponse.json({ message: "Materi berhasil dihapus" });
     } catch (error) {
         return NextResponse.json({ message: "Gagal menghapus materi", error: error.message }, { status: 500 });

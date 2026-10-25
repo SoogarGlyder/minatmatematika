@@ -202,8 +202,8 @@ export default function TopicClient({ initialTopic, initialPaketList }) {
         <div className={styles.navigation} style={{ marginTop: '20px' }}>
           {lastRead && (
             <div className={styles.lastRead}>
-              <Link href={`/${topicSlug}/${lastRead.chapterSlug}`}>
-                Lanjut <span>{lastRead.chapterTitle}</span>
+              <Link href={`/${topicSlug}/${lastRead.packetSlug}`}>
+                Lanjut <span>{lastRead.packetTitle}</span>
               </Link>
             </div>
           )}

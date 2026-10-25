@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import styles from './CommentSection.module.css';
 
-export default function CommentSection({ novelSlug, chapterSlug }) {
+export default function CommentSection({ topicSlug, paketSlug }) {
   const [comments, setComments] = useState([]);
   const [formData, setFormData] = useState({ name: '', content: '' });
   const [loading, setLoading] = useState(true);
@@ -11,17 +11,19 @@ export default function CommentSection({ novelSlug, chapterSlug }) {
   const [error, setError] = useState('');
 
   useEffect(() => {
-    if (chapterSlug) {
+    if (topicSlug && paketSlug) {
       fetchComments();
     }
-  }, [chapterSlug]);
+  }, [topicSlug, paketSlug]);
 
   const fetchComments = async () => {
     try {
-      const res = await fetch(`/api/comments?chapterSlug=${chapterSlug}`);
+      const res = await fetch(
+        `/api/comments?topicSlug=${encodeURIComponent(topicSlug)}&paketSlug=${encodeURIComponent(paketSlug)}`
+      );
       const data = await res.json();
-      if (data.success) {
-        setComments(data.data);
+      if (res.ok && Array.isArray(data)) {
+        setComments(data);
       }
     } catch (error) {
       console.error('Gagal mengambil komentar:', error);
@@ -45,18 +47,16 @@ export default function CommentSection({ novelSlug, chapterSlug }) {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          novelSlug,
-          chapterSlug,
+          topicSlug,
+          paketSlug,
           name: formData.name,
           content: formData.content
         }),
       });
 
       const result = await res.json();
-      
-      console.log("Respon Server:", result); 
 
-      if (!res.ok || !result.success) {
+      if (!res.ok) {
         const pesanError = result.error || result.message || "Terjadi kesalahan misterius.";
         throw new Error(pesanError);
       }

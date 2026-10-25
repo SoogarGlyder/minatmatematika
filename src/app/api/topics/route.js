@@ -1,3 +1,4 @@
+import { revalidatePath } from 'next/cache';
 // File: src/app/api/topics/route.js
 import { NextResponse } from 'next/server';
 import dbConnect from '@/lib/dbConnect';
@@ -31,6 +32,8 @@ export async function POST(request) {
         }
 
         const newTopic = await Topic.create(body);
+        revalidatePath('/');
+        revalidatePath('/sitemap.xml');
         return NextResponse.json({ message: "Topik berhasil dibuat", data: newTopic }, { status: 201 });
     } catch (error) {
         console.error("Error API POST Topic:", error);

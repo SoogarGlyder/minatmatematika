@@ -110,7 +110,7 @@ export default async function ArticleDetailPage({ params }) {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      <BlogClient article={article} />
+      <MateriClient article={article} />
     </>
   );
 }

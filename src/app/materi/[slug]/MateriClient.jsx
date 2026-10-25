@@ -214,7 +214,7 @@ export default function MateriClient({ article }) {
                     <h3 className={styles.relatedTitle}>Materi Lainnya</h3>
                     <div className={styles.relatedGrid}>
                         {relatedArticles.map((rel) => (
-                            <Link href={`/blog/${rel.slug}`} key={rel._id} className={styles.relatedCard}>
+                            <Link href={`/materi/${rel.slug}`} key={rel._id} className={styles.relatedCard}>
                                 <div className={styles.relatedImageWrapper}>
                                     <Image 
                                         src={rel.image || '/social-cover.jpg'} 

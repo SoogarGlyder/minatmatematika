@@ -1,6 +1,6 @@
 export async function pingIndexNow(urls) {
-  const KEY = "4cf49eb7856845868190b84c8e9c52b9"; // API Key Bing Anda
-  const HOST = "www.linkstart.id";
+  const KEY = process.env.INDEXNOW_KEY || "4cf49eb7856845868190b84c8e9c52b9"; // file kuncinya ada di /public
+  const HOST = "www.minatmatematika.com";
   
   // Pastikan urls selalu dalam bentuk Array
   const urlList = Array.isArray(urls) ? urls : [urls];

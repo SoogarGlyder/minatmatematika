@@ -1,15 +1,15 @@
-const HISTORY_KEY = 'linkstart.id_history';
+const HISTORY_KEY = 'minatmatematika_history';
 
-export const saveReadingHistory = (novelSlug, chapterSlug, chapterTitle, chapterNumber) => {
+export const saveReadingHistory = (topicSlug, packetSlug, packetTitle, packetNumber) => {
   if (typeof window === 'undefined') return;
 
   try {
     const currentHistory = JSON.parse(localStorage.getItem(HISTORY_KEY) || '{}');
 
-    currentHistory[novelSlug] = {
-      chapterSlug,
-      chapterTitle,
-      chapterNumber,
+    currentHistory[topicSlug] = {
+      packetSlug,
+      packetTitle,
+      packetNumber,
       lastReadAt: new Date().toISOString(),
     };
 
@@ -19,12 +19,12 @@ export const saveReadingHistory = (novelSlug, chapterSlug, chapterTitle, chapter
   }
 };
 
-export const getReadingHistory = (novelSlug) => {
+export const getReadingHistory = (topicSlug) => {
   if (typeof window === 'undefined') return null;
 
   try {
     const currentHistory = JSON.parse(localStorage.getItem(HISTORY_KEY) || '{}');
-    return currentHistory[novelSlug] || null;
+    return currentHistory[topicSlug] || null;
   } catch (error) {
     return null;
   }

@@ -143,11 +143,33 @@ export default async function Page({ params }) {
     ]
   };
 
+  const learningLd = {
+    '@context': 'https://schema.org',
+    '@type': 'LearningResource',
+    name: `${currentPacket.title} - ${topic.title}`,
+    learningResourceType: 'Latihan soal dan pembahasan',
+    inLanguage: 'id',
+    about: topic.title,
+    educationalUse: 'Persiapan UTBK SNBT',
+    isPartOf: {
+      '@type': 'CollectionPage',
+      name: topic.title,
+      url: `https://www.minatmatematika.com/${topicSlug}`,
+    },
+    dateModified: currentPacket.updatedAt?.toISOString?.() || currentPacket.createdAt?.toISOString?.(),
+    url: `https://www.minatmatematika.com/${topicSlug}/${packetSlug}`,
+    publisher: { '@type': 'Organization', name: 'Minat Matematika', url: 'https://www.minatmatematika.com' },
+  };
+
   return (
     <>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(learningLd) }}
       />
 
       <PacketClient 

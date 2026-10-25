@@ -1,3 +1,4 @@
+import { revalidatePath } from 'next/cache';
 import { NextResponse } from 'next/server';
 import dbConnect from '@/lib/dbConnect';
 import Article from '@/models/Article';
@@ -13,10 +14,12 @@ export async function POST(request) {
     }
 
     const newArticle = await Article.create(body);
+    revalidatePath('/materi');
+    revalidatePath('/sitemap.xml');
 
     // 🚀 PING INDEXNOW: Memberitahu Bing bahwa ada Artikel Blog baru
     if (newArticle.slug) {
-      pingIndexNow(`/blog/${newArticle.slug}`);
+      pingIndexNow(`/materi/${newArticle.slug}`);
     }
 
     return NextResponse.json({ success: true, article: newArticle }, { status: 201 });
