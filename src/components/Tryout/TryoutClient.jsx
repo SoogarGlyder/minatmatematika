@@ -2,9 +2,13 @@
 'use client';
 
 import React, { useState, useEffect, useMemo, useRef, useCallback } from 'react';
-import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import 'katex/dist/katex.min.css';
 import styles from './Tryout.module.css';
+// Kerangka halaman memakai stylesheet halaman paket supaya tampilannya sama persis dengan CBT lama
+import old from '@/app/[topicSlug]/[packetSlug]/PacketReadPage.module.css';
+import Breadcrumbs from '@/components/Breadcrumbs';
+import CommentSection from '@/components/CommentSection';
 import RightSidebar from '@/components/RightSidebar';
 import AdBanner from '@/components/AdBanner';
 import { useFontSize } from '@/contexts/FontSizeContext';
@@ -25,13 +29,7 @@ const formatTime = (sec) => {
   return `${String(Math.floor(s / 60)).padStart(2, '0')}:${String(s % 60).padStart(2, '0')}`;
 };
 
-const formatDate = (iso) => {
-  try {
-    return new Date(iso).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' });
-  } catch {
-    return '';
-  }
-};
+const titleCase = (w) => w.charAt(0) + w.slice(1).toLowerCase(); // "TIDAK" -> "Tidak"
 
 const hasValue = (a) => {
   if (a === undefined || a === null) return false;
@@ -39,17 +37,19 @@ const hasValue = (a) => {
 };
 
 export default function TryoutClient({ topic, packet, questions, skippedCount }) {
+  const router = useRouter();
   const fontCtx = useFontSize();
   const fontSize = fontCtx?.fontSize ?? 18;
 
-  const [phase, setPhase] = useState('intro'); // intro | running | result
-  const [withTimer, setWithTimer] = useState(true);
+  const [phase, setPhase] = useState('running'); // running | result (langsung mulai, seperti CBT lama)
+  const [withTimer, setWithTimer] = useState(false);
   const [index, setIndex] = useState(0);
   const [answers, setAnswers] = useState({});
   const [flags, setFlags] = useState({});
   const [remaining, setRemaining] = useState(0);
   const [result, setResult] = useState(null);
   const [history, setHistory] = useState([]);
+  const [showScoreModal, setShowScoreModal] = useState(false);
 
   const answersRef = useRef({});
   const startRef = useRef(0);
@@ -60,8 +60,10 @@ export default function TryoutClient({ topic, packet, questions, skippedCount })
   const gradableCount = useMemo(() => questions.filter((q) => q.type !== 'essay').length, [questions]);
 
   useEffect(() => {
+    startRef.current = Date.now();
+    setRemaining(totalSeconds);
     setHistory(getAttempts(topic.slug, packet.paket_slug));
-  }, [topic.slug, packet.paket_slug]);
+  }, [topic.slug, packet.paket_slug, totalSeconds]);
 
   const setAnswer = (id, value) => {
     answersRef.current = { ...answersRef.current, [id]: value };
@@ -86,25 +88,32 @@ export default function TryoutClient({ topic, packet, questions, skippedCount })
     setHistory(getAttempts(topic.slug, packet.paket_slug));
     setResult({ graded, durationSec });
     setPhase('result');
+    setShowScoreModal(true);
     setIndex(0);
-    if (typeof window !== 'undefined') window.scrollTo({ top: 0 });
   }, [questions, topic.slug, packet.paket_slug]);
 
-  const start = () => {
+  const restart = () => {
     answersRef.current = {};
     finishedRef.current = false;
     setAnswers({});
     setFlags({});
     setIndex(0);
+    setResult(null);
+    setShowScoreModal(false);
     startRef.current = Date.now();
     endRef.current = Date.now() + totalSeconds * 1000;
     setRemaining(totalSeconds);
-    setResult(null);
     setPhase('running');
     if (typeof window !== 'undefined') window.scrollTo({ top: 0 });
   };
 
-  // Timer berbasis waktu akhir (tidak melenceng saat tab di latar belakang)
+  const enableTimer = () => {
+    endRef.current = Date.now() + totalSeconds * 1000;
+    setRemaining(totalSeconds);
+    setWithTimer(true);
+  };
+
+  // Timer (opsional) berbasis waktu akhir, tidak melenceng saat tab di latar belakang
   useEffect(() => {
     if (phase !== 'running' || !withTimer) return undefined;
     const id = setInterval(() => {
@@ -115,18 +124,18 @@ export default function TryoutClient({ topic, packet, questions, skippedCount })
     return () => clearInterval(id);
   }, [phase, withTimer, finish]);
 
-  // Peringatan sebelum menutup tab di tengah pengerjaan
+  const answeredCount = questions.filter((q) => hasValue(answers[q._id])).length;
+
+  // Peringatan sebelum menutup tab bila sudah ada jawaban
   useEffect(() => {
-    if (phase !== 'running') return undefined;
+    if (phase !== 'running' || answeredCount === 0) return undefined;
     const onBeforeUnload = (e) => {
       e.preventDefault();
       e.returnValue = '';
     };
     window.addEventListener('beforeunload', onBeforeUnload);
     return () => window.removeEventListener('beforeunload', onBeforeUnload);
-  }, [phase]);
-
-  const answeredCount = questions.filter((q) => hasValue(answers[q._id])).length;
+  }, [phase, answeredCount]);
 
   const confirmFinish = () => {
     const unanswered = gradableCount - questions.filter((q) => q.type !== 'essay' && hasValue(answers[q._id])).length;
@@ -137,73 +146,33 @@ export default function TryoutClient({ topic, packet, questions, skippedCount })
   };
 
   const backLink = `/${topic.slug}/${packet.paket_slug}`;
-  const statusById = result ? Object.fromEntries(result.graded.items.map((i) => [i._id ?? i.id, i.status])) : {};
 
-  // Data tile untuk peta nomor soal (kolom kanan di desktop, strip melayang di HP)
-  const tiles = questions.map((q) => {
-    const a = answers[q._id];
+  const toggleCbtMode = () => {
+    if (phase === 'running' && !window.confirm('Apakah Anda yakin ingin membatalkan ujian dan kembali ke Mode Baca?')) return;
+    router.push(backLink);
+  };
+
+  const isResult = phase === 'result' && result;
+  const statusById = isResult ? Object.fromEntries(result.graded.items.map((i) => [i.id, i.status])) : {};
+
+  // Data tile untuk peta nomor soal (RightSidebar di desktop, strip melayang di HP)
+  const tiles = questions.map((item) => {
+    const a = answers[item._id];
     const answered = hasValue(a);
     let label = '-';
-    if (q.type === 'single') label = typeof a === 'string' && a ? a : '-';
-    else if (q.type === 'complex') label = answered ? (Object.keys(a).length >= q.statements.length ? '✓' : '…') : 'PGK';
-    else if (q.type === 'short') label = answered ? '✓' : '-';
-    else label = 'URA';
+    if (item.type === 'single') label = typeof a === 'string' && a ? a : '-';
+    else if (item.type === 'complex') label = answered ? (Object.keys(a).length >= item.statements.length ? '✓' : '…') : 'PGK';
+    else if (item.type === 'short') label = answered ? '✓' : '-';
+    else label = answered ? '✓' : 'URA';
     return {
-      number: q.number,
+      number: item.number,
       answered,
-      flagged: Boolean(flags[q._id]),
-      status: phase === 'result' ? statusById[q._id] : null,
+      flagged: Boolean(flags[item._id]),
+      status: isResult ? statusById[item._id] : null,
       label,
     };
   });
 
-  /* ---------------- INTRO ---------------- */
-  if (phase === 'intro') {
-    return (
-      <div className={styles.wrapper}>
-        <div className={styles.card}>
-          <p className={styles.kicker}>Mode CBT</p>
-          <h1 className={styles.title}>{packet.title}</h1>
-          <p className={styles.subtitle}>{topic.title}</p>
-
-          <ul className={styles.infoList}>
-            <li>{questions.length} soal ({gradableCount} dinilai otomatis{questions.length - gradableCount > 0 ? `, ${questions.length - gradableCount} uraian tidak dinilai` : ''})</li>
-            <li>Waktu yang disarankan: {Math.round(totalSeconds / 60)} menit</li>
-            <li>Riwayat percobaan tersimpan di perangkat ini saja.</li>
-            {skippedCount > 0 && <li>{skippedCount} soal sedang diperbaiki dan dilewati sementara.</li>}
-          </ul>
-
-          <label className={styles.checkRow}>
-            <input type="checkbox" checked={withTimer} onChange={(e) => setWithTimer(e.target.checked)} />
-            Pakai timer (otomatis berakhir saat waktu habis)
-          </label>
-
-          <div className={styles.actions}>
-            <button type="button" className={styles.primaryBtn} onClick={start}>Mulai Try Out</button>
-            <Link href={backLink} className={styles.linkBtn}>Kembali ke Mode Baca</Link>
-          </div>
-
-          {history.length > 0 && (
-            <div className={styles.historyBox}>
-              <h2 className={styles.h2}>Percobaan sebelumnya</h2>
-              <ul className={styles.historyList}>
-                {history.slice(0, 5).map((h) => (
-                  <li key={h.at}>
-                    <span>{formatDate(h.at)}</span>
-                    <strong>{h.score === null ? '-' : `${h.score}`}</strong>
-                    <span>{h.correct}/{h.gradable} benar</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
-        </div>
-      </div>
-    );
-  }
-
-  /* ---------------- MENGERJAKAN & TINJAUAN (satu layout) ---------------- */
-  const isResult = phase === 'result' && result;
   const q = questions[index];
   const answer = answers[q._id];
   const isFlagged = Boolean(flags[q._id]);
@@ -213,84 +182,140 @@ export default function TryoutClient({ topic, packet, questions, skippedCount })
     : -1;
 
   return (
-    <div className={styles.layout}>
-      <main className={styles.main}>
-        <div className={styles.headRow}>
+    <div className={old.holyGrailLayout}>
+      {showScoreModal && isResult && (
+        <div className={old.modalOverlay}>
+          <div className={old.modalContent}>
+            <h3 style={{ margin: '0 0 15px 0' }}>Skor Try Out Anda</h3>
+            <div className={old.scoreCircle} style={{ margin: '0 auto 20px auto' }}>
+              {result.graded.score === null ? '-' : result.graded.score}
+            </div>
+            <p style={{ fontSize: '0.9rem', marginBottom: '8px', opacity: 0.9 }}>
+              {result.graded.correct} benar, {result.graded.wrong} salah, {result.graded.skipped} dilewati
+              {result.graded.ungraded > 0 ? `, ${result.graded.ungraded} tidak dinilai` : ''}.
+            </p>
+            <p style={{ fontSize: '0.85rem', marginBottom: '20px', opacity: 0.75 }}>
+              Waktu {formatTime(result.durationSec)}
+              {previousBest >= 0 && result.graded.score !== null ? ` · Terbaik sebelumnya: ${previousBest}` : ''}
+            </p>
+            <p style={{ fontSize: '0.9rem', marginBottom: '25px', opacity: 0.9 }}>
+              Ujian selesai! Tutup pesan ini untuk melihat kunci jawaban dan meninjau pembahasan dari setiap soal.
+            </p>
+            <div className={old.modalActions}>
+              <button onClick={() => setShowScoreModal(false)} className={old.closeModalBtn}>Tinjau Pembahasan</button>
+              <button onClick={restart} className={old.resetModalBtn}>Ulangi Ujian</button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      <main className={old.mainContent}>
+        <Breadcrumbs items={[{ label: topic.title, link: `/${topic.slug}` }, { label: packet.title, link: null }]} />
+        <div className={old.chapterHeader}>
           <div>
-            <h1 className={styles.pageTitle}>{topic.title}</h1>
-            <h2 className={styles.pageSubtitle}>{packet.title}</h2>
+            <h1>{topic.title}</h1>
+            <h2>{packet.title}</h2>
           </div>
-          {!isResult && withTimer && (
-            <span className={remaining <= 60 ? styles.timerLow : styles.timer}>{formatTime(remaining)}</span>
-          )}
-        </div>
-
-        {isResult && (
-          <div className={styles.summary}>
-            <div className={styles.score}>{result.graded.score === null ? '-' : result.graded.score}</div>
-            <div className={styles.summaryMeta}>
-              <strong>Skor Try Out Anda</strong>
-              <span>{result.graded.correct} benar, {result.graded.wrong} salah, {result.graded.skipped} dilewati{result.graded.ungraded > 0 ? `, ${result.graded.ungraded} tidak dinilai` : ''}</span>
-              <span>Waktu {formatTime(result.durationSec)}{previousBest >= 0 && result.graded.score !== null ? ` · Terbaik sebelumnya: ${previousBest}` : ''}</span>
-              <span className={styles.summaryHint}>Klik nomor soal di peta untuk melihat jawaban dan pembahasan.</span>
-            </div>
-            <div className={styles.summaryActions}>
-              <button type="button" className={styles.primaryBtn} onClick={start}>Ulangi</button>
-              <Link href={backLink} className={styles.linkBtn}>Kembali ke Mode Baca</Link>
-            </div>
-          </div>
-        )}
-
-        <div className={styles.box} style={{ fontSize: `${fontSize}px` }}>
-          {q.supportHtml && (
-            <details className={styles.support} open>
-              <summary>Teks pendukung</summary>
-              <Html html={q.supportHtml} className={styles.html} />
-            </details>
-          )}
-
-          <div className={styles.qHeader}>
-            <h3 className={styles.qNumber}>Soal {q.number}</h3>
-            {isResult && <span className={styles[`badge_${status}`] || styles.badge_ungraded}>{STATUS_LABEL[status]}</span>}
-          </div>
-
-          <Html html={q.type === 'complex' ? stemWithoutTable(q.stemHtml) : q.stemHtml} className={styles.html} />
-
-          <AnswerInput q={q} answer={answer} locked={Boolean(isResult)} onChange={(v) => setAnswer(q._id, v)} />
-
-          {isResult && <ReviewDetail q={q} answer={answer} />}
-
-          <div className={styles.footerNav}>
-            <button type="button" className={styles.secondaryBtn} disabled={index === 0} onClick={() => setIndex(index - 1)}>
-              « Sebelumnya
+          <div className={old.singleToggleContainer}>
+            <button onClick={toggleCbtMode} className={`${old.toggleBtn} ${old.toggleBtnActive}`}>
+              Mode CBT: ON
             </button>
+          </div>
+        </div>
+        <hr className={old.divider} />
 
-            {!isResult && (
-              <button type="button" className={isFlagged ? styles.chipActive : styles.chip} onClick={() => setFlags({ ...flags, [q._id]: !isFlagged })}>
-                {isFlagged ? 'Hapus tanda ragu' : 'Tandai ragu'}
-              </button>
-            )}
+        <div className={old.cbtSimulatorLayout}>
+          <div>
+            <div className={styles.toolRow}>
+              <span className={styles.progress}>
+                {skippedCount > 0 ? `${skippedCount} soal sedang diperbaiki dan dilewati · ` : ''}
+                {answeredCount}/{questions.length} terjawab
+              </span>
+              {!isResult && (withTimer ? (
+                <span className={remaining <= 60 ? styles.timerLow : styles.timer}>⏱ {formatTime(remaining)}</span>
+              ) : (
+                <button type="button" className={styles.chip} onClick={enableTimer}>
+                  ⏱ Aktifkan timer ({Math.round(totalSeconds / 60)} menit)
+                </button>
+              ))}
+            </div>
 
-            {index < questions.length - 1 ? (
-              <button type="button" className={styles.secondaryBtn} onClick={() => setIndex(index + 1)}>Selanjutnya »</button>
-            ) : isResult ? (
-              <button type="button" className={styles.darkBtn} onClick={start}>Ulangi Ujian</button>
-            ) : (
-              <button type="button" className={styles.finishBtn} onClick={confirmFinish}>Selesai</button>
-            )}
+            <div className={old.cbtQuestionBox}>
+              <div className={old.content} style={{ fontSize: `${fontSize}px` }}>
+                {q.supportHtml && (
+                  <div>
+                    <h3>Teks Pendukung</h3>
+                    <Html html={q.supportHtml} />
+                  </div>
+                )}
+                <div className={styles.qHeader}>
+                  <h3>Nomor {q.number}</h3>
+                  {isResult && <span className={styles[`badge_${status}`] || styles.badge_ungraded}>{STATUS_LABEL[status]}</span>}
+                </div>
+                <Html html={q.type === 'complex' ? stemWithoutTable(q.stemHtml) : q.stemHtml} />
+              </div>
+
+              <AnswerInput q={q} answer={answer} locked={Boolean(isResult)} onChange={(v) => setAnswer(q._id, v)} />
+
+              {isResult && !showScoreModal && <ReviewDetail q={q} answer={answer} fontSize={fontSize} />}
+
+              <div className={old.cbtFooterNav}>
+                <button onClick={() => setIndex(Math.max(0, index - 1))} disabled={index === 0} className={old.navCbtBtn}>
+                  « Sebelumnya
+                </button>
+
+                {!isResult && (
+                  <button type="button" className={isFlagged ? styles.chipActive : styles.chip} onClick={() => setFlags({ ...flags, [q._id]: !isFlagged })}>
+                    {isFlagged ? 'Hapus tanda ragu' : 'Tandai ragu'}
+                  </button>
+                )}
+
+                {index < questions.length - 1 ? (
+                  <button onClick={() => setIndex(Math.min(questions.length - 1, index + 1))} className={old.navCbtBtn}>
+                    Selanjutnya »
+                  </button>
+                ) : isResult ? (
+                  <button onClick={restart} className={old.submitCbtBtn} style={{ background: '#374151' }}>Ulangi Ujian</button>
+                ) : (
+                  <button onClick={confirmFinish} className={old.submitCbtBtn}>Selesai</button>
+                )}
+              </div>
+
+              {!isResult && index < questions.length - 1 && (
+                <div className={styles.finishRow}>
+                  <button type="button" className={styles.linkBtnPlain} onClick={confirmFinish}>Akhiri try out sekarang</button>
+                </div>
+              )}
+            </div>
+
+            <div style={{ paddingTop: '20px' }}>
+              <span style={{ fontSize: '0.75rem', color: '#888', display: 'block', textAlign: 'center', marginBottom: '20px' }}>Advertisement</span>
+              <AdBanner dataAdSlot="4564146092" />
+            </div>
           </div>
 
-          {!isResult && index < questions.length - 1 && (
-            <div className={styles.finishRow}>
-              <button type="button" className={styles.linkBtnPlain} onClick={confirmFinish}>Akhiri try out sekarang ({answeredCount}/{questions.length} terjawab)</button>
-            </div>
-          )}
+          {/* Peta nomor soal untuk HP: strip melayang di bawah (sama seperti CBT lama) */}
+          <div className={old.mobileCbtGrid}>
+            {tiles.map((t, i) => {
+              let cls = old.mobileGridTile;
+              if (t.answered) cls += ` ${old.mobileGridTileAnswered}`;
+              if (t.flagged) cls += ` ${styles.tileFlagged}`;
+              if (i === index) cls += ` ${old.mobileGridTileCurrent}`;
+              if (t.status === 'correct') cls += ` ${old.mobileGridTileCorrect}`;
+              else if (t.status === 'wrong') cls += ` ${old.mobileGridTileWrong}`;
+              else if (t.status === 'skipped') cls += ` ${styles.tileSkipped}`;
+              if (t.status && i === index) cls += ` ${old.mobileGridTileCurrentReview}`;
+              return (
+                <button key={questions[i]._id} onClick={() => setIndex(i)} className={cls}>
+                  {t.number}
+                  <span className={old.miniLabel}>{t.label}</span>
+                </button>
+              );
+            })}
+          </div>
         </div>
 
-        <div style={{ paddingTop: '20px' }}>
-          <span className={styles.adLabel}>Advertisement</span>
-          <AdBanner dataAdSlot="4564146092" />
-        </div>
+        <CommentSection topicSlug={topic.slug} paketSlug={packet.paket_slug} />
       </main>
 
       <RightSidebar
@@ -304,26 +329,6 @@ export default function TryoutClient({ topic, packet, questions, skippedCount })
           tiles,
         }}
       />
-
-      {/* Peta nomor soal untuk HP (strip melayang di bawah, seperti CBT lama) */}
-      <div className={styles.mobileStrip}>
-        {tiles.map((t, i) => {
-          let cls = styles.tile;
-          if (t.answered) cls += ` ${styles.tileAnswered}`;
-          if (t.flagged) cls += ` ${styles.tileFlagged}`;
-          if (i === index) cls += ` ${styles.tileCurrent}`;
-          if (t.status === 'correct') cls += ` ${styles.tileCorrect}`;
-          else if (t.status === 'wrong') cls += ` ${styles.tileWrong}`;
-          else if (t.status === 'skipped') cls += ` ${styles.tileSkipped}`;
-          if (t.status && i === index) cls += ` ${styles.tileCurrentReview}`;
-          return (
-            <button key={questions[i]._id} type="button" className={cls} onClick={() => setIndex(i)} aria-label={`Soal ${t.number}`}>
-              {t.number}
-              <span className={styles.miniLabel}>{t.label}</span>
-            </button>
-          );
-        })}
-      </div>
     </div>
   );
 }
@@ -346,6 +351,7 @@ function AnswerInput({ q, answer, locked, onChange }) {
             </label>
           );
         })}
+        {!locked && <p className={styles.clickHint}>Silakan klik langsung pada pilihan kotak di atas untuk menjawab.</p>}
       </div>
     );
   }
@@ -360,7 +366,7 @@ function AnswerInput({ q, answer, locked, onChange }) {
           <thead>
             <tr>
               <th>Pernyataan</th>
-              {choices.map((c) => <th key={c}>{c}</th>)}
+              {choices.map((c) => <th key={c} className={styles.centerCell}>{titleCase(c)}</th>)}
             </tr>
           </thead>
           <tbody>
@@ -373,7 +379,7 @@ function AnswerInput({ q, answer, locked, onChange }) {
                   else if (locked && given[i] === c) cls += ` ${styles.cellWrong}`;
                   return (
                     <td key={c} className={cls}>
-                      <input type="radio" name={`q-${q._id}-${i}`} checked={given[i] === c} disabled={locked} onChange={() => onChange({ ...given, [i]: c })} aria-label={`Pernyataan ${i + 1}: ${c}`} />
+                      <input type="radio" name={`q-${q._id}-${i}`} checked={given[i] === c} disabled={locked} onChange={() => onChange({ ...given, [i]: c })} aria-label={`Pernyataan ${i + 1}: ${titleCase(c)}`} />
                     </td>
                   );
                 })}
@@ -381,6 +387,7 @@ function AnswerInput({ q, answer, locked, onChange }) {
             ))}
           </tbody>
         </table>
+        {!locked && <p className={styles.clickHint}>Silakan klik langsung pada tabel di atas untuk menjawab Pernyataan ({choices.map(titleCase).join('/')}).</p>}
       </div>
     );
   }
@@ -400,19 +407,31 @@ function AnswerInput({ q, answer, locked, onChange }) {
           onChange={(e) => onChange(e.target.value)}
           placeholder="Ketik angka (boleh desimal atau pecahan, mis. 3/4)"
         />
+        <span className={styles.hint}>Satuan tidak perlu ditulis.</span>
       </div>
     );
   }
 
+  // essay (uraian): jawaban ditulis bebas, tidak dinilai otomatis
   return (
-    <p className={styles.note}>
-      Soal uraian: kerjakan di kertas, lalu bandingkan dengan pembahasan setelah try out selesai. Soal ini tidak masuk perhitungan skor.
-    </p>
+    <div className={styles.shortBox}>
+      <label className={styles.shortLabel} htmlFor={`essay-${q._id}`}>Jawaban / langkah pengerjaan Anda</label>
+      <textarea
+        id={`essay-${q._id}`}
+        className={styles.essayInput}
+        rows={6}
+        value={typeof answer === 'string' ? answer : ''}
+        disabled={locked}
+        onChange={(e) => onChange(e.target.value)}
+        placeholder="Tulis jawaban Anda di sini (opsional)."
+      />
+      <span className={styles.hint}>Soal uraian tidak dinilai otomatis. Setelah selesai, bandingkan jawaban Anda dengan pembahasan.</span>
+    </div>
   );
 }
 
 /* ---------- kunci dan pembahasan (hanya saat tinjauan) ---------- */
-function ReviewDetail({ q, answer }) {
+function ReviewDetail({ q, answer, fontSize }) {
   let yours = '';
   let correct = '';
   if (q.type === 'single') {
@@ -420,15 +439,21 @@ function ReviewDetail({ q, answer }) {
     correct = q.answer;
   } else if (q.type === 'complex') {
     const given = answer && typeof answer === 'object' ? answer : {};
-    yours = q.statements.map((_, i) => `${i + 1}. ${given[i] || '-'}`).join('  ');
-    correct = (Array.isArray(q.answer) ? q.answer : []).map((a, i) => `${i + 1}. ${a}`).join('  ');
+    yours = q.statements.map((_, i) => `${i + 1}. ${given[i] ? titleCase(given[i]) : '-'}`).join('  ');
+    correct = (Array.isArray(q.answer) ? q.answer : []).map((a, i) => `${i + 1}. ${titleCase(a)}`).join('  ');
   } else if (q.type === 'short') {
     yours = typeof answer === 'string' && answer.trim() ? answer : '-';
     correct = q.answer;
   }
+  const essayText = q.type === 'essay' && typeof answer === 'string' ? answer.trim() : '';
 
   return (
-    <div className={styles.reviewBox}>
+    <div className={styles.reviewBox} style={{ fontSize: `${fontSize}px` }}>
+      {q.type === 'essay' && (
+        <p className={styles.answerLine}>
+          <span>Jawaban Anda: {essayText ? <span className={styles.essayAnswer}>{essayText}</span> : <strong>-</strong>}</span>
+        </p>
+      )}
       {q.type !== 'essay' && (
         <p className={styles.answerLine}>
           <span>Jawaban Anda: <strong>{yours}</strong></span>
@@ -438,7 +463,7 @@ function ReviewDetail({ q, answer }) {
       {q.explanationHtml && (
         <div className={styles.explanation}>
           <strong>Pembahasan</strong>
-          <Html html={q.explanationHtml} className={styles.html} />
+          <Html html={q.explanationHtml} className={old.content} />
         </div>
       )}
     </div>
