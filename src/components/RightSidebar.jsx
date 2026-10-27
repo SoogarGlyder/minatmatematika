@@ -8,6 +8,7 @@ import styles from './RightSidebar.module.css';
 
 // IMPORT KOMPONEN IKLAN
 import AdBanner from '@/components/AdBanner';
+import { AD_SLOTS, SHOW_CBT_SIDEBAR_BAWAH } from '@/lib/adSlots';
 
 export default function RightSidebar({ affiliateData, isCbtMode, cbtProps }) {
   const { changeFontSize, resetFontSize } = useFontSize();
@@ -112,7 +113,7 @@ export default function RightSidebar({ affiliateData, isCbtMode, cbtProps }) {
         {/* IKLAN ATAS (FIXED 300x250) */}
         <div className={styles.adWrapper}>
           <AdBanner
-            dataAdSlot="4896743654"
+            dataAdSlot={isCbtMode ? AD_SLOTS.CBT_SIDEBAR_ATAS : AD_SLOTS.BACA_SIDEBAR_ATAS}
             dataAdFormat=""
             dataFullWidthResponsive={false}
             style={{ display: 'inline-block', width: '300px', height: '250px' }}
@@ -135,15 +136,18 @@ export default function RightSidebar({ affiliateData, isCbtMode, cbtProps }) {
           </div>
         )}
 
-        {/* IKLAN BAWAH (FIXED 300x250) */}
-        <div className={styles.adWrapper}>
-          <AdBanner
-            dataAdSlot="8398202563" 
-            dataAdFormat=""
-            dataFullWidthResponsive={false}
-            style={{ display: 'inline-block', width: '300px', height: '250px' }}
-          />
-        </div>
+        {/* IKLAN BAWAH (FIXED 300x250). Di mode CBT disembunyikan agar tidak berlebihan bersama Offerwall;
+            untuk menampilkannya lagi ubah SHOW_CBT_SIDEBAR_BAWAH di src/lib/adSlots.js */}
+        {(!isCbtMode || SHOW_CBT_SIDEBAR_BAWAH) && (
+          <div className={styles.adWrapper}>
+            <AdBanner
+              dataAdSlot={isCbtMode ? AD_SLOTS.CBT_SIDEBAR_BAWAH : AD_SLOTS.BACA_SIDEBAR_BAWAH}
+              dataAdFormat=""
+              dataFullWidthResponsive={false}
+              style={{ display: 'inline-block', width: '300px', height: '250px' }}
+            />
+          </div>
+        )}
 
       </div>
     </aside>

@@ -16,6 +16,7 @@ import RightSidebar from '@/components/RightSidebar';
 
 // IMPORT KOMPONEN IKLAN ADSENSE
 import AdBanner from '@/components/AdBanner';
+import { AD_SLOTS } from '@/lib/adSlots';
 
 // IMPORT KATEX UNTUK MEMBACA RUMUS ($...$)
 import katex from 'katex';
@@ -219,7 +220,7 @@ export default function TopicClient({ initialTopic, initialPaketList }) {
         </div>
         <div style={{ margin: '30px 0', borderTop: '1px dashed var(--input-border)', borderBottom: '1px dashed var(--input-border)', padding: '20px 0' }}>
           <span style={{ fontSize: '0.75rem', color: '#888', display: 'block', textAlign: 'center', marginBottom: '20px' }}>Advertisement</span>
-          <AdBanner dataAdSlot="6974185423" />
+          <AdBanner dataAdSlot={AD_SLOTS.TOPIK_BAWAH} />
         </div>
       </main>
       

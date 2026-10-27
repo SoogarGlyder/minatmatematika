@@ -10,6 +10,7 @@ import LoadingSpinner from './LoadingSpinner';
 
 // Mengimpor komponen iklan yang sudah kita sempurnakan sebelumnya
 import AdBanner from './AdBanner';
+import { AD_SLOTS } from '@/lib/adSlots';
 
 function TopicList({ activeSerie, onTopicClick }) {
   const { topics, loading, error } = useTopicList(activeSerie);
@@ -91,7 +92,7 @@ function TopicList({ activeSerie, onTopicClick }) {
                 
                 {/* Memanggil AdBanner dengan format fluid khusus untuk In-feed */}
                 <AdBanner 
-                  dataAdSlot="8411690525" // Pastikan slot ini adalah tipe "In-feed Ads" di AdSense
+                  dataAdSlot={AD_SLOTS.DAFTAR_MATERI_INFEED} // Pastikan slot ini adalah tipe "In-feed Ads" di AdSense
                   dataAdFormat="fluid" 
                   style={{ width: '100%', height: '100%', margin: '0' }}
                 />

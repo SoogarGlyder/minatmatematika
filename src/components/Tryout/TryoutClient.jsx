@@ -11,6 +11,7 @@ import Breadcrumbs from '@/components/Breadcrumbs';
 import CommentSection from '@/components/CommentSection';
 import RightSidebar from '@/components/RightSidebar';
 import AdBanner from '@/components/AdBanner';
+import { AD_SLOTS } from '@/lib/adSlots';
 import { useFontSize } from '@/contexts/FontSizeContext';
 import { renderQuestionHtml, stemWithoutTable } from '@/lib/renderQuestionHtml';
 import { gradeAttempt, complexChoices, defaultDurationSeconds } from '@/lib/tryoutGrading.mjs';
@@ -60,12 +61,23 @@ export default function TryoutClient({ topic, packet, questions, skippedCount })
   const gradableCount = useMemo(() => questions.filter((q) => q.type !== 'essay').length, [questions]);
 
   useEffect(() => {
-    startRef.current = Date.now();
     setRemaining(totalSeconds);
     setHistory(getAttempts(topic.slug, packet.paket_slug));
   }, [topic.slug, packet.paket_slug, totalSeconds]);
 
+  // Waktu pengerjaan mulai dihitung saat interaksi pertama, bukan saat halaman dimuat
+  // (mis. saat pengunjung masih melihat Offerwall atau iklan berhadiah).
+  const markStarted = () => {
+    if (!startRef.current) startRef.current = Date.now();
+  };
+
+  const goTo = (i) => {
+    markStarted();
+    setIndex(i);
+  };
+
   const setAnswer = (id, value) => {
+    markStarted();
     answersRef.current = { ...answersRef.current, [id]: value };
     setAnswers(answersRef.current);
   };
@@ -74,7 +86,7 @@ export default function TryoutClient({ topic, packet, questions, skippedCount })
     if (finishedRef.current) return;
     finishedRef.current = true;
     const graded = gradeAttempt(questions, answersRef.current);
-    const durationSec = Math.round((Date.now() - startRef.current) / 1000);
+    const durationSec = startRef.current ? Math.round((Date.now() - startRef.current) / 1000) : 0;
     saveAttempt(topic.slug, packet.paket_slug, {
       at: new Date().toISOString(),
       durationSec,
@@ -100,7 +112,7 @@ export default function TryoutClient({ topic, packet, questions, skippedCount })
     setIndex(0);
     setResult(null);
     setShowScoreModal(false);
-    startRef.current = Date.now();
+    startRef.current = 0;
     endRef.current = Date.now() + totalSeconds * 1000;
     setRemaining(totalSeconds);
     setPhase('running');
@@ -108,6 +120,7 @@ export default function TryoutClient({ topic, packet, questions, skippedCount })
   };
 
   const enableTimer = () => {
+    markStarted();
     endRef.current = Date.now() + totalSeconds * 1000;
     setRemaining(totalSeconds);
     setWithTimer(true);
@@ -260,7 +273,7 @@ export default function TryoutClient({ topic, packet, questions, skippedCount })
               {isResult && !showScoreModal && <ReviewDetail q={q} answer={answer} fontSize={fontSize} />}
 
               <div className={old.cbtFooterNav}>
-                <button onClick={() => setIndex(Math.max(0, index - 1))} disabled={index === 0} className={old.navCbtBtn}>
+                <button onClick={() => goTo(Math.max(0, index - 1))} disabled={index === 0} className={old.navCbtBtn}>
                   « Sebelumnya
                 </button>
 
@@ -271,7 +284,7 @@ export default function TryoutClient({ topic, packet, questions, skippedCount })
                 )}
 
                 {index < questions.length - 1 ? (
-                  <button onClick={() => setIndex(Math.min(questions.length - 1, index + 1))} className={old.navCbtBtn}>
+                  <button onClick={() => goTo(Math.min(questions.length - 1, index + 1))} className={old.navCbtBtn}>
                     Selanjutnya »
                   </button>
                 ) : isResult ? (
@@ -288,9 +301,11 @@ export default function TryoutClient({ topic, packet, questions, skippedCount })
               )}
             </div>
 
-            <div style={{ paddingTop: '20px' }}>
+            {/* Jarak 48px dari tombol navigasi agar iklan tidak terklik tidak sengaja.
+                Ganti ID slot-nya di src/lib/adSlots.js (CBT_BAWAH_SOAL). */}
+            <div style={{ paddingTop: '48px' }}>
               <span style={{ fontSize: '0.75rem', color: '#888', display: 'block', textAlign: 'center', marginBottom: '20px' }}>Advertisement</span>
-              <AdBanner dataAdSlot="4564146092" />
+              <AdBanner dataAdSlot={AD_SLOTS.CBT_BAWAH_SOAL} />
             </div>
           </div>
 
@@ -306,7 +321,7 @@ export default function TryoutClient({ topic, packet, questions, skippedCount })
               else if (t.status === 'skipped') cls += ` ${styles.tileSkipped}`;
               if (t.status && i === index) cls += ` ${old.mobileGridTileCurrentReview}`;
               return (
-                <button key={questions[i]._id} onClick={() => setIndex(i)} className={cls}>
+                <button key={questions[i]._id} onClick={() => goTo(i)} className={cls}>
                   {t.number}
                   <span className={old.miniLabel}>{t.label}</span>
                 </button>
@@ -325,7 +340,7 @@ export default function TryoutClient({ topic, packet, questions, skippedCount })
           currentCbtIndex: index,
           userAnswers: {},
           isCbtSubmitted: Boolean(isResult),
-          setCurrentCbtIndex: setIndex,
+          setCurrentCbtIndex: goTo,
           tiles,
         }}
       />

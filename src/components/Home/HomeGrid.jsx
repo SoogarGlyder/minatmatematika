@@ -8,6 +8,7 @@ import styles from './HomeGrid.module.css';
 
 // 1. IMPORT AdBanner ke sini
 import AdBanner from '@/components/AdBanner'; 
+import { AD_SLOTS } from '@/lib/adSlots';
 
 // Data topik datang dari Server Component (page.jsx), jadi tidak perlu fetch/loading di browser.
 export default function HomeGrid({ topics }) {
@@ -65,7 +66,7 @@ export default function HomeGrid({ topics }) {
                 }}
               >
                 <AdBanner 
-                  dataAdSlot="9507873240" 
+                  dataAdSlot={AD_SLOTS.BERANDA_INFEED} 
                   dataAdFormat="fluid"
                   style={{ width: '100%', height: '100%', margin: '0' }}
                 />

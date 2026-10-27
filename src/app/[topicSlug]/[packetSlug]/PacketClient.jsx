@@ -19,6 +19,7 @@ import RightSidebar from '@/components/RightSidebar';
 import katex from 'katex';
 import 'katex/dist/katex.min.css';
 import AdBanner from '@/components/AdBanner';
+import { AD_SLOTS } from '@/lib/adSlots';
 
 export default function PacketClient({
   topic, packet, allPackets, prevPacket, nextPacket 
@@ -465,7 +466,7 @@ export default function PacketClient({
                   </div>
                   <div style={{ paddingTop: '20px' }}>
                     <span style={{ fontSize: '0.75rem', color: '#888', display: 'block', textAlign: 'center', marginBottom: '20px' }}>Advertisement</span>
-                    <AdBanner dataAdSlot="4564146092" />
+                    <AdBanner dataAdSlot={AD_SLOTS.CBT_BAWAH_SOAL} />
                   </div>
                 </div>
 
@@ -516,7 +517,7 @@ export default function PacketClient({
                 <div className={styles.content} style={{ fontSize: `${fontSize}px` }}>{parse(finalHtmlContent, options)}</div>
                 <div style={{ margin: '30px 0', borderTop: '1px dashed var(--input-border)', paddingTop: '20px' }}>
                   <span style={{ fontSize: '0.75rem', color: '#888', display: 'block', textAlign: 'center', marginBottom: '20px' }}>Advertisement</span>
-                  <AdBanner dataAdSlot="4564146092" />
+                  <AdBanner dataAdSlot={AD_SLOTS.BACA_BAWAH_ISI} />
                 </div>
               </>
             )}
