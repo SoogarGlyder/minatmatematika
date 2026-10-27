@@ -1,0 +1,116 @@
+/* File: src/components/Tryout/Tryout.module.css */
+
+/* ---------- Layout: soal di kiri, peta nomor (RightSidebar) di kanan ---------- */
+.layout { display: flex; width: 100%; max-width: 1200px; margin: 0 auto; align-items: flex-start; justify-content: center; position: relative; }
+.main { flex: 1; min-width: 0; padding: 10px 20px 100px; box-sizing: border-box; color: var(--foreground); }
+
+.headRow { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; margin-bottom: 12px; }
+.pageTitle { margin: 0; font-size: 1.3rem; }
+.pageSubtitle { margin: 2px 0 0; font-size: 1rem; font-weight: 500; opacity: 0.8; }
+
+.box { background-color: var(--card-bg); border: 1px solid var(--input-border); border-radius: 8px; padding: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.02); width: 100%; box-sizing: border-box; }
+.adLabel { font-size: 0.75rem; color: #888; display: block; text-align: center; margin-bottom: 20px; }
+
+/* ---------- Intro (kartu tengah) ---------- */
+.wrapper { width: 100%; display: flex; justify-content: center; padding: 16px; box-sizing: border-box; }
+.card { width: 100%; max-width: 820px; background: var(--card-bg); color: var(--foreground); border-radius: 12px; padding: 20px; box-sizing: border-box; border: 1px solid var(--input-border); }
+.kicker { margin: 0; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.06em; opacity: 0.7; }
+.title { margin: 4px 0 0; font-size: 1.4rem; }
+.subtitle { margin: 4px 0 16px; opacity: 0.8; }
+.h2 { font-size: 1rem; margin: 0 0 8px; }
+.infoList { margin: 0 0 16px; padding-left: 20px; line-height: 1.7; }
+.checkRow { display: flex; gap: 8px; align-items: center; margin-bottom: 16px; cursor: pointer; }
+.historyBox { margin-top: 24px; border-top: 1px solid var(--input-border); padding-top: 16px; }
+.historyList { list-style: none; margin: 0; padding: 0; }
+.historyList li { display: flex; gap: 14px; justify-content: space-between; padding: 6px 0; font-size: 0.92rem; }
+
+/* ---------- Tombol ---------- */
+.actions { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-top: 16px; }
+.primaryBtn, .secondaryBtn, .chip, .chipActive, .linkBtn, .linkBtnPlain, .finishBtn, .darkBtn { font: inherit; cursor: pointer; border-radius: 6px; padding: 10px 20px; }
+.primaryBtn { background: var(--primary); color: var(--background); border: 1px solid var(--primary); font-weight: 600; }
+.secondaryBtn { background: var(--input-bg); color: var(--foreground); border: 1px solid var(--input-border); font-weight: 600; }
+.secondaryBtn:disabled { opacity: 0.4; cursor: not-allowed; }
+.finishBtn { background: #ff4757; color: white; border: none; font-weight: bold; padding: 10px 24px; }
+.darkBtn { background: #374151; color: white; border: none; font-weight: bold; padding: 10px 24px; }
+.chip { background: transparent; color: var(--foreground); border: 1px solid var(--input-border); padding: 8px 12px; font-size: 0.9rem; }
+.chipActive { background: #f39c12; color: white; border: 1px solid #f39c12; padding: 8px 12px; font-size: 0.9rem; }
+.linkBtn { color: var(--link); border: 1px solid var(--input-border); text-decoration: none; display: inline-block; background: var(--input-bg); }
+.linkBtn:hover { color: var(--link-hover); }
+.linkBtnPlain { background: none; border: none; color: var(--link); text-decoration: underline; padding: 4px 0; }
+.finishRow { margin-top: 10px; text-align: right; }
+
+/* ---------- Timer ---------- */
+.timer, .timerLow { font-variant-numeric: tabular-nums; font-weight: 700; padding: 6px 12px; border-radius: 8px; border: 1px solid var(--input-border); background: var(--card-bg); white-space: nowrap; }
+.timerLow { color: #b3261e; border-color: #b3261e; }
+
+/* ---------- Ringkasan skor ---------- */
+.summary { display: flex; flex-wrap: wrap; gap: 16px 20px; align-items: center; padding: 16px; margin-bottom: 14px; background: var(--card-bg); border: 1px solid var(--input-border); border-radius: 8px; }
+.score { width: 84px; height: 84px; border-radius: 50%; background: var(--primary); color: var(--background); display: flex; align-items: center; justify-content: center; font-size: 2rem; font-weight: 800; flex-shrink: 0; }
+.summaryMeta { display: flex; flex-direction: column; gap: 3px; flex: 1; min-width: 200px; font-size: 0.95rem; }
+.summaryHint { opacity: 0.7; font-size: 0.85rem; }
+.summaryActions { display: flex; flex-wrap: wrap; gap: 10px; }
+
+/* ---------- Soal ---------- */
+.qHeader { display: flex; justify-content: space-between; align-items: center; gap: 10px; margin: 4px 0 8px; }
+.qNumber { font-size: 1.05rem; margin: 0; }
+.muted { opacity: 0.75; font-size: 0.9rem; }
+.note { padding: 12px; border: 1px dashed var(--input-border); border-radius: 8px; font-size: 0.92rem; }
+.html { line-height: 1.7; overflow-x: auto; }
+.html :global(img) { max-width: 100%; height: auto; }
+.support { margin-bottom: 14px; border: 1px solid var(--input-border); border-radius: 8px; padding: 10px 12px; }
+.support summary { cursor: pointer; font-weight: 600; }
+
+.options { display: flex; flex-direction: column; gap: 8px; margin-top: 14px; padding-top: 14px; border-top: 1px dashed var(--input-border); }
+.option, .optionSelected, .optionCorrect, .optionWrong { display: flex; gap: 10px; align-items: flex-start; padding: 10px 12px; border-radius: 8px; border: 2px solid var(--input-border); background: var(--input-bg); cursor: pointer; }
+.option:hover { border-color: var(--primary); }
+.optionSelected { background: var(--primary); border-color: var(--primary); color: var(--background); }
+.optionCorrect { background: #2ed573; border-color: #2ed573; color: white; }
+.optionWrong { background: #ff4757; border-color: #ff4757; color: white; }
+.option input, .optionSelected input, .optionCorrect input, .optionWrong input { margin-top: 5px; }
+.optKey { font-weight: 700; }
+.optHtml { flex: 1; min-width: 0; }
+
+.tableWrap { overflow-x: auto; margin-top: 14px; padding-top: 14px; border-top: 1px dashed var(--input-border); }
+.complexTable { width: 100%; border-collapse: collapse; }
+.complexTable th, .complexTable td { border: 1px solid var(--input-border); padding: 8px 10px; text-align: left; }
+.centerCell { text-align: center !important; }
+.cellCorrect { background: #2ed573; }
+.cellWrong { background: #ff4757; }
+
+.shortBox { margin-top: 14px; padding-top: 14px; border-top: 1px dashed var(--input-border); display: flex; flex-direction: column; gap: 6px; }
+.shortLabel { font-weight: 600; }
+.shortInput { font: inherit; padding: 10px 12px; border-radius: 8px; border: 1px solid var(--input-border); background: var(--input-bg); color: var(--foreground); }
+
+.footerNav { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 10px; margin-top: 30px; padding-top: 20px; border-top: 1px solid var(--input-border); }
+
+/* ---------- Tinjauan ---------- */
+.reviewBox { margin-top: 14px; }
+.answerLine { display: flex; flex-wrap: wrap; gap: 6px 20px; margin: 10px 0; }
+.explanation { margin-top: 10px; padding-top: 10px; border-top: 1px dashed var(--input-border); }
+.badge_correct, .badge_wrong, .badge_skipped, .badge_ungraded { font-size: 0.8rem; padding: 2px 10px; border-radius: 999px; border: 1px solid var(--input-border); font-weight: 600; }
+.badge_correct { color: #1b7f3b; border-color: #1b7f3b; }
+.badge_wrong { color: #b3261e; border-color: #b3261e; }
+.badge_skipped { color: #c77700; border-color: #c77700; }
+
+/* ---------- Peta nomor untuk HP: strip melayang (sama seperti CBT lama) ---------- */
+.mobileStrip { display: none; }
+.miniLabel { font-size: 0.65rem; opacity: 0.8; display: block; margin-top: 1px; line-height: 1; }
+
+@media (max-width: 767px) {
+  .layout { flex-direction: column; align-items: stretch; }
+  .main { padding: 8px 8px 110px; }
+  .box { padding: 12px; }
+  .score { width: 68px; height: 68px; font-size: 1.6rem; }
+  .card { padding: 14px; }
+
+  .mobileStrip { display: flex; position: fixed; bottom: 15px; left: 25px; right: 90px; padding: 10px; gap: 8px; overflow-x: auto; z-index: 99; -ms-overflow-style: none; scrollbar-width: none; }
+  .mobileStrip::-webkit-scrollbar { display: none; }
+  .tile { flex: 0 0 auto; width: 48px; height: 48px; border-radius: 8px; border: 1px solid var(--input-border); background-color: var(--input-bg); color: var(--foreground); font-size: 0.9rem; font-weight: bold; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 0; margin: 0; box-sizing: border-box; }
+  .tileAnswered { background-color: #374151; color: white; border-color: #374151; }
+  .tileFlagged { box-shadow: inset 0 0 0 2px #f39c12; }
+  .tileCurrent { border-color: var(--primary) !important; background-color: var(--primary) !important; color: white !important; }
+  .tileCorrect { background-color: #2ed573 !important; color: white !important; border-color: #2ed573 !important; }
+  .tileWrong { background-color: #ff4757 !important; color: white !important; border-color: #ff4757 !important; }
+  .tileSkipped { background-color: #f5a623 !important; color: white !important; border-color: #f5a623 !important; }
+  .tileCurrentReview { border-color: #1e90ff !important; box-shadow: inset 0 0 0 1px #1e90ff !important; }
+}

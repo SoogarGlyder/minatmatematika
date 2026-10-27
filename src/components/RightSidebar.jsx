@@ -19,7 +19,8 @@ export default function RightSidebar({ affiliateData, isCbtMode, cbtProps }) {
     currentCbtIndex = 0, 
     userAnswers = {}, 
     isCbtSubmitted = false, 
-    setCurrentCbtIndex = () => {} 
+    setCurrentCbtIndex = () => {},
+    tiles = null // opsional: data tile siap pakai dari tryout terstruktur
   } = cbtProps || {};
 
   return (
@@ -66,7 +67,24 @@ export default function RightSidebar({ affiliateData, isCbtMode, cbtProps }) {
           <div className={styles.cbtAnswerGridMap}>
             <h4>Peta Nomor Soal</h4>
             <div className={styles.gridContainer}>
-              {cbtQuestions.map((_, idx) => {
+              {tiles ? tiles.map((t, idx) => {
+                const isCurrent = currentCbtIndex === idx;
+                let tileStyle = styles.gridTile;
+                if (t.answered) tileStyle += ` ${styles.gridTileAnswered}`;
+                if (t.flagged) tileStyle += ` ${styles.gridTileFlagged}`;
+                if (isCurrent) tileStyle += ` ${styles.gridTileCurrent}`;
+                if (t.status === 'correct') tileStyle += ` ${styles.gridTileCorrect}`;
+                else if (t.status === 'wrong') tileStyle += ` ${styles.gridTileWrong}`;
+                else if (t.status === 'skipped') tileStyle += ` ${styles.gridTileSkipped}`;
+                if (t.status && isCurrent) tileStyle += ` ${styles.gridTileCurrentReview}`;
+
+                return (
+                  <button key={idx} onClick={() => setCurrentCbtIndex(idx)} className={tileStyle}>
+                    {t.number}
+                    <span className={styles.miniLabel}>{t.label}</span>
+                  </button>
+                );
+              }) : cbtQuestions.map((_, idx) => {
                 const hasAnswered = userAnswers[idx] !== undefined;
                 const isCurrent = currentCbtIndex === idx;
 

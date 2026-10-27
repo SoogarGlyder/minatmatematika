@@ -261,6 +261,16 @@
   z-index: 2;
 }
 
+.gridTileFlagged { 
+  box-shadow: inset 0 0 0 2px #f39c12;
+}
+
+.gridTileSkipped { 
+  background-color: #f5a623 !important; 
+  color: white !important; 
+  border-color: #f5a623 !important; 
+}
+
 .miniLabel { 
   font-size: 0.65rem; 
   opacity: 0.8; 
