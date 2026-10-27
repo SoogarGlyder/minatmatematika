@@ -4,6 +4,7 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import SafeImage from '@/components/SafeImage';
 import parse, { domToReact } from 'html-react-parser';
 import sanitizeHtml from 'sanitize-html';
 import { useFontSize } from '@/contexts/FontSizeContext'; 
@@ -96,7 +97,7 @@ export default function MateriClient({ article }) {
         const { src, alt } = domNode.attribs;
         return (
           <div className={styles.optimizedImageWrapper}>
-            <Image 
+            <SafeImage 
               src={src}
               alt={alt || 'Ilustrasi Materi'}
               width={0}

@@ -26,9 +26,9 @@
     "dompurify": "^3.3.1",
     "dotenv": "^17.4.0",
     "html-react-parser": "^5.2.11",
-    "katex": "^0.16.47",
+    "katex": "^0.19.1",
     "mongoose": "^9.3.3",
-    "next": "16.1.6",
+    "next": "^16.4.3",
     "next-themes": "^0.4.6",
     "react": "19.2.1",
     "react-dom": "19.2.1",
@@ -36,16 +36,16 @@
     "react-katex": "^3.1.0",
     "react-markdown": "^10.1.0",
     "react-quill-new": "^3.7.0",
-    "rehype-katex": "^7.0.1",
+    "rehype-katex": "^1.2.0",
     "rehype-raw": "^7.0.0",
     "remark-gfm": "^4.0.1",
-    "remark-math": "^6.0.0",
+    "remark-math": "^3.0.1",
     "sanitize-html": "^2.17.0",
-    "sharp": "^0.34.5"
+    "sharp": "^0.35.5"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
-    "@tailwindcss/typography": "^0.5.19",
+    "@tailwindcss/typography": "^0.5.4",
     "eslint": "^9",
     "eslint-config-next": "16.0.10",
     "tailwindcss": "^4"

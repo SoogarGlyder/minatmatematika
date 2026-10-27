@@ -2,6 +2,7 @@
 // Membersihkan HTML soal/pembahasan lalu merender rumus $...$ dengan KaTeX (sama seperti halaman paket).
 import sanitizeHtml from 'sanitize-html';
 import katex from 'katex';
+import { withImageFallback } from '@/lib/imageFallback';
 
 const SANITIZE_OPTIONS = {
   allowedTags: sanitizeHtml.defaults.allowedTags.concat([
@@ -29,7 +30,7 @@ export function renderQuestionHtml(html) {
   if (!html) return '';
   // "&dots;" bukan entitas HTML yang valid dan tampil mentah; samakan dengan titik tiga
   const clean = sanitizeHtml(String(html).replace(/&dots;/g, '&hellip;').replace(/\n/g, ' '), SANITIZE_OPTIONS);
-  return clean.replace(/\$([^$]+)\$/g, (match, formula) => {
+  return withImageFallback(clean).replace(/\$([^$]+)\$/g, (match, formula) => {
     try {
       return katex.renderToString(formula.replaceAll('&amp;', '&'), { throwOnError: false });
     } catch {

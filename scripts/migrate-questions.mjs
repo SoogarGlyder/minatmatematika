@@ -47,7 +47,7 @@ let infoCount = 0;
 let otherWarnings = 0;
 
 for (const paket of pakets) {
-  const { questions, warnings } = parsePacketContent(paket.content);
+  const { questions, warnings, supportHtml } = parsePacketContent(paket.content);
   const complex = questions.filter((q) => q.type === 'complex').length;
   const shortCount = questions.filter((q) => q.type === 'short').length;
   const essayCount = questions.filter((q) => q.type === 'essay').length;
@@ -99,6 +99,7 @@ for (const paket of pakets) {
             $set: {
               topic: paket.topic,
               type: q.type,
+              supportHtml,
               stemHtml: q.stemHtml,
               options: q.options,
               statements: q.statements,

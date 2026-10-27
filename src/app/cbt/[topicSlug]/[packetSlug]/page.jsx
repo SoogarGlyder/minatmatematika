@@ -1,8 +1,10 @@
-// File baru: src/app/cbt/[topicSlug]/[packetSlug]/page.jsx
+// File: src/app/cbt/[topicSlug]/[packetSlug]/page.jsx
+// Mode CBT: memakai try out terstruktur jika paket sudah punya soal di koleksi `questions`;
+// jika belum, otomatis memakai CBT lama (parsing HTML paket) sebagai cadangan.
 import React from 'react';
-
-// Menggunakan alias @ untuk langsung mengarah ke folder src/
-import PacketPageContent from '@/app/[topicSlug]/[packetSlug]/page'; 
+import PacketPageContent from '@/app/[topicSlug]/[packetSlug]/page';
+import TryoutClient from '@/components/Tryout/TryoutClient';
+import { getTryoutData } from '@/lib/getTryoutData';
 
 export const metadata = {
   title: 'Mode CBT',
@@ -14,6 +16,11 @@ export const metadata = {
 };
 
 export default async function CbtPage(props) {
-  // Meneruskan seluruh parameter ke halaman induk
+  const { topicSlug, packetSlug } = await props.params;
+  const data = await getTryoutData(topicSlug, packetSlug);
+
+  if (data) return <TryoutClient {...data} />;
+
+  // Cadangan: CBT lama
   return <PacketPageContent {...props} />;
 }

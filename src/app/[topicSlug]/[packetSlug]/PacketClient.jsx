@@ -4,7 +4,7 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import Link from 'next/link';
-import Image from 'next/image';
+import SafeImage from '@/components/SafeImage';
 import parse, { domToReact } from 'html-react-parser';
 import sanitizeHtml from 'sanitize-html';
 import { useFontSize } from '@/contexts/FontSizeContext'; 
@@ -157,7 +157,7 @@ export default function PacketClient({
         const { src, alt } = domNode.attribs;
         return (
           <div className={styles.optimizedImageWrapper}>
-            <Image src={src} alt={alt || 'Ilustrasi Soal'} width={0} height={0} sizes="(max-width: 768px) 100vw, 800px" style={{ width: '100%', height: 'auto' }} loading="lazy" quality={85} />
+            <SafeImage src={src} alt={alt || 'Ilustrasi Soal'} width={0} height={0} sizes="(max-width: 768px) 100vw, 800px" style={{ width: '100%', height: 'auto' }} loading="lazy" quality={85} />
           </div>
         );
       }

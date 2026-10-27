@@ -22,6 +22,7 @@ const QuestionSchema = new mongoose.Schema(
     // 'essay'   : uraian tanpa kunci tunggal; pengguna mengerjakan sendiri lalu membandingkan dengan pembahasan
     type: { type: String, enum: ['single', 'complex', 'short', 'essay'], default: 'single' },
 
+    supportHtml: { type: String, default: '' }, // teks pendukung bersama (jika ada)
     stemHtml: { type: String, default: '' },
     options: { type: [OptionSchema], default: [] },
     statements: { type: [String], default: [] }, // khusus complex
