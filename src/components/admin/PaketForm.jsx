@@ -1,5 +1,6 @@
 // File: src/components/admin/PaketForm.jsx
 import React, { useState, useEffect } from 'react';
+import PaketReportPanel from './PaketReportPanel';
 
 const initialPaketState = {
   topic: '',
@@ -14,6 +15,7 @@ function PaketForm({ paketToEdit, onSaveSuccess, styles }) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
+  const [report, setReport] = useState(null); // hasil pemeriksaan paket setelah disimpan
   const [topicOptions, setTopicOptions] = useState([]);
   
   const isEditing = !!paketToEdit;
@@ -66,6 +68,7 @@ function PaketForm({ paketToEdit, onSaveSuccess, styles }) {
     setLoading(true);
     setError(null);
     setSuccess(null);
+    setReport(null);
 
     const payload = { 
         ...formData, 
@@ -90,6 +93,9 @@ function PaketForm({ paketToEdit, onSaveSuccess, styles }) {
           throw new Error(errData.error || errData.message || "Gagal menyimpan paket soal");
       }
 
+      const saved = await res.json().catch(() => null);
+      if (saved?.report) setReport(saved.report);
+
       setSuccess(`Paket soal berhasil di${isEditing ? 'perbarui' : 'buat'}!`);
       if (!isEditing) {
         setFormData(prev => ({ 
@@ -108,6 +114,7 @@ function PaketForm({ paketToEdit, onSaveSuccess, styles }) {
 
   return (
     <form onSubmit={handleSubmit} className={styles.novelForm}>
+      <PaketReportPanel report={report} onClose={() => setReport(null)} />
       {error && <p className={styles.error} style={{ color: 'red', fontWeight: 'bold' }}>{error}</p>}
       {success && <p className={styles.success} style={{ color: 'green', fontWeight: 'bold' }}>{success}</p>}
       

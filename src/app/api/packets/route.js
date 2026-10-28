@@ -2,6 +2,9 @@
 import { NextResponse } from 'next/server';
 import dbConnect from '@/lib/dbConnect';
 import PaketSoal from '@/models/PaketSoal';
+import Question from '@/models/Question';
+import { syncPacketQuestions } from '@/lib/syncQuestions.mjs';
+import { revalidatePacketPaths } from '@/lib/revalidatePacket';
 
 export async function GET() {
     try {
@@ -23,7 +26,13 @@ export async function POST(request) {
         }
 
         const newPacket = await PaketSoal.create(body);
-        return NextResponse.json({ message: "Paket soal berhasil dibuat", data: newPacket }, { status: 201 });
+
+        // HTML paket tetap sumber utama: soal terstruktur untuk tryout disinkronkan otomatis,
+        // dan hasil pemeriksaannya dikembalikan agar ditampilkan di admin.
+        const report = await syncPacketQuestions(newPacket, Question);
+        await revalidatePacketPaths(newPacket);
+
+        return NextResponse.json({ message: "Paket soal berhasil dibuat", data: newPacket, report }, { status: 201 });
     } catch (error) {
         console.error("Error API POST Packet:", error);
         
