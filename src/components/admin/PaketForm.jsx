@@ -1,6 +1,8 @@
 // File: src/components/admin/PaketForm.jsx
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import PaketReportPanel from './PaketReportPanel';
+import SoalToolbar from './SoalToolbar';
+import { insertTemplate } from '@/lib/soalTemplates.mjs';
 
 const initialPaketState = {
   topic: '',
@@ -16,9 +18,44 @@ function PaketForm({ paketToEdit, onSaveSuccess, styles }) {
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
   const [report, setReport] = useState(null); // hasil pemeriksaan paket setelah disimpan
+  const [toolbarNote, setToolbarNote] = useState('');
+  const textareaRef = useRef(null);
+  const lastSel = useRef(null);    // posisi kursor terakhir di kolom konten
+  const pendingSel = useRef(null); // teks pengisi yang dipilih setelah kerangka disisipkan
   const [topicOptions, setTopicOptions] = useState([]);
   
   const isEditing = !!paketToEdit;
+
+  // Posisi kursor lama tidak berlaku lagi saat berganti paket yang diedit
+  useEffect(() => {
+    lastSel.current = null;
+  }, [paketToEdit]);
+
+  // Setelah kerangka disisipkan: fokuskan kolom dan pilih teks pengisi pertama supaya langsung bisa diketik
+  useEffect(() => {
+    const el = textareaRef.current;
+    if (pendingSel.current && el) {
+      el.focus();
+      el.setSelectionRange(pendingSel.current.start, pendingSel.current.end);
+      pendingSel.current = null;
+    }
+  }, [formData.content]);
+
+  const handleInsertTemplate = (id) => {
+    if (id === 'teks-pendukung' && /teks\s+pendukung/i.test(formData.content)) {
+      setToolbarNote('Teks pendukung sudah ada di paket ini.');
+      return;
+    }
+    setToolbarNote('');
+    const sel = lastSel.current; // kosong = sisipkan di akhir
+    const result = insertTemplate(formData.content, sel?.start, sel?.end, id);
+    pendingSel.current = { start: result.selectStart, end: result.selectEnd };
+    setFormData((prev) => ({ ...prev, content: result.content }));
+  };
+
+  const rememberSelection = (e) => {
+    lastSel.current = { start: e.target.selectionStart, end: e.target.selectionEnd };
+  };
 
   useEffect(() => {
     const fetchTopics = async () => {
@@ -168,12 +205,16 @@ function PaketForm({ paketToEdit, onSaveSuccess, styles }) {
             />
 
             <label htmlFor="content">Konten Soal & Pembahasan (HTML)</label>
+            <SoalToolbar onInsert={handleInsertTemplate} note={toolbarNote} />
             <textarea
                 id="content"
                 name="content"
                 rows="15"
+                ref={textareaRef}
                 value={formData.content}
                 onChange={handleChange}
+                onSelect={rememberSelection}
+                onBlur={rememberSelection}
                 placeholder="Tulis soal dan pembahasan menggunakan tag HTML di sini..."
             />
 
