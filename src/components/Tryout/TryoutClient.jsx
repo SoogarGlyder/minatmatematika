@@ -256,8 +256,7 @@ export default function TryoutClient({ topic, packet, questions, skippedCount })
             <div className={old.cbtQuestionBox}>
               <div className={old.content} style={{ fontSize: `${fontSize}px` }}>
                 {q.supportHtml && (
-                  <div>
-                    <h3>Teks Pendukung</h3>
+                  <div style={{marginBottom: '16px'}}>
                     <Html html={q.supportHtml} />
                   </div>
                 )}

@@ -12,20 +12,19 @@
 .chipActive { background: #f39c12; color: white; border: 1px solid #f39c12; padding: 8px 12px; font-size: 0.9rem; }
 .linkBtnPlain { background: none; border: none; color: var(--link); text-decoration: underline; padding: 4px 0; }
 .finishRow { margin-top: 10px; text-align: right; }
-
 .qHeader { display: flex; justify-content: space-between; align-items: center; gap: 10px; }
 .muted { opacity: 0.75; font-size: 0.9rem; }
 
-.options { display: flex; flex-direction: column; gap: 12px; margin-top: 18px; padding-top: 18px; border-top: 1px dashed var(--input-border); }
+.options { display: flex; flex-direction: column; margin-top: -18px}
 .option, .optionSelected, .optionCorrect, .optionWrong { display: flex; gap: 10px; align-items: flex-start; padding: 16px 18px; border-radius: 12px; border: 2px solid var(--input-border); background: var(--input-bg); cursor: pointer; }
 .option:hover { border-color: var(--primary); }
-.optionSelected { background: var(--primary); border-color: var(--primary); color: white; }
+.optionSelected { background: var(--primary); border-color: var(--primary); color: var(--input-bg); }
 .optionCorrect { background: #2ed573; border-color: #2ed573; color: white; }
 .optionWrong { background: #ff4757; border-color: #ff4757; color: white; }
 .option input, .optionSelected input, .optionCorrect input, .optionWrong input { margin-top: 6px; }
 .optKey { font-weight: 700; }
 .optHtml { flex: 1; min-width: 0; }
-.clickHint { margin: 4px 0 0; font-size: 0.9rem; font-style: italic; font-weight: 600; color: #3498db; }
+.clickHint { margin: 16px 0 0; font-size: 0.9rem; font-style: italic; font-weight: 600; color: #3498db; }
 
 .tableWrap { overflow-x: auto; margin-top: 18px; padding-top: 18px; border-top: 1px dashed var(--input-border); }
 .complexTable { width: 100%; border-collapse: collapse; }

@@ -240,7 +240,7 @@
 .gridTileCurrent { 
   border-color: var(--primary) !important; 
   background-color: var(--primary) !important; 
-  color: white !important; 
+  color: var(--input-bg) !important;
 }
 
 .gridTileCorrect { 
