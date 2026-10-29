@@ -40,6 +40,9 @@ assert.equal(hostMatches('a.b.x.com', '*.x.com'), false);
 assert.equal(hostMatches('a.b.x.com', '**.x.com'), true);
 assert.equal(hostMatches('i.imgur.com', 'i.imgur.com'), true);
 
+// penanda gambar yang belum diisi dilaporkan dengan jelas
+assert.match(classifyImage('URL_GAMBAR_LAMPU_DAN_KRIS_ANDA_DISINI', env), /penanda yang belum diisi/);
+
 // &approx; adalah entitas valid (sebelumnya salah dilaporkan)
 assert.deepEqual(analyzeHtml('<p>x &approx; 3 dan &ne; 4</p>', env).entities, {});
 // entitas tersimpan ganda

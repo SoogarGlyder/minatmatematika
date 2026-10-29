@@ -37,7 +37,7 @@ export function classifyImage(src, { isHostAllowed, publicHas }) {
   try {
     url = new URL(value.startsWith('//') ? `https:${value}` : value);
   } catch {
-    return 'alamat gambar tidak valid';
+    return 'alamat gambar tidak valid atau masih berupa penanda yang belum diisi (isi dengan tautan gambar yang benar)';
   }
   if (url.protocol === 'http:') return 'memakai http:// (diblokir next/image; ganti ke https://)';
   if (url.protocol !== 'https:') return `protokol tidak didukung (${url.protocol})`;
