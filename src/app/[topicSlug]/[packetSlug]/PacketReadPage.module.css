@@ -98,7 +98,6 @@
 .optimizedImageWrapper {
   position: relative;
   width: 100%;
-  max-width: 800px;
   height: auto;
   overflow: hidden;
 }

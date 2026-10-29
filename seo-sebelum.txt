@@ -1,0 +1,44 @@
+Pemeriksaan SEO: https://www.minatmatematika.com
+
+robots.txt: status 200
+  [error] robots.txt memblokir /_next/ (Google butuh CSS/JS dan gambar teroptimasi untuk merender halaman)
+sitemap.xml: status 200, 93 alamat
+
+Halaman diperiksa: 93
+Tanpa masalah berat: 81 dari 93
+
+[error] status: 8 halaman
+    https://www.minatmatematika.com/circular-farming
+      status HTTP 404 (harus 200 agar bisa diindeks)
+    https://www.minatmatematika.com/taman-kota
+      status HTTP 404 (harus 200 agar bisa diindeks)
+    https://www.minatmatematika.com/bayangan-lampu
+      status HTTP 404 (harus 200 agar bisa diindeks)
+    https://www.minatmatematika.com/roda-kereta-api
+      status HTTP 404 (harus 200 agar bisa diindeks)
+    https://www.minatmatematika.com/bayangan-lampu/paket-02
+      status HTTP 404 (harus 200 agar bisa diindeks)
+    ... dan 3 lainnya
+[error] canonical-salah: 4 halaman
+    https://www.minatmatematika.com/about
+      canonical menunjuk ke /, bukan halaman ini (/about); Google bisa menganggap halaman ini duplikat
+    https://www.minatmatematika.com/contact
+      canonical menunjuk ke /, bukan halaman ini (/contact); Google bisa menganggap halaman ini duplikat
+    https://www.minatmatematika.com/privacy
+      canonical menunjuk ke /, bukan halaman ini (/privacy); Google bisa menganggap halaman ini duplikat
+    https://www.minatmatematika.com/disclaimer
+      canonical menunjuk ke /, bukan halaman ini (/disclaimer); Google bisa menganggap halaman ini duplikat
+[warn] konten-tipis: 2 halaman
+    https://www.minatmatematika.com/materi
+      isi teks terlihat hanya 85 kata (halaman tipis sulit diindeks)
+    https://www.minatmatematika.com/pangkat-bulat
+      isi teks terlihat hanya 84 kata (halaman tipis sulit diindeks)
+[warn] deskripsi-pendek: 1 halaman
+    https://www.minatmatematika.com/privacy
+      meta description pendek (54 karakter)
+
+[warn] meta description ganda: 4 kelompok
+    "Penalaran Kuantitatif menguji kemampuan berpikir yang melibatkan kuantitas, hubu..." dipakai 3 halaman
+    "Penalaran logis merupakan suatu langkah berpikir untuk menarik suatu kesimpulan ..." dipakai 2 halaman
+    "Sederhana saja, apabila kita punya 2 apel lalu ditambahkan dengan 3 apel, maka s..." dipakai 2 halaman
+    "Proses berpikir untuk menyelesaikan masalah secara logis disebut Penalaran Logis..." dipakai 3 halaman
