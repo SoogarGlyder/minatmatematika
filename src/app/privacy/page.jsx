@@ -4,6 +4,7 @@ import Link from 'next/link';
 import styles from '../styles/LandPages.module.css';
 
 export const metadata = {
+  alternates: { canonical: '/privacy' },
   title: 'Kebijakan Privasi | Minat Matematika',
   description: 'Kebijakan privasi penggunaan website Minat Matematika.',
 };

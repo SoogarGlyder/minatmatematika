@@ -3,6 +3,7 @@ import React from 'react';
 import styles from '../styles/LandPages.module.css';
 
 export const metadata = {
+  alternates: { canonical: '/contact' },
   title: 'Hubungi Kami | Minat Matematika',
   description: 'Hubungi tim Minat Matematika untuk memberikan saran, melaporkan kesalahan pada soal, request materi, atau mendiskusikan peluang kerjasama.',
 };

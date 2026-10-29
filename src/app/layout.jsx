@@ -17,9 +17,6 @@ export const viewport = {
 
 export const metadata = {
   metadataBase: new URL('https://www.minatmatematika.com'),
-  alternates: {
-    canonical: '/',
-  },
   title: 'Minat Matematika | Platform Belajar & Tryout Mandiri', 
   description: 'Belajar matematika lebih mudah dengan ringkasan materi, latihan soal, dan pembahasan terstruktur untuk persiapan ujian dan UTBK SNBT.',
   applicationName: 'Minat Matematika',
@@ -72,12 +69,7 @@ export default function RootLayout({ children }) {
     '@type': 'WebSite',
     name: 'Minat Matematika',
     alternateName: ['MinatMatematika', 'Belajar Matematika', 'Matematika UTBK'], 
-    url: 'https://www.minatmatematika.com',
-    potentialAction: {
-      "@type": "SearchAction",
-      "target": "https://www.minatmatematika.com/?search={search_term_string}",
-      "query-input": "required name=search_term_string"
-    }
+    url: 'https://www.minatmatematika.com'
   };
 
   return (

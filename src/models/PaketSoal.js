@@ -27,6 +27,9 @@ const PaketSoalSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
+}, {
+  // updatedAt otomatis dipakai sebagai lastmod di sitemap. createdAt tetap memakai definisi di atas.
+  timestamps: { createdAt: false, updatedAt: true },
 });
 
 PaketSoalSchema.index({ topic: 1, paket_slug: 1 }, { unique: true });

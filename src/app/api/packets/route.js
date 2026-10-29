@@ -5,6 +5,7 @@ import PaketSoal from '@/models/PaketSoal';
 import Question from '@/models/Question';
 import { syncPacketQuestions } from '@/lib/syncQuestions.mjs';
 import { revalidatePacketPaths } from '@/lib/revalidatePacket';
+import { pingIndexNow } from '@/lib/indexnow';
 
 export async function GET() {
     try {
@@ -30,7 +31,8 @@ export async function POST(request) {
         // HTML paket tetap sumber utama: soal terstruktur untuk tryout disinkronkan otomatis,
         // dan hasil pemeriksaannya dikembalikan agar ditampilkan di admin.
         const report = await syncPacketQuestions(newPacket, Question);
-        await revalidatePacketPaths(newPacket);
+        const { publicPaths } = await revalidatePacketPaths(newPacket);
+        if (publicPaths.length) await pingIndexNow(publicPaths); // memberi tahu Bing/mesin pencari IndexNow lain
 
         return NextResponse.json({ message: "Paket soal berhasil dibuat", data: newPacket, report }, { status: 201 });
     } catch (error) {

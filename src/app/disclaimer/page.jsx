@@ -4,6 +4,7 @@ import Link from 'next/link';
 import styles from '../styles/LandPages.module.css';
 
 export const metadata = {
+  alternates: { canonical: '/disclaimer' },
   title: 'Disclaimer | Minat Matematika',
   description: 'Informasi penafian dan ketentuan penggunaan materi di Minat Matematika.',
 };

@@ -5,6 +5,7 @@ import PaketSoal from '@/models/PaketSoal';
 import Question from '@/models/Question';
 import { syncPacketQuestions, deletePacketQuestions } from '@/lib/syncQuestions.mjs';
 import { revalidatePacketPaths } from '@/lib/revalidatePacket';
+import { pingIndexNow } from '@/lib/indexnow';
 
 // Fungsi PUT untuk Mengedit Paket Soal
 export async function PUT(request, { params }) {
@@ -23,7 +24,8 @@ export async function PUT(request, { params }) {
 
         // Sinkronkan soal terstruktur dari HTML yang baru, lalu segarkan halaman terkait
         const report = await syncPacketQuestions(updatedPacket, Question);
-        await revalidatePacketPaths(before, updatedPacket);
+        const { publicPaths } = await revalidatePacketPaths(before, updatedPacket);
+        if (publicPaths.length) await pingIndexNow(publicPaths);
 
         return NextResponse.json({ message: "Paket soal berhasil diupdate", data: updatedPacket, report });
     } catch (error) {
@@ -44,7 +46,8 @@ export async function DELETE(request, { params }) {
 
         // Bersihkan soal terstruktur milik paket ini dan segarkan halaman terkait
         await deletePacketQuestions(deletedPacket._id, Question);
-        await revalidatePacketPaths(deletedPacket);
+        const { publicPaths } = await revalidatePacketPaths(deletedPacket);
+        if (publicPaths.length) await pingIndexNow(publicPaths);
 
         return NextResponse.json({ message: "Paket soal berhasil dihapus" });
     } catch (error) {

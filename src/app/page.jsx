@@ -6,7 +6,12 @@ import dbConnect from '@/lib/dbConnect';
 import Topic from '@/models/Topic';
 import HomeClient from '@/components/Home/HomeClient';
 
-export const revalidate = 300; // segarkan tiap 5 menit; juga di-refresh saat admin menyimpan materi
+export const revalidate = 300;
+
+// Canonical beranda didefinisikan di sini (bukan di layout) agar tidak diwarisi semua halaman lain.
+export const metadata = {
+  alternates: { canonical: '/' },
+}; // segarkan tiap 5 menit; juga di-refresh saat admin menyimpan materi
 
 const CATEGORIES = [
   'Penalaran Umum',

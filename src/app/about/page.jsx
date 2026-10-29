@@ -4,6 +4,7 @@ import Link from 'next/link';
 import styles from '../styles/LandPages.module.css';
 
 export const metadata = {
+  alternates: { canonical: '/about' },
   title: 'Tentang Kami | Minat Matematika',
   description: 'Ketahui lebih lanjut tentang Minat Matematika, platform belajar dan simulasi tryout matematika dengan antarmuka modern, cepat, dan responsif.',
 };

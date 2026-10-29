@@ -5,6 +5,12 @@ import PaketSoal from '@/models/PaketSoal';
 import { stripHtml } from '@/utils/stringUtils';
 import TopicClient from './TopicClient';
 import { notFound } from 'next/navigation';
+import { buildTopicSeo } from '@/lib/seoText.mjs';
+
+const BASE_URL = 'https://www.minatmatematika.com';
+
+// Segarkan cache tiap 10 menit (lihat catatan di halaman paket).
+export const revalidate = 600;
 
 export async function generateMetadata({ params }) {
   const { topicSlug } = await params;
@@ -22,12 +28,13 @@ export async function generateMetadata({ params }) {
     };
   }
 
-  const rawDesc = topic.description || `Belajar materi ${topic.title} beserta soal dan pembahasan di Minat Matematika.`;
-  const cleanDescription = stripHtml(rawDesc).substring(0, 160);
+  const paketCount = await PaketSoal.countDocuments({ topic: topic._id });
+  const seo = buildTopicSeo({ title: topic.title, description: stripHtml(topic.description || ''), paketCount });
+  const cleanDescription = seo.description;
   const ogImage = topic.coverImage || '/social-cover.jpg';
 
   return {
-    title: `${topic.title} | Minat Matematika`,
+    title: seo.title,
     description: cleanDescription,
     
     alternates: {
@@ -50,7 +57,7 @@ export async function generateMetadata({ params }) {
     },
     twitter: {
       card: 'summary_large_image',
-      title: `${topic.title} | Minat Matematika`,
+      title: seo.title,
       description: cleanDescription,
       images: [ogImage],
     },
@@ -86,5 +93,38 @@ export default async function Page({ params }) {
     _id: paket._id.toString(),
   }));
 
-  return <TopicClient initialTopic={serializedTopic} initialPaketList={serializedPaketList} />;
+  // Data terstruktur: breadcrumb (didukung Google) dan daftar paket pada topik ini
+  const breadcrumbLd = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Beranda', item: BASE_URL },
+      { '@type': 'ListItem', position: 2, name: topic.title, item: `${BASE_URL}/${topicSlug}` },
+    ],
+  };
+  const collectionLd = {
+    '@context': 'https://schema.org',
+    '@type': 'CollectionPage',
+    name: topic.title,
+    url: `${BASE_URL}/${topicSlug}`,
+    inLanguage: 'id',
+    isPartOf: { '@type': 'WebSite', name: 'Minat Matematika', url: BASE_URL },
+    mainEntity: {
+      '@type': 'ItemList',
+      itemListElement: paketList.map((paket, i) => ({
+        '@type': 'ListItem',
+        position: i + 1,
+        name: paket.title,
+        url: `${BASE_URL}/${topicSlug}/${paket.paket_slug}`,
+      })),
+    },
+  };
+
+  return (
+    <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(collectionLd) }} />
+      <TopicClient initialTopic={serializedTopic} initialPaketList={serializedPaketList} />
+    </>
+  );
 }

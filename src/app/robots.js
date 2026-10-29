@@ -11,8 +11,10 @@ export default function robots() {
         disallow: [
           '/admin/',
           '/api/',
-          '/_next/',
-          '/cbt/', // Memblokir folder CBT dengan struktur URL yang baru
+          // /_next/ SENGAJA tidak diblokir: Google perlu mengambil CSS/JS (/_next/static/) dan gambar
+          // teroptimasi (/_next/image) untuk merender halaman dan mengindeks gambar.
+          '/cbt/', // Mode CBT: tidak untuk diindeks
+          '/tryout/', // Alamat beta lama yang hanya mengalihkan ke /cbt/
         ],
       },
       {

@@ -2,9 +2,13 @@
 import dbConnect from '@/lib/dbConnect';
 import Topic from '@/models/Topic';
 import PaketSoal from '@/models/PaketSoal';
-import { stripHtml } from '@/utils/stringUtils';
 import PacketClient from './PacketClient';
 import { notFound } from 'next/navigation';
+import { buildPacketSeo } from '@/lib/seoText.mjs';
+
+// Segarkan cache tiap 10 menit: perubahan konten dari admin (termasuk yang dijalankan di komputer lokal)
+// tetap sampai ke produksi tanpa perlu deploy ulang.
+export const revalidate = 600;
 
 export async function generateMetadata({ params }) {
   try {
@@ -30,13 +34,13 @@ export async function generateMetadata({ params }) {
       return { title: `Paket Tidak Ditemukan | ${topic.title} | Minat Matematika` };
     }
 
-    const rawContent = packet.content || `Belajar ${topic.title} ${packet.title}`;
-    const descPreview = stripHtml(rawContent).substring(0, 160);
+    const seo = buildPacketSeo({ topicTitle: topic.title, packetTitle: packet.title, content: packet.content });
+    const descPreview = seo.description;
     const ogImage = topic.coverImage || '/social-cover.jpg';
     const currentUrl = `/${topicSlug}/${packetSlug}`;
 
     return {
-      title: `${packet.title} | ${topic.title} | Minat Matematika`,
+      title: seo.title,
       description: descPreview,
       
       alternates: {
@@ -44,7 +48,7 @@ export async function generateMetadata({ params }) {
       },
 
       openGraph: {
-        title: `${packet.title} | ${topic.title}`,
+        title: seo.title.replace(' | Minat Matematika', ''),
         description: descPreview,
         url: currentUrl,
         type: 'article',
@@ -60,7 +64,7 @@ export async function generateMetadata({ params }) {
       },
       twitter: {
         card: 'summary_large_image',
-        title: `${packet.title} | ${topic.title} | Minat Matematika`,
+        title: seo.title,
         description: descPreview,
         images: [ogImage],
       },
