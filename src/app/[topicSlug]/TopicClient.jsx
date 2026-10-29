@@ -75,7 +75,7 @@ export default function TopicClient({ initialTopic, initialPaketList }) {
       if (domNode.type === 'tag' && domNode.name === 'img') {
         const { src, alt } = domNode.attribs;
         return (
-          <div className={styles.optimizedImageWrapper}>
+          <span className={styles.optimizedImageWrapper} style={{ display: 'block' }}>
             <SafeImage 
               src={src}
               alt={alt || 'Ilustrasi Materi'}
@@ -86,7 +86,7 @@ export default function TopicClient({ initialTopic, initialPaketList }) {
               loading="lazy"
               quality={85}
             />
-          </div>
+          </span>
         );
       }
       

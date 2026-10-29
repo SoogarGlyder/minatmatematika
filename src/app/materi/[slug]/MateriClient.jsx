@@ -97,7 +97,7 @@ export default function MateriClient({ article }) {
       if (domNode.type === 'tag' && domNode.name === 'img') {
         const { src, alt } = domNode.attribs;
         return (
-          <div className={styles.optimizedImageWrapper}>
+          <span className={styles.optimizedImageWrapper} style={{ display: 'block' }}>
             <SafeImage 
               src={src}
               alt={alt || 'Ilustrasi Materi'}
@@ -108,7 +108,7 @@ export default function MateriClient({ article }) {
               loading="lazy"
               quality={85}
             />
-          </div>
+          </span>
         );
       }
       if (domNode.type === 'tag' && ['h2', 'h3'].includes(domNode.name)) {
