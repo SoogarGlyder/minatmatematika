@@ -1,0 +1,16 @@
+Pemeriksaan SEO: https://www.minatmatematika.com
+
+robots.txt: status 200, tidak ada masalah
+sitemap.xml: status 200, 108 alamat
+
+Halaman diperiksa: 108
+Tanpa masalah berat: 108 dari 108
+
+[warn] konten-tipis: 2 halaman
+    https://www.minatmatematika.com/materi
+      isi teks terlihat hanya 85 kata (halaman tipis sulit diindeks)
+    https://www.minatmatematika.com/pangkat-bulat
+      isi teks terlihat hanya 88 kata (halaman tipis sulit diindeks)
+[warn] deskripsi-pendek: 1 halaman
+    https://www.minatmatematika.com/privacy
+      meta description pendek (54 karakter)

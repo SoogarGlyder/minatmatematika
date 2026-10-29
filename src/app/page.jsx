@@ -48,7 +48,7 @@ export default async function HomePage() {
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', width: '100%', paddingBottom: '20px' }}>
-      <section style={{ textAlign: 'center', padding: '24px 16px 4px' }}>
+      {/* <section style={{ textAlign: 'center', padding: '24px 16px 4px' }}>
         <h1 style={{ fontSize: '1.4rem', fontWeight: 700, margin: 0 }}>
           Belajar Matematika & Tryout UTBK SNBT
         </h1>
@@ -56,11 +56,11 @@ export default async function HomePage() {
           Ringkasan materi, latihan soal, dan pembahasan terstruktur untuk Penalaran Umum,
           Penalaran Matematika, Pengetahuan Kuantitatif, dan PKS kelas 10-12.
         </p>
-      </section>
+      </section> */}
 
       <HomeClient topics={topics} />
 
-      {topics.length > 0 && (
+      {/* {topics.length > 0 && (
         <details style={{ maxWidth: '960px', margin: '24px auto 0', padding: '0 16px', width: '100%' }}>
           <summary style={{ cursor: 'pointer', fontWeight: 600 }}>Lihat semua materi</summary>
           {CATEGORIES.map((category) => {
@@ -80,7 +80,7 @@ export default async function HomePage() {
             );
           })}
         </details>
-      )}
+      )} */}
     </div>
   );
 }

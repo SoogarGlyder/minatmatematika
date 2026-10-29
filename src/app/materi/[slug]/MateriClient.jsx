@@ -104,9 +104,9 @@ export default function MateriClient({ article }) {
               width={0}
               height={0}
               sizes="(max-width: 768px) 100vw, 800px"
-              style={{ width: '100%', height: 'auto' }}
+              style={{ width: '400px', height: 'auto' }}
               loading="lazy"
-              quality={85}
+              quality={100}
             />
           </span>
         );

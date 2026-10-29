@@ -158,7 +158,7 @@ export default function PacketClient({
         const { src, alt } = domNode.attribs;
         return (
           <span className={styles.optimizedImageWrapper} style={{ display: 'block' }}>
-            <SafeImage src={src} alt={alt || 'Ilustrasi Soal'} width={0} height={0} sizes="(max-width: 768px) 100vw, 800px" style={{ width: '100%', height: 'auto' }} loading="lazy" quality={85} />
+            <SafeImage src={src} alt={alt || 'Ilustrasi Soal'} width={0} height={0} sizes="(max-width: 768px) 100vw, 800px" style={{ width: '400px', height: 'auto' }} loading="lazy" quality={100} />
           </span>
         );
       }
